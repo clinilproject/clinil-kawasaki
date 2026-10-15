@@ -7485,15 +7485,15 @@ async function showClinicDetails(clinicId) {
             <div id="clinicPublicVaccineInfo"></div>
 
             ${
-              clinic.id !== 2 && clinic.opening_hours
-              ? `<p><strong>診療時間：</strong>${escapeHtml(clinic.opening_hours)}</p>`
-              : ""
+                clinic.opening_hours
+                    ? `<p><strong>診療時間：</strong>${escapeHtml(clinic.opening_hours)}</p>`
+                    : ""
             }
 
             ${
-            clinic.id !== 2 && clinic.closed_days
-            ? `<p><strong>休診日：</strong>${escapeHtml(clinic.closed_days)}</p>`
-            : ""
+                clinic.closed_days
+                    ? `<p><strong>休診日：</strong>${escapeHtml(clinic.closed_days)}</p>`
+                    : ""
             }
 
             ${
