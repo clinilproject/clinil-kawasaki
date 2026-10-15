@@ -8,6 +8,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
+
+     /* スマホ横ブレ防止 */
+
+    *,
+    *::before,
+    *::after {
+           box-sizing: border-box;
+        }
+
+        html {
+           width: 100%;
+           overflow-x: clip;
+        }
+
+        body {
+           width: 100%;
+           margin: 0;
+           padding: 0;
+           overflow-x: clip;
+        }
+
+/* 画像のはみ出し防止 */
+
+        img,
+        video,
+        iframe {
+            max-width: 100%;
+            height: auto;
+        }   
+
         body {
             margin: 0;
             font-family: "Zen Maru Gothic", sans-serif;
@@ -103,6 +133,34 @@
             font-size: 14px !important;
             line-height: 1.45;
         }
+
+        /* スマホ版 */
+
+@media screen and (max-width: 767px) {
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 16px;
+        margin: 0 auto;
+    }
+
+    .section {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+}
 
         /* 日本語の問い合わせ・回答入力を優先するための指定。
            WindowsではIMEの「あ / A」は利用者側の現在状態が優先されます。 */
@@ -244,6 +302,11 @@
         .result-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px 14px;
+        }
+
+        .patient-search-fields {
+        grid-template-columns: 1fr 1fr auto;
+        align-items: end;
         }
 
         .patient-search-fields,
@@ -416,38 +479,7 @@
 
         @media (max-width: 600px) {
             header {
-                padding: 10px 12px;
-                /* スマホ版：トップのキャッチコピー調整 */
-
-.home-hero-new-text {
-    width: 100%;
-    max-width: 100%;
-    padding: 20px 12px;
-    box-sizing: border-box;
-}
-
-.home-hero-new-label {
-    font-size: 11px;
-    letter-spacing: 1px;
-}
-
-.home-hero-new-text h1 {
-    font-size: 22px;
-    line-height: 1.45;
-    margin: 12px 0;
-}
-
-.home-hero-new-text h2 {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 14px 0;
-}
-
-.home-hero-new-description {
-    font-size: 12px;
-    line-height: 1.8;
-    overflow-wrap: anywhere;
-}
+            padding: 10px 12px;
             }
 
             header h1 {
@@ -498,6 +530,27 @@
             .admin-dashboard-header {
                 top: 4px;
             }
+            /* スマホ版：トップの3列を解除 */
+            .home-hero-new-inner {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0;
+            }
+
+            .home-hero-side {
+                min-width: 0;
+            }
+
+            .home-hero-new-text {
+                min-width: 0;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .home-hero-new-description {
+                font-size: 12px !important;
+                line-height: 1.7 !important;
+            }
         }
     /* ===== 新トップページ：ヘッダー ===== */
 
@@ -526,6 +579,10 @@
 
 .site-header-actions .site-nav {
     margin-left: 0;
+}
+
+.site-nav {
+    margin-left: auto;
 }
 
 .site-logo {
@@ -589,13 +646,17 @@
 
 @media (max-width: 900px) {
     .site-header-inner {
-        padding: 12px 16px;
+        padding: 12px 12px;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
+        padding-bottom: 0px;
     }
 
     .site-logo-title {
-        font-size: 23px;
+        font-size: 20px;
+
+        position: relative;
+        left: 10px;
     }
 
     .site-nav {
@@ -606,13 +667,46 @@
     }
 
     .site-nav button {
-        font-size: 13px;
+        font-size: 12px;
         padding: 8px;
     }
 
     #clinicPortalButton {
         margin-left: auto;
+        /* ボタンを小さくする */
+        font-size: 12px;
+        padding: 6px 9px;
+
+        /* 少し上に移動 */
+        position: relative;
+        top: -20px;
+
+        /* 文字の折り返し防止 */
+        white-space: nowrap;
     }
+
+    .site-header-inner > :first-child {
+        text-align: left;
+        padding-left: 0;
+        transform: translateX(-8px);
+        position: relative;
+        top: 10px;
+    }
+
+    .site-logo-sub {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        text-align: left;
+    }
+
+    .site-header-actions .site-nav {
+        position: relative;
+        top: -8px;
+    }
+
+
 }    
     
     /* ===== トップページ ヒーロー ===== */
@@ -702,7 +796,7 @@
     }
 
     .home-hero h1 {
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .home-hero-visual {
@@ -741,6 +835,19 @@
     height: 26px;
     left: 140px;
     bottom: 82px;
+}
+
+/* スマホ版：横はみ出し防止 */
+@media (max-width: 600px) {
+    .home-hero-new-inner {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .home-hero-side,
+    .home-hero-new-text {
+        min-width: 0;
+    }
 }
 
 .home-hero-new::after {
@@ -848,7 +955,7 @@
 
 .home-hero-new-description {
     margin: 0;
-    font-size: 17px;
+    font-size: 13px;
     line-height: 1.95;
     font-weight: 500;
     color: #1f4d91;
@@ -949,12 +1056,13 @@
     }
 
     .home-hero-new-text h2 {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .home-hero-new-description {
         font-size: 15px;
     }
+    
 }
 
 .reference-hero {
@@ -1152,7 +1260,46 @@
     .reference-feature-grid {
         grid-template-columns: 1fr 1fr;
     }
+
+@media (max-width: 600px) {
+
+    .mobile-illust-area {
+        display: flex;
+        width: 100%;
+        align-items: flex-end;
+    }
+
+    .mobile-doctor-illust {
+        width: 75%;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .mobile-patient-illust {
+        width: 75%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .mobile-doctor-illust img,
+    .mobile-patient-illust img {
+        width: 120px;
+        height: auto;
+    }
+
+    .mobile-patient-illust img {
+    position: relative;
+    left: -30px;
+    }
+
+    .mobile-doctor-illust img {
+    position: relative;
+    left: 30px;
+    }
 }
+
+}
+
 
 @media (max-width: 600px) {
     .reference-feature-grid {
@@ -1297,10 +1444,18 @@
       
     @media (max-width: 1400px) {
     .home-hero-new-text h1 {
-        font-size: 34px !important;
+        font-size: 35px !important;
         white-space: normal !important;
         line-height: 1.35 !important;
     }
+
+    @media (max-width: 600px) {
+  .home-hero-new-text h1 {
+    font-size: 25px !important;
+    line-height: 1.4 !important;
+  }
+}
+
 }
     
     .reference-feature-icon svg {
@@ -1325,12 +1480,12 @@
 }
 
 .reference-feature-content h3 {
-    font-size: 17px !important;
+    font-size: 18px !important;
     margin-bottom: 8px !important;
 }
 
 .reference-feature-content p {
-    font-size: 13px !important;
+    font-size: 12px !important;
     line-height: 1.55 !important;
 }
     
@@ -1743,30 +1898,6 @@ body {
     position: static !important;
     transform: none !important;
 }
-    
-    /* ===== トップ画面全体：白に近い空＋薄い雲 ===== */
-
-body {
-    background: #f7fcff !important;
-}
-
-body {
-    position: relative;
-}
-
-.site-header,
-.container,
-footer {
-    position: relative;
-    z-index: 2;
-}
-
-.reference-feature-icon img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    display: block;
-}
 
 /* 背景は淡い水色だけにする */
 body {
@@ -1802,6 +1933,21 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
+
+.footer-cta {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 34px 40px 24px;
+
+    display: flex;
+    flex-wrap: wrap; /* 追加 */
+    gap: 20px;       /* 追加 */
+
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
 }
 
 .footer-brand {
@@ -1814,6 +1960,9 @@ body {
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 0.04em;
+
+    position: relative;
+    left: 15px;
 }
 
 .footer-tagline {
@@ -1825,12 +1974,17 @@ body {
 
 .footer-links {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    flex-wrap: nowrap;
-    gap: 24px;
-    white-space: nowrap;
-    transform: translate(45px, 13px);
+
+    flex-wrap: wrap;
+    gap: 8px 18px;
+
+    white-space: normal;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: auto;
+    transform: translate(60px, 15px);
 }
 
 .footer-links a {
@@ -1851,11 +2005,15 @@ body {
 }
 
 .footer-copyright {
-    margin-top: 0px;
+    margin-top: 5px;
     color: #8499a7;
-    font-size: 12px;
+    font-size: 9px;
     white-space: nowrap;
     align-self: flex-end;
+
+    /* 追加：コピーライトを左へ */
+    padding-right: 20px;
+    box-sizing: border-box;
 }
 
 
@@ -1874,10 +2032,21 @@ body {
 
     .footer-logo {
         font-size: 21px;
+        position: relative;
+        left: 3px;
     }
 
     .footer-tagline {
         font-size: 13px;
+    }
+
+    .footer-brand {
+        position: relative;
+        left: 8px;
+    }
+    
+    .site-footer .footer-cta .footer-links {
+        transform: translateX(20px) !important;
     }
 
     .footer-links {
@@ -2065,10 +2234,12 @@ body {
 .medical-cta-title {
   margin: 0 0 16px;
   color: #073b75;
-  font-size: 38px;
+  font-size: 23px;
   line-height: 1.35;
   font-weight: 800;
   letter-spacing: 0.02em;
+  text-align: left; 
+  margin-left: 0;
 }
 
 .medical-cta-text {
@@ -2089,13 +2260,25 @@ body {
   font-weight: 700;
 }
 
+.policy-highlight {
+    color: #0759a8;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.8;
+    background: #e6f3ff;
+    padding: 5px 8px;
+    border-left: 4px solid #1686d9;
+    border-radius: 0px;
+    margin-bottom: 14px; /* 2文の間隔 */
+}
+
 .medical-cta-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 18px;
   width: 100%;
-  max-width: 590px;
+  max-width: 390px;
   margin-top: 18px;
   padding: 18px 25px;
   border-radius: 25px;
@@ -2233,6 +2416,1007 @@ body {
 
 }
    
+.action-icon {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+/* 4つの検索ボタン内アイコンを固定 */
+.patient-search-actions button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 14px !important;
+    padding: 0 24px !important;
+
+    color: #16324f !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+}
+
+.patient-search-actions .action-icon {
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    object-fit: contain !important;
+}
+
+   /* ===== スマホ画面専用：下側3つのCTA ===== */
+@media screen and (max-width: 600px) {
+
+      .learned-reply-btn {
+    font-size: 11px !important;
+  }
+
+    .saved-reply-btn {
+  font-size: 11px !important;
+  }
+
+    .send-reply-btn {
+  font-size: 11px !important;
+  }
+
+    .resolved-btn {
+  font-size: 11px !important;
+  }
+    
+    .symptom-setting-btn {
+  font-size: 11px !important;
+  }
+
+    .inquiry-setting-btn {
+  font-size: 11px !important;
+  }
+
+    .clinic-department-option {
+  font-size: 11px !important;
+  padding: 5px 6px !important;
+  gap: 5px !important;
+  border-radius: 6px !important;
+  }
+
+    .clinic-department-option input[type="checkbox"] {
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0 !important;
+  }
+    
+
+  .reference-feature-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 20px 0 !important;
+    box-sizing: border-box;
+  }
+
+  .reference-feature-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+}
+   
+   /* スマホ版：下3つの情報カードを縦1列にする */
+@media screen and (max-width: 600px) {
+
+  .home-info-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .home-info-row > .home-info-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+}
+   
+   /* ===== スマホ版：全体の文字サイズ調整 ===== */
+@media screen and (max-width: 600px) {
+
+  body {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+}
+  
+/* ===== スマホ版：フッターのロゴ文字を小さく ===== */
+@media screen and (max-width: 600px) {
+
+  .site-footer .footer-logo {
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+  }
+
+  .site-footer .footer-tagline {
+    font-size: 7px !important;
+    line-height: 1.4 !important;
+  }
+
+}
+
+/* ===== スマホ版：フッター右側を2列にする ===== */
+@media screen and (max-width: 600px) {
+
+  .site-footer .footer-cta {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .site-footer .footer-links {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px 12px !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    transform: none !important;
+    margin: 12px 0 0 !important;
+    justify-content: initial !important;
+    box-sizing: border-box !important;
+  }
+
+  .site-footer .footer-links a {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 10px !important;
+    line-height: 1.5 !important;
+    white-space: normal !important;
+    text-align: left !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+}
+
+/* ===== スマホ版フッター：左右にコンパクト配置 ===== */
+@media screen and (max-width: 600px) {
+
+  .site-footer .footer-cta {
+    display: grid !important;
+    grid-template-columns: 100px minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 8px !important;
+    padding: 10px 8px !important;
+  }
+
+  /* 左：クリニル川崎 */
+  .site-footer .footer-brand {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 右：リンクを2列に */
+  .site-footer .footer-links {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 3px 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+
+  .site-footer .footer-links a {
+    font-size: 7px !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    text-align: left !important;
+  }
+
+}
+
+/* スマホ版：フッター右側のリンクだけ調整 */
+@media screen and (max-width: 600px) {
+
+  .site-footer .footer-links {
+  width: 190px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  position: relative !important;
+  left: 12px !important;
+  column-gap: 2px !important;
+  row-gap: 0 !important;
+  
+}
+
+}
+   
+/* ===== このサイトについて：スマホ版 ===== */
+
+@media (max-width: 600px) {
+
+  /* ページ全体の余白 */
+  #aboutSiteSection {
+    padding: 35px 18px 50px !important;
+  }
+
+  /* ABOUT CLINIL の見出し */
+  #aboutSiteSection > div > div:first-child {
+    margin-bottom: 28px !important;
+  }
+
+  /* メインタイトル */
+  #aboutSiteSection h2 {
+    font-size: 20px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* 本文 */
+  #aboutSiteSection p {
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+}
+
+   .independent-notice {
+    max-width: 1100px;
+    margin: 16px auto 12px;
+    padding: 0 20px;
+
+    font-size: 14px;
+    line-height: 1.6;
+    color: #7a8490;
+
+    text-align: right;
+}
+
+.independent-notice span {
+    display: inline-block;
+    max-width: 1000px;
+    text-align: left;
+}
+   
+   @media (max-width: 600px) {
+  body.department-page .home-hero-new-text h1 {
+    font-size: 20px !important;
+    line-height: 1.5 !important;
+  }
+}
+   
+   .mobile-illust-area {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+
+    .mobile-illust-area {
+        display: flex !important;
+        width: 100%;
+        align-items: flex-end;
+    }
+
+    .home-hero-new {
+        background-image: none !important;
+    }
+
+    .home-hero-new::before,
+    .home-hero-new::after {
+        content: none !important;
+        display: none !important;
+        background: none !important;
+        background-image: none !important;
+    }
+}.mobile-illust-area {
+    display: none;
+}
+  
+@media (max-width: 600px) {
+
+    .home-hero-new {
+        background-image: none !important;
+    }
+
+    .home-hero-new::before,
+    .home-hero-new::after {
+        content: none !important;
+        display: none !important;
+        background: none !important;
+        background-image: none !important;
+    }
+
+}
+
+/* スマホ版：4つのボタンを正方形にする */
+@media screen and (max-width: 767px) {
+
+  .reference-feature-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .reference-feature-card {
+    width: 100% !important;
+
+    /* 今までの高さ指定を解除 */
+    height: auto !important;
+    min-height: 0 !important;
+
+    /* 正方形 */
+    aspect-ratio: 1 / 1 !important;
+
+    padding: 12px !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 16px !important;
+  }
+
+}
+
+   @media screen and (max-width: 767px) {
+
+  /* イラストを大きく */
+  .reference-feature-icon {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .reference-feature-icon img {
+    width: 96px !important;
+    height: 96px !important;
+    object-fit: contain !important;
+  }
+
+  /* 正方形ボタン内の配置 */
+  .reference-feature-card {
+    padding: 10px !important;
+    gap: 4px !important;
+  }
+}
+   
+@media screen and (max-width: 767px) {
+
+  /* ボタンのタイトル文字 */
+  .reference-feature-card .reference-feature-content h3 {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+  }
+
+}
+
+@media screen and (max-width: 767px) {
+
+  .reference-feature-arrow {
+    display: none !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  .kawasaki-cityscape {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .kawasaki-cityscape-message {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    /* 文字を画像より上へ */
+    order: 1 !important;
+  }
+
+  .cityscape-main-image {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+
+    width: 100% !important;
+    height: auto !important;
+
+    /* 画像を文字の下へ */
+    order: 2 !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .kawasaki-cityscape-message {
+    width: 100% !important;
+    text-align: center !important;
+
+    margin: 0 auto !important;
+    padding: 0 !important;
+
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+
+    box-sizing: border-box !important;
+  }
+
+}
+
+   @media screen and (max-width: 600px) {
+
+  /* 「医療機関の方へ」 */
+  .medical-cta-label {
+    font-size: 11px !important;
+  }
+
+  /* メインタイトル */
+  .medical-cta-title {
+    font-size: 20px !important;
+    line-height: 1.45 !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  /* 説明文 */
+  .medical-cta-content p {
+    font-size: 12px !important;
+    line-height: 1.8 !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  .medical-cta-button {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  .medical-cta .medical-cta-content .medical-cta-free,
+  .medical-cta .medical-cta-content .medical-cta-free p {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  .independent-notice {
+    font-size: 10px !important;
+    line-height: 1.5 !important;
+    padding: 8px 10px !important;
+  }
+
+  .independent-notice span {
+    font-size: inherit !important;
+    line-height: inherit !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  /* クリニル川崎 */
+  .footer-logo {
+    font-size: 13px !important;
+    margin-top: 25px !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  /* フッター全体を縦並びにする */
+  .footer-cta {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* ロゴ部分 */
+  .footer-brand {
+    width: 100% !important;
+  }
+
+  /* リンク部分 */
+  .footer-links {
+    position: relative !important;
+    top: 15px !important;
+
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    text-align: center !important;
+  }
+
+  .footer-links a {
+    font-size: 9px !important;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  /* リンク文字 */
+  footer.site-footer .footer-links a {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* 「・」区切り */
+  footer.site-footer .footer-links .footer-separator {
+    font-size: 10px !important;
+    margin: 0 3px !important;
+    padding: 0 !important;
+  }
+
+  /* リンク全体 */
+  footer.site-footer .footer-links {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .site-footer .footer-links {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 24px !important;
+    row-gap: 6px !important;
+    top: 18px !important;
+    left: -5px !important;
+  }
+
+  .site-footer .footer-links a {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 「・」などの区切りは消す */
+  .site-footer .footer-separator {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .site-footer {
+    position: relative !important;
+  }
+
+  .site-footer .footer-copyright {
+    position: relative !important;
+    width: 100vw !important;
+
+    left: 50% !important;
+    transform: translateX(-21%) !important;
+
+    margin: 10px 0 0 0 !important;
+    padding: 0 !important;
+
+    text-align: center !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+    #clinicSearchSection > div h2 {
+        font-size: 24px !important;
+    }
+    #clinicSearchSection > div > p {
+    font-size: 12px !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .clinic-detail-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+}
+
+   .inquiry-category-fold {
+  margin: 24px 0 10px;
+}
+
+.inquiry-category-fold > summary {
+  padding: 10px 12px;
+  font-weight: bold;
+  border-bottom: 2px solid #1976d2;
+  cursor: pointer;
+}
+
+.inquiry-category-body {
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.inquiry-category-fold {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+}
+
+@media screen and (max-width: 600px) {
+  .inquiry-category-body {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .home-hero-new-text h1 {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+  }
+
+  .home-hero-new-text h2 {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  }
+
+  .home-hero-new-description {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+  }
+
+  .home-feature-title {
+  font-size: 17px !important;
+  line-height: 1.4 !important;
+  }
+
+  .medical-cta .medical-cta-content p.medical-cta-free {
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+  }
+
+  .medical-cta .medical-cta-button span {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  }
+
+}
+
+   /* Galaxyなど幅360px以下だけ調整 */
+@media screen and (max-width: 360px) {
+
+  .home-hero-new-text h1 {
+    font-size: 18px !important;
+  }
+
+  .home-hero-new-text h2 {
+    font-size: 13px !important;
+  }
+
+  .home-hero-new-description {
+    font-size: 10px !important;
+    line-height: 1.5 !important;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 900px) {
+
+  .site-header-actions {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    align-items: flex-end !important;
+    gap: 6px !important;
+  }
+
+  .site-header-actions .site-nav {
+    position: static !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+}
+
+@media screen and (min-width: 601px) and (max-width: 900px) {
+  #clinicPortalButton {
+    transform: translateY(20px) !important;
+  }
+}
+
+.home-hero-new::before,
+.home-hero-new::after {
+  display: none !important;
+}
+
+/* ===== iPad：特徴3項目 ===== */
+@media screen and (min-width: 601px) and (max-width: 900px) {
+
+  .home-info-row {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  .home-info-row > .home-info-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 70px !important;
+
+    margin: 0 !important;
+    padding: 12px 18px !important;
+    box-sizing: border-box !important;
+
+    background: #f1faff !important;
+    border-radius: 14px !important;
+  }
+
+  .home-info-row > .home-info-item > * {
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  .home-info-row > .home-info-item h3 {
+    margin: 0 16px 0 12px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .home-info-row > .home-info-item p {
+    margin: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    flex: 1 !important;
+  }
+}
+
+/* ===== iPad フッター最終調整 ===== */
+@media (min-width: 601px) and (max-width: 900px) {
+
+  .site-footer {
+    padding: 18px 24px !important;
+  }
+
+  .site-footer .footer-cta {
+    display: grid !important;
+    grid-template-columns: 180px 1fr !important;
+    grid-template-areas:
+      "brand links"
+      "brand copyright" !important;
+
+    align-items: center !important;
+    column-gap: 30px !important;
+    row-gap: 10px !important;
+
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .site-footer .footer-brand {
+    grid-area: brand !important;
+    margin: 0 !important;
+  }
+
+  .site-footer .footer-links {
+    grid-area: links !important;
+
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+
+    gap: 8px 12px !important;
+    margin: 0 !important;
+  }
+
+  .site-footer .footer-links a {
+    white-space: nowrap !important;
+    margin: 0 !important;
+  }
+
+  .site-footer .footer-separator {
+    margin: 0 !important;
+  }
+
+  .site-footer .footer-copyright {
+    grid-area: copyright !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+}
+
+/* iPad：フッター自体を縦長にする */
+@media (min-width: 601px) and (max-width: 900px) {
+  .site-footer {
+    min-height: 220px !important;
+    height: auto !important;
+    padding: 32px 28px !important;
+    box-sizing: border-box !important;
+  }
+
+  .footer-cta {
+    height: auto !important;
+    min-height: 150px !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .footer-brand {
+    transform: translateX(40px) !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .footer-tagline {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .footer-links {
+    transform: translateX(26px) !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .footer-links {
+    transform: translate(26px, 22px) !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .footer-copyright {
+    transform: translate(300px, -25px) !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+
+  .clinic-detail-grid {
+    width: 650px !important;
+    max-width: 100% !important;
+    grid-template-columns: 300px 1fr !important;
+    gap: 16px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .clinic-detail-grid > div {
+    width: auto !important;
+    max-width: none !important;
+  }
+}
+
+/* iPad Pro：ヒーロー左イラストを小さく */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .hero-illust-img {
+    width: 180px !important;
+    height: 180px !important;
+    object-fit: contain;
+  }
+}
+
+/* iPad Pro：中央文字エリアを左右均等に広げる */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .home-hero-new-text {
+    width: 480px !important;
+    max-width: 480px !important;
+
+    position: relative !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+
+    text-align: center !important;
+  }
+}
+
+/* iPad Pro：特徴3項目を縦並び */
+@media (min-width: 901px) and (max-width: 1100px) {
+
+  .home-info-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  .home-info-item {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: auto !important;
+  }
+}
+
+.footer-links {
+  width: 360px !important;
+  max-width: 360px !important;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+
+  gap: 8px 14px !important;
+
+  margin: -15px 0 0 -90px !important;
+
+  white-space: normal !important;
+  font-size: 11px !important;
+}
+
+@media screen and (min-width: 769px) and (max-width: 1100px) {
+  #clinicManagementMenu button {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1100px) {
+  .medical-cta-free {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* Galaxy 360px：フッターナビだけ左へ */
+@media screen and (min-width: 350px) and (max-width: 370px) {
+  footer.site-footer nav.footer-links {
+    position: relative !important;
+    left: -20px !important;
+    transform: none !important;
+  }
+}
+
+/* iPad mini：フッターのリンク文字だけ左へ */
+@media screen and (min-width: 700px) and (max-width: 800px) {
+  footer.site-footer .footer-links {
+    position: relative !important;
+    left: 40px !important;
+  }
+}
+
+/* iPad mini：クリニル川崎だけ左へ */
+@media screen and (min-width: 700px) and (max-width: 800px) {
+  footer.site-footer .footer-logo {
+    position: relative !important;
+    left: 8px !important;
+  }
+}
+
    </style>
 </head>
 
@@ -2245,16 +3429,19 @@ body {
             <div class="site-logo-title">クリニル川崎</div>
             <div class="site-logo-sub">川崎の医療を、もっと身近に</div>
         </div>
-
+        
         <div class="site-header-actions">
+        
         <nav class="site-nav">
     <button type="button" onclick="showAboutSite()">このサイトについて</button>
+</nav>
+</div>
 
         <button
             id="clinicPortalButton"
             type="button"
             class="clinic-login-button"
-            onclick="showClinicOwnerSection()"
+            onclick="hideAboutSiteSection(); showClinicOwnerSection()"
         >
             <span class="clinic-login-icon">●</span>
             <span>
@@ -2262,7 +3449,7 @@ body {
                 <strong>ログイン ›</strong>
             </span>
         </button>
-     </div>
+
     </div>
 </header>
 
@@ -2359,6 +3546,13 @@ body {
       </p>
 
       <p style="font-size:13px; color:#64748b; margin:28px 0;">
+        本サイトは、問い合わせフォームを備えた地域医療情報サイトです。
+        掲載情報やお問い合わせ機能の安全性についても、<br>
+        AIを活用した定期的な点検と改善に取り組んでいます。
+        
+      </p>
+
+      <p style="font-size:13px; color:#64748b; margin:28px 0; text-align:center;">
         2026年 クリニル川崎企画運営部
       </p>
 
@@ -2370,10 +3564,10 @@ body {
         >
           ← トップへ戻る
         </button>
-      </div>
+        </div>
 
     </div>
-  </div>
+    </div>
 </section>
 
     <section class="home-hero-new">
@@ -2401,8 +3595,7 @@ body {
 
             <p class="home-hero-new-description">
                 患者さんはアカウント作成不要かつ完全無料で利用できます。<br>
-                公認登録した医療機関には問い合わせフォームも利用可能です<br>
-                （AIによる自動返信含む）。
+                登録した医療機関はAI機能付き問い合わせフォームも利用可能<br>
             </p>
         </div>
 
@@ -2418,21 +3611,34 @@ body {
     </div>
 </section>
 
+<div class="mobile-illust-area">
+
+    <div class="mobile-doctor-illust">
+        <img src="doctor-hero.png" alt="">
+    </div>
+
+    <div class="mobile-patient-illust">
+        <img src="patient-hero.png" alt="">
+    </div>
+
+</div>
+
+<div style="clear: both; width: 100%; box-sizing: border-box; margin: 12px 0; padding: 0 8px; font-size: 13px; color: #555;">
+  ※ 画面の移動がわかりにくい場合は、画面内の「クリニル川崎」を押してください。
+</div>
+
 <section class="reference-feature-grid">
 
     <button
         type="button"
         class="reference-feature-card"
-        onclick="
-            history.pushState({ view: 'search' }, '', '');
-            document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
-            document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
-            setTimeout(() => document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'}), 100);
-        "
-    >
+        
+        onclick="openClinicSearch()"
+
+        >
         <div class="reference-feature-icon">
-    <img src="icon_search.png" alt="クリニックを検索">
-</div>
+        <img src="icon_search.png" alt="クリニックを検索">
+        </div>
 
         <div class="reference-feature-content">
             <h3>クリニックを検索</h3>
@@ -2446,18 +3652,23 @@ body {
         type="button"
         class="reference-feature-card"
         onclick="
-            history.pushState({ view: 'search' }, '', '');
+            hideAboutSiteSection();
             document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+            document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
+            document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
+            document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
+            document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
             document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
             setTimeout(() => {
                 document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'});
-                sortByDistance();
+                history.pushState({ page: 'nearby' }, '', '#nearby');
+                showNearbyDepartmentSelector();
             }, 150);
         "
-    >
+        >
         <div class="reference-feature-icon">
-    <img src="icon_nearby.png" alt="現在地から近い順">
-</div>
+        <img src="icon_nearby.png" alt="現在地から近い順">
+        </div>
 
         <div class="reference-feature-content">
             <h3>現在地から近い順</h3>
@@ -2471,18 +3682,27 @@ body {
         type="button"
         class="reference-feature-card"
         onclick="
-            history.pushState({ view: 'search' }, '', '');
-            document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
-            document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
-            setTimeout(() => {
-                document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'});
-                showRealtimeVaccineInfo();
-            }, 150);
+        hideAboutSiteSection();
+        document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+        document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
+        document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
+        document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
+        document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
+        document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
+
+        showVaccineWardSelector();
+
+        setTimeout(() => {
+        document.getElementById('clinicSearchSection')?.scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+        }, 150);
         "
-    >
+        >
         <div class="reference-feature-icon">
-    <img src="icon_vaccine.png" alt="リアルタイムワクチン情報">
-</div>
+        <img src="icon_vaccine.png" alt="リアルタイムワクチン情報">
+        </div>
 
         <div class="reference-feature-content">
             <h3>リアルタイム<br>ワクチン情報</h3>
@@ -2496,18 +3716,23 @@ body {
         type="button"
         class="reference-feature-card"
         onclick="
-            history.pushState({ view: 'search' }, '', '');
+            hideAboutSiteSection();
             document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+            document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
+            document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
+            document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
+            document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
             document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
             setTimeout(() => {
                 document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'});
-                showRealtimeReceptionClinics();
+                history.pushState({page:'reception'}, '', '#reception');
+                showReceptionWardSelector();
             }, 150);
         "
-    >
+        >
         <div class="reference-feature-icon">
-    <img src="icon_available.png" alt="リアルタイム受付可能施設">
-</div>
+        <img src="icon_available.png" alt="リアルタイム受付可能施設">
+        </div>
 
         <div class="reference-feature-content">
             <h3>リアルタイム<br>受付可能施設</h3>
@@ -2540,23 +3765,19 @@ body {
         </div>
     </div>
 
-    <button
-    type="button"
-    class="home-info-item home-info-contact"
-    style="cursor: default;"
->
+    <div class="home-info-item">
         <div class="reference-feature-icon">
     <img src="btn_chat.png" alt="問い合わせフォーム">
 </div>
 
         <div>
-            <h3>問い合わせフォーム　›</h3>
+            <h3>問い合わせフォーム</h3>
             <p>
                 気になることを医療機関へ<br>
                 直接問い合わせできます。
             </p>
         </div>
-    </button>
+    </div>
 
     <div class="home-info-item">
         <div class="reference-feature-icon">
@@ -2576,9 +3797,22 @@ body {
 
     <div id="clinicOwnerSection" style="display:none; margin-bottom:25px; background:white; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
         <h2> 医療機関の登録・ログイン</h2>
-        <p style="text-align:center; color:#555; line-height:1.7;">
-            初めて登録する医療機関も、登録済みの医療機関も、こちらからお進みください。
-        </p>
+        <p style="text-align:center; color:#555; line-height:1.8;">
+    初めて登録する医療機関も、登録済みの医療機関も、こちらからお進みください。<br><br>
+
+    <span style="
+        display:inline-block;
+        text-align:left;
+        font-size:15px;
+        font-weight:700;
+        color:#0f3f68;
+        line-height:2;
+    ">
+        ※ログイン後、貴院の詳細ページに移動して編集してください。<br>
+        ※編集終了後は必ず編集画面のログアウトボタンを押してください。<br>
+        ※右上のログインボタンに病院マークがある場合は、ログアウトできていない状態です。
+    </span>
+</p>
 
         <div id="clinicPortalHome">
             <div style="display:grid; gap:14px; margin-top:25px;">
@@ -2777,11 +4011,42 @@ body {
             <p id="applicationResult" style="white-space:pre-wrap;"></p>
         </form>
 
+        
+            <div id="clinicApplicationOtpArea"
+            style="display:none; padding:20px; text-align:center;">
+
+                <h3>メールアドレスの確認</h3>
+
+            <p>
+               メールに届いた8桁の認証コードを入力してください。
+            </p>
+
+        <input
+            type="text"
+            id="clinicApplicationOtpCode"
+            inputmode="numeric"
+            maxlength="8"
+            autocomplete="one-time-code"
+            placeholder="8桁の認証コード"
+            style="padding:12px; font-size:18px; text-align:center;"
+        >
+
+        <button type="button" id="clinicApplicationOtpButton">
+          認証する
+        </button>
+
+        <p id="clinicApplicationOtpResult"></p>
+
+        </div>
+
+        
         <div id="clinicApplicationComplete" style="display:none; text-align:center; padding:20px 0;">
             <h3 style="color:#166534;">登録申請を受け付けました</h3>
-            <p style="line-height:1.8;">
-                運営者が医療機関情報を確認します。<br>
-                審査結果や追加確認が必要な場合は、入力されたメールアドレスへ運営者からご連絡します。
+            <p>
+               メール認証が完了し、医療機関の登録申請を受け付けました。<br>
+               現在、管理者による審査・承認待ちです。<br>
+               承認後、登録されたメールアドレスにご案内します。<br>
+               管理者からのメールをお待ちください。
             </p>
             <button type="button" onclick="showClinicPortalHome()">最初の画面へ戻る</button>
         </div>
@@ -2807,26 +4072,22 @@ body {
 
     <div class="box" id="clinicSearchSection" style="display:none; background:#ffffff; border-radius:24px; padding:36px 32px; margin-top:28px; box-shadow:0 10px 35px rgba(15, 76, 129, 0.08); border:1px solid #e6f2fa;">
          <button
-    type="button"
-    onclick="
-        document.getElementById('clinicSearchSection')?.style.setProperty('display','none','important');
-        document.querySelector('.home-hero-new')?.style.setProperty('display','block','important');
-        window.scrollTo({ top:0, behavior:'smooth' });
-    "
-    style="
-        margin-bottom:22px;
-        border:none;
-        background:none;
-        color:#1687c9;
-        font-family:inherit;
-        font-size:15px;
-        font-weight:700;
-        cursor:pointer;
-    "
+        type="button"
+        onclick="showHome()"
+        style="
+            margin-bottom:22px;
+            border:none;
+            background:none;
+            color:#1687c9;
+            font-family:inherit;
+            font-size:15px;
+            font-weight:700;
+            cursor:pointer;
+        "
 >
     ← トップへ戻る
 </button>
-        <div style="text-align:center; margin-bottom:28px;">
+        <div id="clinicSearchTitle" style="text-align:center; margin-bottom:28px;">
     <div style="font-size:14px; font-weight:700; color:#1687c9; margin-bottom:8px;">
         CLINIC SEARCH
     </div>
@@ -2838,12 +4099,23 @@ body {
     </p>
 </div>
 
-<div class="patient-search-fields">
+<div style="margin-bottom:20px;">
+  <label for="clinicNameSearch">クリニック名で検索</label>
+  <input
+    type="search"
+    id="clinicNameSearch"
+    placeholder="クリニック名を入力してください"
+    style="width:100%; min-height:56px; padding:16px; border:1px solid #d7e5f5; border-radius:12px;"
+  >
+</div>
+
+<div id="clinicSearchFields" class="patient-search-fields">
 <div>
         <label>診療科</label>
         <select id="department" style="width:100%; min-height:56px; padding:0 18px; border:1.5px solid #d7e8f5; border-radius:16px; background:#f8fcff; font-family:inherit; font-size:16px; color:#16324f; outline:none; cursor:pointer;">
             <option value="">すべての診療科</option>
             <option value="内科">内科</option>
+            <option value="外科">外科</option>
             <option value="整形外科">整形外科</option>
             <option value="皮膚科">皮膚科</option>
             <option value="小児科">小児科</option>
@@ -2868,7 +4140,31 @@ body {
     <option value="麻生区">麻生区</option>
 </select>
 </div>
+
+<button
+  type="button"
+  onclick="searchClinics(false)"
+  style="
+    min-width: 30px;
+    height: 56px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 12px;
+    background: #317dd4;
+    color: white;
+    font-size: 15px;
+    font-weight: 300;
+    cursor: pointer;
+  "
+>
+  GO
+</button>
+
 </div>
+
+<p style="font-size:13px; color:#52657a; margin-top:12px; margin-bottom:6px;">
+  ※「現在地から近い順」で検索する場合は、先に「診療科」と「区」を選択してから、「現在地から近い順」ボタンを押してください。
+</p>
 
 <p style="font-size: 13px; color: #666; margin-top: 15px;">
     ※掲載情報は変更されている場合があります。受診前に、診療時間・休診日などを各医療機関の公式サイトまたは電話でご確認ください。
@@ -2913,7 +4209,7 @@ body {
 
 <h4>2．お問い合わせについて</h4>
 <p style="padding:10px 12px; border:2px solid #2563eb; border-radius:8px; background:#eff6ff; color:#1e3a8a; font-weight:bold;">
-  ポリシー違反に該当しないお問い合わせは、医院側へ必ず届く仕組みです。宛先と内容を十分に確認してから送信してください。
+  ポリシー違反に該当しないお問い合わせは、基本的に医院側へ届く仕組みです。宛先と内容を十分に確認してから送信してください。
 </p>
 <p>
   お問い合わせは、選択した医療機関へ直接送信されます。回答の有無、
@@ -3134,7 +4430,7 @@ body {
     for="inquiryCommonItem"
     style="display:block; font-weight:bold; margin-bottom:8px;"
   >
-    よくあるお問い合わせ項目
+    よくあるお問い合わせ項目（このクリニックに多く寄せられる質問）
   </label>
 
   <select
@@ -3280,6 +4576,24 @@ body {
         <input id="clinicDailyNotificationOffEnd" type="time" style="width:100%; box-sizing:border-box;">
       </label>
     </div>
+    <div style="margin:10px 0 16px;">
+  <div style="font-weight:bold; margin-bottom:8px;">
+    曜日指定の通知OFF日
+  </div>
+<label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
+  <input id="clinicWeeklyOffEnabled" type="checkbox">
+  通知OFF指定曜日を使用する
+</label>
+<div style="display:flex; flex-wrap:wrap; gap:12px;">
+    <label><input type="checkbox" id="clinicWeeklyOffMon"> 月</label>
+    <label><input type="checkbox" id="clinicWeeklyOffTue"> 火</label>
+    <label><input type="checkbox" id="clinicWeeklyOffWed"> 水</label>
+    <label><input type="checkbox" id="clinicWeeklyOffThu"> 木</label>
+    <label><input type="checkbox" id="clinicWeeklyOffFri"> 金</label>
+    <label><input type="checkbox" id="clinicWeeklyOffSat"> 土</label>
+    <label><input type="checkbox" id="clinicWeeklyOffSun"> 日</label>
+  </div>
+</div>
     <label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
       <input id="clinicLongTermNotificationOffEnabled" type="checkbox">
       長期休診中の通知をOFFにする
@@ -3490,8 +4804,24 @@ body {
 }
     
     function showAboutSite() {
-    document.getElementById("aboutSiteSection").style.display = "block";
-    document.getElementById("aboutSiteSection").scrollIntoView({
+        const termsSection = document.getElementById("termsSection");
+        if (termsSection) {
+        termsSection.style.display = "none";
+        }
+        const privacySection = document.getElementById("privacySection");
+        if (privacySection) {
+        privacySection.style.setProperty("display", "none", "important");
+        }
+        const contactSection = document.getElementById("contactSection");
+        if (contactSection) {
+        contactSection.style.display = "none";
+        }
+        const listingSection = document.getElementById("listingSection");
+        if (listingSection) {
+        listingSection.style.setProperty("display", "none", "important");
+        }
+        document.getElementById("aboutSiteSection").style.display = "block";
+        document.getElementById("aboutSiteSection").scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
@@ -3522,6 +4852,22 @@ function showListingInfo() {
 
 function showPrivacyInfo() {
     const searchSection = document.getElementById("clinicSearchSection");
+
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.display = "none";
+    }
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.display = "none";
+    }
+
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+    aboutSiteSection.style.display = "none";
+    }
+
     const inquirySection = document.getElementById("patientInquirySection");
     const target = document.getElementById("privacyInfo");
 
@@ -3543,11 +4889,94 @@ function showPrivacyInfo() {
     }, 150);
 }
 
+function showListingSection() {
+    const listingSection = document.getElementById("listingSection");
+
+    if (!listingSection) return;
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+    aboutSiteSection.style.setProperty("display", "none", "important");
+   }
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.setProperty("display", "none", "important");
+    }
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.display = "none";
+    }
+    const privacySection = document.getElementById("privacySection");
+    if (privacySection) {
+    privacySection.style.display = "none";
+    }
+
+    listingSection.style.display = "block";
+
+    setTimeout(() => {
+        listingSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 100);
+}
+
+function showPrivacySection() {
+    const privacySection = document.getElementById("privacySection");
+
+    if (!privacySection) return;
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+    aboutSiteSection.style.setProperty("display", "none", "important");
+    } 
+
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.setProperty("display", "none", "important");
+    }
+
+    const listingSection = document.getElementById("listingSection");
+    if (listingSection) {
+    listingSection.style.display = "none";
+    }
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.setProperty("display", "none", "important");
+    }
+
+    privacySection.style.display = "block";
+
+    setTimeout(() => {
+        privacySection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 100);
+}
+
 function showTerms() {
     const termsSection = document.getElementById("termsSection");
 
     if (!termsSection) return;
+    const privacySection = document.getElementById("privacySection");
+if (privacySection) {
+    privacySection.style.display = "none";
+}
 
+    const listingSection = document.getElementById("listingSection");
+if (listingSection) {
+    listingSection.style.display = "none";
+}
+    
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+if (aboutSiteSection) {
+    aboutSiteSection.style.display = "none";
+}
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.display = "none";
+    }
     termsSection.style.display = "block";
 
     setTimeout(() => {
@@ -3562,7 +4991,23 @@ function showContact() {
     const contactSection = document.getElementById("contactSection");
 
     if (!contactSection) return;
+    const privacySection = document.getElementById("privacySection");
+if (privacySection) {
+    privacySection.style.setProperty("display", "none", "important");
+}
+    const listingSection = document.getElementById("listingSection");
+if (listingSection) {
+    listingSection.style.setProperty("display", "none", "important");
+}
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+if (aboutSiteSection) {
+    aboutSiteSection.style.display = "none";
+}
 
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.display = "none";
+    }
     contactSection.style.display = "block";
 
     setTimeout(() => {
@@ -3571,6 +5016,14 @@ function showContact() {
             block: "start"
         });
     }, 100);
+}
+
+    function hideAboutSite() {
+    document.getElementById("aboutSiteSection").style.display = "none";
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
     
     const CLINIL_AUTH_HASH_PARAMS = new URLSearchParams(window.location.hash.replace(/^#/, ""));
@@ -3727,14 +5180,15 @@ function resetClinicInactivityTimer() {
 }
 
 function startClinicInactivityTimer() {
-  if (isClinicLoginRemembered()) {
-    stopClinicInactivityTimer();
-    return;
-  }
-
   clinicInactivityMonitoring = true;
   resetClinicInactivityTimer();
+
+  console.log("医療機関の自動ログアウト監視を開始しました", {
+    monitoring: clinicInactivityMonitoring,
+    timer: clinicInactivityTimer
+  });
 }
+
 
 ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach(
   function(eventName) {
@@ -3762,14 +5216,23 @@ if (clinicAutoLogoutMessage) {
     let savedSearchResultsHtml = "";
     let savedSearchScrollY = 0;
 
-    history.replaceState(
-    {
-        view: "home"
-    },
-    ""
+    const params = new URLSearchParams(window.location.search);
+const clinicIdFromUrl = params.get("clinicId");
+const viewFromUrl = params.get("view");
+
+history.replaceState(
+  {
+    view: viewFromUrl === "clinic" && clinicIdFromUrl
+      ? "clinic"
+      : "search",
+    clinicId: clinicIdFromUrl ? Number(clinicIdFromUrl) : null
+  },
+  "",
+  window.location.href
 );
 
 window.addEventListener("popstate", async function(event) {
+    console.log("戻る時の履歴:", event.state, location.href);
   handlingBrowserHistory = true;
 
   try {
@@ -3791,11 +5254,11 @@ window.addEventListener("popstate", async function(event) {
   );
   return;
 }
-    
+    showClinicDetails
     if (state.view === "clinic" && state.clinicId) {
-      await showClinicDetails(state.clinicId);
-      return;
-    }
+  await showClinicDetails(Number(state.clinicId));
+  return;
+}
 
     if (state.view === "search") {
       parkClinicManagementArea();
@@ -4154,6 +5617,14 @@ function getAutomaticReceptionStatus(clinic) {
 
 async function searchClinics(showMore = false) {
 
+    if (!showMore && location.hash !== "#clinic-search-result") {
+    history.pushState(
+        { page: "clinicSearchResult" },
+        "",
+        "#clinic-search-result"
+    );
+    }
+
     parkClinicManagementArea();
 
     const department =
@@ -4161,6 +5632,8 @@ async function searchClinics(showMore = false) {
 
     const ward =
         document.getElementById("ward").value;
+
+    const clinicName = document.getElementById("clinicNameSearch").value.trim();
 
     const result =
         document.getElementById("result");
@@ -4188,6 +5661,10 @@ async function searchClinics(showMore = false) {
         );
     }
 
+    if (clinicName !== "") {
+        query = query.ilike("name", `%${clinicName}%`);
+    }
+
     if (ward !== "") {
         query = query.eq("ward", ward);
     }
@@ -4213,6 +5690,15 @@ async function searchClinics(showMore = false) {
             "<p>検索エラー：" + error.message + "</p>";
         console.error(error);
         return;
+    }
+
+    const myClinicId = await getLoggedInClinicId().catch(() => null);
+
+    if (myClinicId) {
+    data.sort((a, b) =>
+    Number(String(b.id) === String(myClinicId)) -
+    Number(String(a.id) === String(myClinicId))
+    );
     }
 
     if (data.length === 0) {
@@ -4440,14 +5926,14 @@ if (data.length > CLINICS_PER_PAGE) {
 
 }
 
-async function showRealtimeReceptionClinics() {
+async function showRealtimeReceptionClinics(selectedWard) {
     parkClinicManagementArea();
 
     const inquirySection = document.getElementById("patientInquirySection");
     if (inquirySection) inquirySection.style.display = "none";
 
-    const department = document.getElementById("department").value;
-    const ward = document.getElementById("ward").value;
+    const department = document.getElementById("department").value || "";
+    const ward = selectedWard || document.getElementById("ward").value || "";
     const result = document.getElementById("result");
 
     result.className = "result-grid";
@@ -4515,11 +6001,49 @@ async function showRealtimeReceptionClinics() {
     }
 
     result.innerHTML = `
-        <h2>🏥 リアルタイム受付可能施設</h2>
-        <p><strong>${escapeHtml(now)}現在：${availableClinics.length}施設</strong></p>
-        <p style="font-size:13px; color:#666;">
-            各医療機関が登録した受付時間・当日の変更・休診情報から表示しています。予約の成立や受診の確約ではありません。受診前に必ず医療機関へご確認ください。
+    <div style="
+        background:#f4fbff;
+        border:1px solid #d8eef8;
+        border-radius:20px;
+        padding:24px 28px;
+        margin-bottom:20px;
+    ">
+        <div style="
+            font-size:13px;
+            font-weight:800;
+            letter-spacing:2px;
+            color:#1687c9;
+            margin-bottom:7px;
+        ">
+            REALTIME RECEPTION
+        </div>
+
+        <h2 style="
+            margin:0 0 10px;
+            color:#073b96;
+            font-size:26px;
+        ">
+            リアルタイム受付可能施設
+        </h2>
+
+        <p style="
+            margin:0 0 8px;
+            font-size:16px;
+            font-weight:700;
+            color:#173b63;
+        ">
+            ${escapeHtml(now)}現在：${availableClinics.length}施設
         </p>
+
+        <p style="
+            margin:0;
+            font-size:13px;
+            line-height:1.8;
+            color:#66788a;
+        ">
+            各医療機関が登録した受付時間・当日の変更・休診情報から表示しています。予約の成立や受診の確約ではありません。
+        </p>
+    </div>
         ${availableClinics.map(function(item) {
             const clinic = item.clinic;
             const reception = item.reception;
@@ -4556,7 +6080,326 @@ async function showRealtimeReceptionClinics() {
     result.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-async function showRealtimeVaccineInfo() {
+function showReceptionWardSelector() {
+
+    document.getElementById("clinicSearchTitle").style.display = "none";
+    document.getElementById("clinicSearchFields").style.display = "none";
+
+    const result = document.getElementById("result");
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+        <h2>区を選択してください</h2>
+        <p style="margin-bottom:20px;">
+            現在受付可能な医療機関を確認したい区を選択してください。
+        </p>
+
+        <div style="display:grid; gap:10px;">
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('川崎区')">川崎区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('幸区')">幸区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('中原区')">中原区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('高津区')">高津区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('宮前区')">宮前区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('多摩区')">多摩区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('麻生区')">麻生区</button>
+        </div>
+    `;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function searchNearbyByDepartment(selectedDepartment) {
+
+    const departmentSelect = document.getElementById("department");
+
+    if (departmentSelect) {
+        departmentSelect.value = selectedDepartment;
+    }
+
+    history.pushState(
+    { page: "nearbyResult", department: selectedDepartment },
+    "",
+    "#nearby-result"
+    );
+    
+    sortByDistance();
+}
+
+function showNearbyDepartmentSelector() {
+
+    const clinicSearchTitle = document.getElementById("clinicSearchTitle");
+    const clinicSearchFields = document.getElementById("clinicSearchFields");
+    const result = document.getElementById("result");
+
+    if (clinicSearchTitle) {
+        clinicSearchTitle.style.display = "none";
+    }
+
+    if (clinicSearchFields) {
+        clinicSearchFields.style.display = "none";
+    }
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+    <h2>診療科を選択してください</h2>
+
+    <p style="margin-bottom:20px;">
+        現在地から近い医療機関を検索する診療科を選択してください。
+    </p>
+
+    <div style="display:grid; gap:10px;">
+        <button onclick="searchNearbyByDepartment('内科')">内科</button>
+        <button onclick="searchNearbyByDepartment('外科')">外科</button>
+        <button onclick="searchNearbyByDepartment('整形外科')">整形外科</button>
+        <button onclick="searchNearbyByDepartment('皮膚科')">皮膚科</button>
+        <button onclick="searchNearbyByDepartment('小児科')">小児科</button>
+        <button onclick="searchNearbyByDepartment('耳鼻咽喉科')">耳鼻咽喉科</button>
+        <button onclick="searchNearbyByDepartment('眼科')">眼科</button>
+        <button onclick="searchNearbyByDepartment('婦人科')">婦人科</button>
+        <button onclick="searchNearbyByDepartment('泌尿器科')">泌尿器科</button>
+        <button onclick="searchNearbyByDepartment('精神科')">精神科</button>
+    </div>
+`;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+
+function openClinicSearch() {
+  hideAboutSiteSection();
+
+  document.querySelector('.home-hero-new')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.reference-feature-grid')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.home-feature-title')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.home-info-row')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.medical-cta')?.style.setProperty('display', 'none', 'important');
+
+  const section = document.getElementById('clinicSearchSection');
+  if (section) {
+    section.style.setProperty('display', 'block', 'important');
+  }
+
+  history.pushState({ page: 'clinicSearch' }, '', '#clinic-search');
+
+  setTimeout(() => {
+    document.getElementById('clinicSearchSection')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}, 150);
+}
+
+
+function hideAboutSiteSection() {
+    const about = document.getElementById("aboutSiteSection");
+
+    if (about) {
+        about.style.display = "none";
+    }
+}
+
+function showVaccineWardSelector() {
+
+    history.pushState({ page: "vaccine" }, "", "#vaccine");
+
+    document.getElementById("clinicSearchTitle").style.display = "none";
+    document.getElementById("clinicSearchFields").style.display = "none";
+
+    const result = document.getElementById("result");
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+        <h2>区を選択してください</h2>
+        <p style="margin-bottom:20px;">
+            ワクチン情報を確認したい区を選択してください。
+        </p>
+
+        <div style="display:grid; gap:10px;">
+    <button onclick="history.pushState({page:'vaccineType', ward:'川崎区'}, '', '#vaccine-type'); showVaccineTypeSelector('川崎区')">川崎区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'幸区'}, '', '#vaccine-type'); showVaccineTypeSelector('幸区')">幸区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'中原区'}, '', '#vaccine-type'); showVaccineTypeSelector('中原区')">中原区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'高津区'}, '', '#vaccine-type'); showVaccineTypeSelector('高津区')">高津区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'宮前区'}, '', '#vaccine-type'); showVaccineTypeSelector('宮前区')">宮前区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'多摩区'}, '', '#vaccine-type'); showVaccineTypeSelector('多摩区')">多摩区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'麻生区'}, '', '#vaccine-type'); showVaccineTypeSelector('麻生区')">麻生区</button>
+        </div>
+    `;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+window.addEventListener("popstate", function () {
+
+    if (location.hash === "#vaccine") {
+        showVaccineWardSelector();
+        return;
+    }
+
+    if (location.hash === "#reception") {
+        showReceptionWardSelector();
+        return;
+    }
+
+    if (location.hash === "#nearby") {
+        showNearbyDepartmentSelector();
+        return;
+    }
+
+    if (location.hash === "#clinic-search") {
+    document.getElementById("clinicSearchSection")?.style.setProperty("display", "block", "important");
+
+    const title = document.getElementById("clinicSearchTitle");
+    const fields = document.getElementById("clinicSearchFields");
+    const result = document.getElementById("result");
+
+    if (title) title.style.display = "block";
+    if (fields) fields.style.display = "";
+    if (result) result.innerHTML = "";
+
+    return;
+    }
+
+    if (location.hash === "#clinic-search-result") {
+    searchClinics(false);
+    return;
+    }
+
+    if (location.hash === "#vaccine-type") {
+    const selectedWard = history.state?.ward;
+
+    if (selectedWard) {
+        showVaccineTypeSelector(selectedWard);
+    }
+
+    return;
+    }
+    
+    if (
+        location.hash !== "#vaccine-result" &&
+        location.hash !== "#reception-result" &&
+        location.hash !== "#nearby-result"
+    ) {
+        showHome();
+    }
+
+});
+
+async function showVaccineTypeSelector(selectedWard) {
+    const result = document.getElementById("result");
+    if (!result) return;
+    const { data: vaccineData, error } = await supabaseClient
+    .from("clinic_vaccines")
+    .select("vaccine_name")
+    .neq("availability_status", "ended");
+
+    if (error) {
+    console.error(error);
+    result.innerHTML = "<p>ワクチン情報を読み込めませんでした。</p>";
+    return;
+    }
+
+    const vaccineNames = [
+    ...new Set(
+        (vaccineData || [])
+            .map(item => item.vaccine_name)
+            .filter(name => name && name.trim() !== "")
+    )
+].sort();
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+        <h2>${escapeHtml(selectedWard)}のワクチン情報</h2>
+
+        <p style="margin-bottom:20px;">
+            ワクチンの種類を選択してください。
+        </p>
+
+        <select id="vaccineTypeSelect"
+            style="
+                width:100%;
+                max-width:500px;
+                padding:14px;
+                font-size:16px;
+                border:1px solid #ccc;
+                border-radius:8px;
+                background:white;
+            ">
+            <option value="">ワクチンを選択</option>
+
+            ${vaccineNames.map(name => `
+            <option value="${escapeHtml(name)}">${escapeHtml(name)}</option>
+            `).join("")}
+        </select>
+
+        <button
+            type="button"
+            onclick="selectRealtimeVaccineType('${selectedWard}')"
+            style="
+                width:100%;
+                max-width:500px;
+                margin-top:15px;
+                padding:14px;
+                border:none;
+                border-radius:8px;
+                background:#0b67c2;
+                color:white;
+                font-size:16px;
+                font-weight:bold;
+                cursor:pointer;
+            ">
+            このワクチンで検索
+        </button>
+    `;
+}
+
+function selectRealtimeVaccineType(selectedWard) {
+    const select = document.getElementById("vaccineTypeSelect");
+    if (!select) return;
+
+    const selectedVaccine = select.value;
+
+    if (!selectedVaccine) {
+        alert("ワクチンの種類を選択してください。");
+        return;
+    }
+
+    history.pushState(
+        {
+            page: "vaccineResult",
+            ward: selectedWard,
+            vaccine: selectedVaccine
+        },
+        "",
+        "#vaccine-result"
+    );
+
+    showRealtimeVaccineInfo(selectedWard, selectedVaccine);
+}
+
+async function showRealtimeVaccineInfo(selectedWard, selectedVaccine = "") {
     parkClinicManagementArea();
 
     const inquirySection = document.getElementById("patientInquirySection");
@@ -4564,10 +6407,10 @@ async function showRealtimeVaccineInfo() {
 
     const result = document.getElementById("result");
     result.className = "result-grid";
-    const ward = document.getElementById("ward").value;
+    const ward = selectedWard || document.getElementById("ward").value;
     result.innerHTML = "<p>リアルタイムワクチン情報を読み込んでいます...</p>";
 
-    const { data: vaccineData, error: vaccineError } = await supabaseClient
+    let { data: vaccineData, error: vaccineError } = await supabaseClient
         .from("clinic_vaccines")
         .select("*")
         .neq("availability_status", "ended")
@@ -4579,6 +6422,12 @@ async function showRealtimeVaccineInfo() {
         return;
     }
 
+    if (selectedVaccine) {
+    vaccineData = vaccineData.filter(item =>
+        item.vaccine_name === selectedVaccine
+    );
+    }
+    
     const today = getTokyoDateInfo().date;
 
     function getVaccineDisplayPriority(item) {
@@ -4648,9 +6497,14 @@ async function showRealtimeVaccineInfo() {
         return;
     }
 
-    const clinicMap = new Map((clinics || []).map(function(clinic) {
-        return [Number(clinic.id), clinic];
-    }));
+    const filteredClinics = (clinics || []).filter(function(clinic) {
+    if (!selectedWard) return true;
+    return clinic.ward === selectedWard;
+});
+
+const clinicMap = new Map(filteredClinics.map(function(clinic) {
+    return [Number(clinic.id), clinic];
+}));
 
     const vaccinesByClinic = new Map();
     currentVaccines.forEach(function(item) {
@@ -5526,7 +7380,7 @@ async function openClinicSymptomDepartmentSelector(clinicId) {
         : "";
 
     html += `
-      <label style="
+      <label class="clinic-department-option" style="
         display:flex;
         align-items:center;
         gap:8px;
@@ -6262,17 +8116,25 @@ async function loadClinicInquiryItemSettings(clinicId) {
       return;
     }
 
+    if (category === "document" || category === "test" || category === "reception") {
     html += `
-      <h4 style="
-        margin:24px 0 10px;
-        padding-bottom:8px;
-        border-bottom:2px solid #1976d2;
-      ">
-        ${escapeHtml(
-          getInquiryItemCategoryLabel(category)
-        )}
-      </h4>
+        <details class="inquiry-category-fold">
+            <summary>
+                ${escapeHtml(getInquiryItemCategoryLabel(category))}
+            </summary>
+            <div class="inquiry-category-body">
     `;
+    } else {
+    html += `
+        <h4 style="
+            margin:24px 0 10px;
+            padding-bottom:8px;
+            border-bottom:2px solid #1976d2;
+        ">
+            ${escapeHtml(getInquiryItemCategoryLabel(category))}
+        </h4>
+    `;
+    }
 
     categoryItems.forEach(function(item) {
       const setting = settingMap.get(
@@ -6455,7 +8317,15 @@ async function loadClinicInquiryItemSettings(clinicId) {
         </div>
       `;
     });
-  });
+
+     if (category === "document" || category === "test" || category === "reception") {
+    html += `
+        </div>
+      </details>
+    `;
+    }
+
+    });
 
   html += `
       <button
@@ -6629,15 +8499,15 @@ function buildClinicAiSettingsEditor(clinic) {
                     <p style="font-size:13px; color:#666;">
                         診療科ごとの症状について、対応状況と返信候補の定型文を設定します。
                     </p>
-                    <button type="button" onclick="openClinicSymptomDepartmentSelector(${Number(clinic.id)})">
+                    <button class="symptom-setting-btn" type="button" onclick="openClinicSymptomDepartmentSelector(${Number(clinic.id)})">
                         診療分野・症状設定を開く
                     </button>
                     <div id="clinicSymptomSettingsArea" style="margin-top:16px;"></div>
                 </div>
 
-                <div style="margin:16px 0 0; padding:16px; background:#ffffff; border:1px solid #bfdbfe; border-radius:8px;">
-                    <p style="font-weight:bold; margin-top:0;">② よくある問い合わせ・返信定型文</p>
-                    <p style="font-size:13px; color:#666;">
+                <button class="inquiry-setting-btn" type="button" onclick="loadClinicInquiryItemSettings(${Number(clinic.id)})">
+                    <p style="font-weight:bold; margin-top:0; color:#ffffff;">よくある問い合わせ・返信定型文</p>
+                    <p style="font-size:13px; color:#ffffff;">
                         診断書・検査・診察や受付時間について、返信候補の定型文を設定します。
                     </p>
                     <button type="button" onclick="loadClinicInquiryItemSettings(${Number(clinic.id)})">
@@ -6875,25 +8745,7 @@ async function loadPublicClinicVaccines(clinicId) {
         return;
     }
 
-    container.innerHTML = `
-        <section style="margin:20px 0; padding:18px; background:#f0fdfa; border-left:5px solid #0f766e; border-radius:8px;">
-            <h3 style="margin-top:0;">💉 ワクチン情報</h3>
-            ${visibleVaccines.map(function(item) {
-                const period = item.availability_status === "limited"
-                    ? `${escapeHtml(item.start_date || "")}～${escapeHtml(item.end_date || "")}`
-                    : "期間設定なし";
-                const reservation = item.reservation_status === "not_required" ? "予約不要" : "要予約";
-
-                return `
-                    <div style="margin-top:10px; padding:12px; background:white; border:1px solid #99f6e4; border-radius:8px;">
-                        <p style="font-weight:bold; margin:0 0 7px;">${escapeHtml(item.vaccine_name)}</p>
-                        <p style="margin:0;">${period}／${reservation}${item.low_stock ? "／<strong style='color:#b45309;'>残りわずか</strong>" : ""}</p>
-                        ${item.note ? `<p style="margin-bottom:0; white-space:pre-wrap;">${escapeHtml(item.note)}</p>` : ""}
-                    </div>
-                `;
-            }).join("")}
-        </section>
-    `;
+    container.innerHTML = "";
 }
 
 function editClinicVaccine(vaccineId) {
@@ -6941,23 +8793,30 @@ async function deleteClinicVaccine(clinicId, vaccineId) {
 
 function buildClinicPageContentEditor(clinic) {
     const features = clinic.clinic_features || "";
+    const customContent = clinic.clinic_page_custom_content || "";
     const patientNotice = clinic.patient_notice || "";
     const newsPageUrl = clinic.news_page_url || "";
+    
+
+const reservationUrl = clinic.reservation_url || "";
+const latestNoticeTitle = clinic.news_latest_title || clinic.latest_notice_title || "";
+const latestNoticeUrl = clinic.news_latest_url || clinic.latest_notice_url || "";
+
     const acceptsWalkIns = clinic.accepts_walk_ins === true;
     const cashlessStatus = ["unknown", "cash_only", "supported"].includes(
         clinic.cashless_status
     ) ? clinic.cashless_status : "unknown";
 
     return `
-        <details style="
+        <details open style="
             margin:24px 0;
             background:#fffaf0;
             border:1px solid #f0d7a1;
             border-radius:10px;
         ">
-            <summary style="padding:16px; font-size:18px; font-weight:bold; cursor:pointer;">
-                ✏️ クリニックページ・コメント編集
-            </summary>
+            <summary style="padding:16px; font-size:18px; font-weight:bold; cursor:pointer;" onclick="this.parentElement.open = true;">
+    ✏️ クリニックページ・コメント編集
+</summary>
             <div style="padding:0 18px 18px;">
 
             <div style="
@@ -6995,72 +8854,21 @@ function buildClinicPageContentEditor(clinic) {
     </button>
 </div>
 
-            <div style="margin:12px 0; padding:12px; background:#ffffff; border:1px solid #d9e4ec; border-radius:8px;">
-                <label for="clinicCashlessStatus" style="display:block; font-weight:bold; margin-top:0;">
-                    支払い方法
-                </label>
-                <select id="clinicCashlessStatus" style="width:100%; box-sizing:border-box;">
-                    <option value="unknown" ${cashlessStatus === "unknown" ? "selected" : ""}>未確認・未設定</option>
-                    <option value="cash_only" ${cashlessStatus === "cash_only" ? "selected" : ""}>現金のみ</option>
-                    <option value="supported" ${cashlessStatus === "supported" ? "selected" : ""}>キャッシュレス対応</option>
-                </select>
-                <p style="font-size:12px; color:#666; margin-bottom:0;">
-                    患者向けの検索結果と医療機関詳細ページに表示されます。
-                </p>
-            </div>
-
             <label
-                for="clinicPageFeatures"
+                for="clinicPageCustomContent"
                 style="display:block; font-weight:bold; margin-top:15px;">
-                主な対応分野・当院の特徴
+                地域の皆様へのアピールポイント、留意していただきたい注意点、及びSNS等のリンク先等
             </label>
 
-            <p style="font-size:12px; color:#666;">
-                客観的な内容を記載し、他院との比較や
-                「最高」「必ず治る」などの表現は避けてください。
-            </p>
-
+            
             <textarea
-                id="clinicPageFeatures"
-                maxlength="300"
-                rows="5"
-                oninput="updateClinicPageCharacterCount(
-                    'clinicPageFeatures',
-                    'clinicPageFeaturesCount',
-                    300
-                )"
+                id="clinicPageCustomContent"
+                rows="8"
+                maxlength="2000"
                 style="width:100%; box-sizing:border-box;"
-            >${escapeHtml(features)}</textarea>
+                placeholder="地域の皆様へのアピールポイント、注意点、SNS等のリンク先をご記入ください。"
+            >${escapeHtml(customContent)}</textarea>
 
-            <div
-                id="clinicPageFeaturesCount"
-                style="text-align:right; font-size:12px; color:#666;">
-                ${features.length}/300文字
-            </div>
-
-            <label
-                for="clinicPagePatientNotice"
-                style="display:block; font-weight:bold; margin-top:15px;">
-                患者様へのご案内・注意点
-            </label>
-
-            <textarea
-                id="clinicPagePatientNotice"
-                maxlength="300"
-                rows="5"
-                oninput="updateClinicPageCharacterCount(
-                    'clinicPagePatientNotice',
-                    'clinicPagePatientNoticeCount',
-                    300
-                )"
-                style="width:100%; box-sizing:border-box;"
-            >${escapeHtml(patientNotice)}</textarea>
-
-            <div
-                id="clinicPagePatientNoticeCount"
-                style="text-align:right; font-size:12px; color:#666;">
-                ${patientNotice.length}/300文字
-            </div>
 
             <label
                 for="clinicNewsPageUrl"
@@ -7082,6 +8890,35 @@ function buildClinicPageContentEditor(clinic) {
                 一度登録すれば、通常は変更する必要はありません。
             </p>
 
+           
+<label for="clinicLatestNoticeTitle"
+    style="display:block; font-weight:bold; margin-top:15px;">
+    最新のお知らせ・タイトル
+</label>
+
+<input
+    id="clinicLatestNoticeTitle"
+    type="text"
+    maxlength="200"
+    value="${escapeHtml(latestNoticeTitle)}"
+    placeholder="例：休診日のお知らせ"
+    style="width:100%; box-sizing:border-box;"
+>
+
+<label for="clinicLatestNoticeUrl"
+    style="display:block; font-weight:bold; margin-top:15px;">
+    最新のお知らせ・URL
+</label>
+
+<input
+    id="clinicLatestNoticeUrl"
+    type="url"
+    value="${escapeHtml(latestNoticeUrl)}"
+    placeholder="https://example.com/news/notice/"
+    style="width:100%; box-sizing:border-box;"
+>
+
+           
             <button
                 type="button"
                 onclick="saveClinicPageContent(${clinic.id})"
@@ -7114,18 +8951,10 @@ function buildClinicPageContentEditor(clinic) {
     `;
 }
 
+
 async function saveClinicPageContent(clinicId) {
-    const features =
-        document.getElementById("clinicPageFeatures").value;
-
-    const patientNotice =
-        document.getElementById("clinicPagePatientNotice").value;
-
-    const newsPageUrl =
-        document.getElementById("clinicNewsPageUrl").value;
-
-    const cashlessStatus =
-        document.getElementById("clinicCashlessStatus").value;
+    const customContent =
+        document.getElementById("clinicPageCustomContent").value;
 
     const confirmed = confirm(
         "クリニックページの内容を保存しますか？"
@@ -7135,39 +8964,24 @@ async function saveClinicPageContent(clinicId) {
         return;
     }
 
-    const { error: cashlessError } = await supabaseClient.rpc(
-        "set_clinic_cashless_status",
-        {
-            p_clinic_id: Number(clinicId),
-            p_status: cashlessStatus
-        }
-    );
-
-    if (cashlessError) {
-        console.error(cashlessError);
-        alert("支払い方法を保存できませんでした。");
-        return;
-    }
-
     const { error } = await supabaseClient.rpc(
-        "update_clinic_page_content_v2",
+        "update_clinic_page_custom_content",
         {
             p_clinic_id: clinicId,
-            p_clinic_features: features,
-            p_patient_notice: patientNotice,
-            p_news_page_url: newsPageUrl
+            p_content: customContent
         }
     );
 
     if (error) {
         console.error(error);
-        alert("クリニックページの内容を保存できませんでした。");
+        alert("自由記入欄を保存できませんでした。");
         return;
     }
 
     alert("クリニックページの内容を保存しました。");
     await showClinicDetails(clinicId);
 }
+
 
 async function syncClinicNews(clinicId) {
     const confirmed = confirm(
@@ -7246,16 +9060,13 @@ function buildClinicManagementMenu(clinic) {
                     🤖 AI分類・返信定型文<br><small>最重要</small>
                 </button>
                 <button type="button" onclick="showClinicManagementSection('reception')" style="min-height:64px;">
-                    📅 受付時間・休診
+                    📅 基本設定
                 </button>
                 <button type="button" onclick="showClinicManagementSection('vaccine')" style="min-height:64px; background:#0f766e;">
                     💉 ワクチン情報
                 </button>
-                <button type="button" onclick="showClinicManagementSection('page')" style="min-height:64px;">
-                    ✏️ ページ情報・コメント
-                </button>
-                <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:64px;">
-                    🔔 画像・通知設定
+                <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:72px; background:#9f1239; color:white; font-size:17px; font-weight:bold; border:2px solid #881337; border-radius:8px; box-shadow:0 3px 6px rgba(0,0,0,0.25);">
+                    🔔 画像・メール通知設定<br>
                 </button>
                 <button type="button" onclick="showClinicManagementSection('listing')" style="min-height:64px; background:#64748b;">
                     ⚙️ 掲載状態・登録解除
@@ -7267,7 +9078,11 @@ function buildClinicManagementMenu(clinic) {
 
 function buildClinicManagementSection(sectionKey, content) {
     return `
-        <section class="clinic-management-section" data-management-section="${sectionKey}" style="display:none; margin-top:18px;">
+        <section
+            class="clinic-management-section"
+            data-management-section="${sectionKey}"
+            style="display:none; margin-top:18px;"
+        >
             <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
                 <button type="button" onclick="showClinicManagementSection('')" style="width:auto; margin:0; background:#64748b;">
                     ← 編集メニューに戻る
@@ -7276,7 +9091,9 @@ function buildClinicManagementSection(sectionKey, content) {
                     ログアウト
                 </button>
             </div>
+
             ${content}
+
             <button type="button" onclick="showClinicManagementSection('')" style="width:auto; margin-top:10px; background:#64748b;">
                 ← 編集メニューに戻る
             </button>
@@ -7284,15 +9101,41 @@ function buildClinicManagementSection(sectionKey, content) {
     `;
 }
 
+
 function showClinicManagementSection(sectionKey) {
     activeClinicManagementSection = sectionKey || "";
 
+
+    // ページ編集欄が非表示の管理セクション内に
+    // 入っている場合、表示領域のある #result に移動する
+    if (sectionKey === "page") {
+        const pageSection = document.querySelector(
+            '[data-management-section="page"]'
+        );
+        const result = document.getElementById("result");
+
+        if (pageSection && result && !result.contains(pageSection)) {
+            result.appendChild(pageSection);
+        }
+    }
+
+
     const menu = document.getElementById("clinicManagementMenu");
-    if (menu) menu.style.display = sectionKey ? "none" : "block";
+
+    if (menu) {
+        menu.style.display = sectionKey ? "none" : "block";
+    }
 
     document.querySelectorAll(".clinic-management-section").forEach(function(section) {
-        section.style.display =
-            section.dataset.managementSection === sectionKey ? "block" : "none";
+        const isTarget = section.dataset.managementSection === sectionKey;
+        section.style.display = isTarget ? "block" : "none";
+
+        if (isTarget && sectionKey === "page") {
+            const details = section.querySelector("details");
+            if (details) {
+                details.open = true;
+            }
+        }
     });
 
     const destination = sectionKey
@@ -7302,6 +9145,320 @@ function showClinicManagementSection(sectionKey) {
     if (destination) {
         destination.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+
+    if (sectionKey === "reception") {
+        ["Address", "Phone"].forEach(name => {
+            const select = document.getElementById("basic" + name + "Mode");
+            if (!select) return;
+
+            select.value = select.dataset.savedMode === "manual"
+                ? "manual"
+                : "public";
+        });
+    }
+}
+
+function openClinicPageEditor() {
+    const pageSection = document.querySelector(
+        '#result [data-management-section="page"]'
+    );
+
+    if (!pageSection) {
+        alert("ページ編集画面が見つかりません。");
+        return;
+    }
+
+    showClinicManagementSection("page");
+
+    pageSection.style.display = "block";
+
+    const editor = pageSection.querySelector(
+        "#clinicPageCustomContent"
+    );
+
+    if (editor) {
+        editor.focus();
+    }
+
+    pageSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+    const result = document.getElementById("result");
+
+    if (result && !result.contains(pageSection)) {
+        result.appendChild(pageSection);
+    }
+
+    showClinicManagementSection("page");
+
+    pageSection.style.display = "block";
+
+    pageSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+function openClinicPageEditor() {
+    const sections = document.querySelectorAll(
+        '[data-management-section="page"]'
+    );
+
+    if (sections.length === 0) {
+        alert("ページ編集画面が生成されていません。");
+        return;
+    }
+
+    const pageSection = sections[sections.length - 1];
+    const result = document.getElementById("result");
+
+    if (result && !result.contains(pageSection)) {
+        result.appendChild(pageSection);
+    }
+
+    document.querySelectorAll(".clinic-management-section").forEach(
+        function(section) {
+            section.style.display = "none";
+        }
+    );
+
+    const menu = document.getElementById("clinicManagementMenu");
+
+    if (menu) {
+        menu.style.display = "none";
+    }
+
+    pageSection.style.display = "block";
+
+    const details = pageSection.querySelector("details");
+
+    if (details) {
+        details.open = true;
+    }
+
+    pageSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+window.openClinicPageEditor = openClinicPageEditor;
+
+async function saveClinicBasicInfo(clinicId) {
+  const addressMode = document.getElementById("basicAddressMode").value;
+  const phoneMode = document.getElementById("basicPhoneMode").value;
+  const address = document.getElementById("basicAddressInput").value.trim();
+  const phone = document.getElementById("basicPhoneInput").value.trim();
+  const websiteUrl = document.getElementById("basicWebsiteUrlInput").value.trim();
+
+  const { error } = await supabaseClient
+    .from("clinics")
+    .update({
+      address_mode: addressMode,
+      address_manual: addressMode === "manual" ? address : null,
+      phone_mode: phoneMode,
+      phone_manual: phoneMode === "manual" ? phone : null,
+      website_url: websiteUrl || null
+    })
+    .eq("id", clinicId);
+
+  if (error) {
+    console.error(error);
+    alert("保存できませんでした");
+    return;
+  }
+
+  alert("住所・電話番号の設定を保存しました");
+}
+
+  
+async function saveClinicReservationUrl(clinicId) {
+    const input = document.getElementById("basicReservationUrlInput");
+    const reservationUrl = input.value.trim();
+
+    if (
+        reservationUrl &&
+        !/^https?:\/\/.+/i.test(reservationUrl)
+    ) {
+        alert("予約URLは https:// または http:// から入力してください。");
+        return;
+    }
+
+    const confirmed = confirm("予約URLを保存しますか？");
+    if (!confirmed) return;
+
+    const { error } = await supabaseClient.rpc(
+        "update_clinic_reservation_url",
+        {
+            p_clinic_id: Number(clinicId),
+            p_reservation_url: reservationUrl
+        }
+    );
+
+    if (error) {
+        console.error("予約URL保存エラー:", error);
+        alert("予約URLを保存できませんでした。");
+        return;
+    }
+
+    alert("予約URLを保存しました。");
+    await showClinicDetails(clinicId);
+}
+async function saveClinicWebsiteUrl(clinicId) {
+
+  const input = document.getElementById("basicWebsiteUrlInput");
+  const websiteUrl = input.value.trim();
+
+  if (websiteUrl && !/^https?:\/\/.+/i.test(websiteUrl)) {
+    alert("URLは https:// または http:// から入力してください。");
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+  .from("clinics")
+  .update({ website_url: websiteUrl || null })
+  .eq("id", clinicId)
+  .select("id, website_url");
+
+console.log("更新確認:", { data, error, clinicId, websiteUrl });
+
+  if (error) {
+    console.error("ホームページURL保存エラー:", error);
+    alert("保存に失敗しました。");
+    return;
+  }
+
+  alert("ホームページURLを保存しました。");
+}
+
+async function saveClinicCashlessStatus(clinicId) {
+    const status = document.getElementById("basicCashlessStatus").value;
+
+    const { error } = await supabaseClient.rpc(
+        "set_clinic_cashless_status",
+        {
+            p_clinic_id: Number(clinicId),
+            p_status: status
+        }
+    );
+
+    if (error) {
+        console.error("支払い設定保存エラー:", error);
+        alert("支払い設定を保存できませんでした。");
+        return;
+    }
+
+    alert("支払い設定を保存しました。");
+    await showClinicDetails(clinicId);
+}
+
+// ログインメールアドレス変更
+async function changeClinicLoginEmail() {
+    const input = document.getElementById("clinicLoginEmailInput");
+    const message = document.getElementById("clinicLoginSettingsMessage");
+
+    const newEmail = input.value.trim();
+
+    if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+        message.textContent = "正しいメールアドレスを入力してください。";
+        return;
+    }
+
+    if (!confirm("ログインメールアドレスを変更しますか？")) {
+        return;
+    }
+
+    message.textContent = "変更処理中です...";
+
+    const { data, error } = await supabaseClient.auth.updateUser({
+        email: newEmail
+    });
+
+    if (error) {
+        console.error("メールアドレス変更エラー:", error);
+        message.textContent =
+            "変更できませんでした：" + (error.message || "認証エラー");
+        return;
+    }
+
+    message.textContent = data.user?.new_email
+        ? "確認メールを確認してください。新しいメールアドレスの確認後に変更が完了します。"
+        : "変更を受け付けました。メールアドレスの確認が必要な場合は、確認メールをご確認ください。";
+
+    input.value = "";
+}
+
+
+// ログインパスワード変更
+async function changeClinicLoginPassword() {
+    const passwordInput =
+        document.getElementById("clinicLoginNewPassword");
+    const confirmationInput =
+        document.getElementById("clinicLoginNewPasswordConfirm");
+    const message =
+        document.getElementById("clinicLoginSettingsMessage");
+
+    const password = passwordInput.value;
+    const confirmation = confirmationInput.value;
+
+    if (password.length < 10) {
+        message.textContent = "パスワードは10文字以上で入力してください。";
+        return;
+    }
+
+    if (password !== confirmation) {
+        message.textContent = "2つのパスワードが一致しません。";
+        return;
+    }
+
+    if (!confirm("ログインパスワードを変更しますか？")) {
+        return;
+    }
+
+    message.textContent = "変更処理中です...";
+
+    const { error } = await supabaseClient.auth.updateUser({
+        password: password
+    });
+
+    if (error) {
+        console.error("パスワード変更エラー:", error);
+        message.textContent =
+            "変更できませんでした：" + (error.message || "認証エラー");
+        return;
+    }
+
+    passwordInput.value = "";
+    confirmationInput.value = "";
+    message.textContent = "パスワードを変更しました。";
+}
+
+function toggleBasicAddressMode(select) {
+  const input = document.getElementById("basicAddressInput");
+  if (!input) return;
+
+  input.readOnly = select.value === "public";
+
+  if (select.value === "public") {
+    input.value = input.dataset.publicValue || "";
+  } else {
+    input.value = input.dataset.manualValue || "";
+  }
+}
+
+function toggleBasicPhoneMode(select) {
+  const input = document.getElementById("basicPhoneInput");
+  if (!input) return;
+
+  input.readOnly = select.value === "public";
+
+  if (select.value === "public") {
+    input.value = input.dataset.publicValue || "";
+  } else {
+    input.value = input.dataset.manualValue || "";
+  }
 }
 
 async function showClinicDetails(clinicId) {
@@ -7348,8 +9505,60 @@ async function showClinicDetails(clinicId) {
         return;
     }
 
-    const clinicImageUrl = null;
+    // 公開用の通知休止設定を取得して表示
+const { data: publicScheduleData, error: publicScheduleError } =
+  await supabaseClient.rpc("get_public_clinic_notification_schedule", {
+    p_clinic_id: clinicId
+  });
 
+const publicSchedule = Array.isArray(publicScheduleData)
+  ? publicScheduleData[0]
+  : publicScheduleData;
+
+const publicScheduleElement = document.getElementById(
+  "publicClinicNotificationSchedule"
+);
+
+if (publicScheduleElement) {
+  if (publicScheduleError || !publicSchedule) {
+    publicScheduleElement.innerHTML = `
+      <p><strong>お問い合わせ通知の休止時間・休止日</strong></p>
+      <p>設定情報を表示できません。</p>
+    `;
+  } else {
+    const weekdays = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
+    const weeklyDays = Array.isArray(publicSchedule.weekly_off_days)
+      ? publicSchedule.weekly_off_days
+          .map(day => weekdays[Number(day)])
+          .filter(Boolean)
+      : [];
+
+    const dailyOff = publicSchedule.daily_off_enabled
+      ? `${String(publicSchedule.daily_off_start || "").slice(0, 5)} ～ ${String(publicSchedule.daily_off_end || "").slice(0, 5)}`
+      : "設定なし";
+
+    const longTermOff = publicSchedule.long_term_off_enabled
+      ? `${publicSchedule.long_term_off_start || "開始日未設定"} ～ ${publicSchedule.long_term_off_end || "終了日未設定"}`
+      : "設定なし";
+
+    publicScheduleElement.innerHTML = `
+      <p><strong>お問い合わせ通知の休止時間・休止日</strong></p>
+      <p>毎日の通知休止：${dailyOff}</p>
+      <p>曜日指定の通知OFF日：${weeklyDays.length ? weeklyDays.join("、") : "設定なし"}</p>
+      <p>長期休診中の通知休止：${longTermOff}</p>
+    `;
+  }
+}
+    
+    const clinicImagePath = clinic.id + "/cover.jpg";
+
+const { data: clinicImageUrlData } =
+  supabaseClient.storage
+    .from("clinic-images")
+    .getPublicUrl(clinicImagePath);
+
+const clinicImageUrl =
+  clinicImageUrlData.publicUrl + "?v=" + Date.now();
 
     const receptionMap = {
         open: {
@@ -7449,14 +9658,23 @@ async function showClinicDetails(clinicId) {
             ${clinicPublicationNotice}
 
             <h2>${escapeHtml(clinic.name)}</h2>
+            
+            <div class="clinic-detail-grid" style="
+    display:grid;
+    grid-template-columns: 380px 1fr;
+    gap:58px;
+    align-items:start;
+">
+            
             <div
-  style="
+style="
     margin: 15px 0 20px;
-    text-align: center;
-  "
+    text-align: left;
+"
 >
   <div style="display:none;"></div>
 
+            <div>
             <p>
             <span style="
                  display:inline-block;
@@ -7477,27 +9695,22 @@ async function showClinicDetails(clinicId) {
             : ''
             }
 
+            <div>
             <p><strong>診療科：</strong>${escapeHtml(clinic.department || "未登録")}</p>
             <p><strong>住所：</strong>${escapeHtml(clinic.address || "未登録")}</p>
             <p><strong>電話番号：</strong>${escapeHtml(clinic.phone || "未登録")}</p>
             <p><strong>支払い方法：</strong>${cashlessLabel}</p>
 
             <div id="clinicPublicVaccineInfo"></div>
+            
+            // 診療時間・休診日は未登録施設では表示しない
+                    
+            </div>
+                    </div>
+                    </div>
 
-            ${
-                clinic.opening_hours
-                    ? `<p><strong>診療時間：</strong>${escapeHtml(clinic.opening_hours)}</p>`
-                    : ""
-            }
-
-            ${
-                clinic.closed_days
-                    ? `<p><strong>休診日：</strong>${escapeHtml(clinic.closed_days)}</p>`
-                    : ""
-            }
-
-            ${
-    clinic.clinic_features
+           ${
+    clinic.clinic_page_custom_content
         ? `
             <section style="
                 margin-top:24px;
@@ -7507,15 +9720,36 @@ async function showClinicDetails(clinicId) {
                 border-radius:8px;
             ">
                 <h3 style="margin-top:0;">
-                    主な対応分野・当院の特徴
+                    地域の皆様へのアピールポイント、留意していただきたい注意点、及びSNS等のリンク先等
                 </h3>
                 <p style="white-space:pre-wrap; margin-bottom:0;">${escapeHtml(
-                    clinic.clinic_features
+                    clinic.clinic_page_custom_content
                 )}</p>
             </section>
         `
         : ""
 }
+
+
+<div style="margin:20px 0; display:flex; flex-direction:column; gap:10px;">
+  <button type="button"
+    onclick="location.href='clinic-settings-results.html?clinicId=${encodeURIComponent(clinic.id)}&section=reception'">
+    受付時間
+  </button>
+  <button type="button"
+    onclick="location.href='clinic-settings-results.html?clinicId=${encodeURIComponent(clinic.id)}&section=notification'">
+    お問い合わせ通知の休止時間・休止日
+  </button>
+</div>
+
+<div id="clinicSettingsInline" style="display:none;">
+  <h3>受付時間・休診日の確認</h3>
+  <p id="inlineClinicName"></p>
+  <div id="inlineClinicSettingsContent"></div>
+  <button type="button" onclick="closeClinicSettingsInline()">
+    クリニック詳細に戻る
+  </button>
+</div>
 
 ${
     clinic.patient_notice
@@ -7664,12 +9898,168 @@ ${
 </div>
 
                   ${buildWeeklyReceptionScheduleEditor(clinic)}
-                  <button type="button" onclick="showClinicManagementSection('')" style="width:auto; margin-top:10px; background:#64748b;">
-                      ← 編集メニューに戻る
-                  </button>
-                </section>`
+                  <div style="margin-top:20px; padding:15px; border:1px solid #ddd; border-radius:8px;">
+
+<h3>住所・電話番号</h3>
+<p><strong>住所：</strong>${escapeHtml(clinic.address || '未登録')}</p>
+<p><strong>電話番号：</strong>${escapeHtml(clinic.phone || '未登録')}</p>
+                `
                 : ""
             }
+
+${canManageReception ? `
+<section class="clinic-website-section">
+  <h3>ホームページ設定</h3>
+
+
+<label for="basicCashlessStatus"
+       style="display:block; margin-top:16px; font-weight:bold;">
+    支払い方法
+</label>
+<select
+    id="basicCashlessStatus"
+    style="width:100%; box-sizing:border-box;"
+>
+    <option value="unknown" ${clinic.cashless_status === "unknown" ? "selected" : ""}>未確認・未設定</option>
+    <option value="cash_only" ${clinic.cashless_status === "cash_only" ? "selected" : ""}>現金のみ</option>
+    <option value="supported" ${clinic.cashless_status === "supported" ? "selected" : ""}>キャッシュレス対応</option>
+</select>
+<button
+    type="button"
+    onclick="saveClinicCashlessStatus(${clinic.id})"
+    style="margin-top:8px;"
+>
+    支払い設定を保存
+</button>
+
+
+
+
+  <label for="basicWebsiteUrlInput">ホームページURL</label>
+<input
+    type="url"
+    id="basicWebsiteUrlInput"
+    placeholder="https://example.com"
+    value="${escapeHtml(clinic.website_url || '')}"
+    style="width:100%; box-sizing:border-box;"
+>
+<button
+    type="button"
+    onclick="saveClinicWebsiteUrl('${clinic.id}')"
+    style="margin-top:8px;"
+>
+    ホームページURLを保存
+</button>
+
+<div style="
+    margin:16px 0 22px;
+    padding:16px;
+    background:#ffffff;
+    border:1px solid #d9e4ec;
+    border-radius:8px;
+">
+    <p style="font-weight:bold; margin-top:0;">
+        予約外受付可能医療機関の表示
+    </p>
+
+    <p>
+        現在：
+        <strong>
+            ${clinic.accepts_walk_ins === true ? "表示中" : "表示なし"}
+        </strong>
+    </p>
+
+    <button
+        type="button"
+        onclick="setClinicWalkInAcceptance(${clinic.id}, true)"
+        style="padding:10px; margin-right:8px; cursor:pointer;"
+    >
+        ON（予約外受付可能）
+    </button>
+
+    <button
+        type="button"
+        onclick="setClinicWalkInAcceptance(${clinic.id}, false)"
+        style="padding:10px; cursor:pointer;"
+    >
+        OFF（表示しない）
+    </button>
+</div>
+
+<label for="basicReservationUrlInput"
+       style="display:block; margin-top:16px; font-weight:bold;">
+    予約ページURL
+</label>
+<input
+    type="url"
+    id="basicReservationUrlInput"
+    placeholder="https://example.com/reservation/"
+    value="${escapeHtml(clinic.reservation_url || '')}"
+    style="width:100%; box-sizing:border-box;"
+>
+<button
+    type="button"
+    onclick="saveClinicReservationUrl(${clinic.id})"
+    style="margin-top:8px;"
+>
+    予約URLを保存
+</button>
+
+<hr style="margin:24px 0;">
+
+<h3>ログイン情報の変更</h3>
+
+<label for="clinicLoginEmailInput"
+       style="display:block; margin-top:16px; font-weight:bold;">
+    ログインメールアドレス
+</label>
+<input
+    type="email"
+    id="clinicLoginEmailInput"
+    placeholder="新しいメールアドレス"
+    style="width:100%; box-sizing:border-box;"
+>
+<button
+    type="button"
+    onclick="changeClinicLoginEmail()"
+    style="margin-top:8px;">
+    メールアドレスを変更
+</button>
+
+<label for="clinicLoginNewPassword"
+       style="display:block; margin-top:20px; font-weight:bold;">
+    新しいパスワード（10文字以上）
+</label>
+<input
+    type="password"
+    id="clinicLoginNewPassword"
+    autocomplete="new-password"
+    placeholder="新しいパスワード"
+    style="width:100%; box-sizing:border-box;"
+>
+<label for="clinicLoginNewPasswordConfirm"
+       style="display:block; margin-top:10px; font-weight:bold;">
+    新しいパスワード（確認）
+</label>
+<input
+    type="password"
+    id="clinicLoginNewPasswordConfirm"
+    autocomplete="new-password"
+    placeholder="もう一度入力"
+    style="width:100%; box-sizing:border-box;"
+>
+<button
+    type="button"
+    onclick="changeClinicLoginPassword()"
+    style="margin-top:8px;">
+    パスワードを変更
+</button>
+
+<p id="clinicLoginSettingsMessage"
+   role="status"
+   style="margin-top:12px;"></p>
+</section>` 
+: ""}
 
             ${canManageReception
                 ? buildClinicManagementSection(
@@ -7692,7 +10082,7 @@ ${
                         onclick="showPatientInquiryForm(${clinic.id}, this.dataset.clinicName)"
                         style="display:block; width:100%; min-height:64px; margin:0; padding:15px 18px; border:0; border-radius:12px; background:#075fd8; color:white; font-size:19px; font-weight:bold; line-height:1.35; box-shadow:0 4px 10px rgba(7, 95, 216, 0.28); cursor:pointer;"
                     >
-                        ✉️ この医療機関に問い合わせる
+                        この医療機関に問い合わせる
                     </button>
                     <p style="margin:10px 0 0; color:#475569; font-size:12px;">
                         患者様専用・氏名、電話番号、メールアドレスの入力が必要です
@@ -7740,6 +10130,8 @@ function parkClinicManagementArea() {
 }
 
 function attachClinicManagementToDetail() {
+    const patientInquirySection = document.getElementById("patientInquirySection");
+    if (patientInquirySection) patientInquirySection.style.display = "none";
     const area = document.getElementById("clinicInquiryArea");
     const host = document.getElementById("clinicManagementDetailHost");
     const inquiryManagement = document.getElementById("clinicInquiryManagement");
@@ -7760,10 +10152,7 @@ searchClinics();
 let loggedInClinicId = null;
 
 async function showClinicOwnerSection() {
-    if (loggedInClinicId !== null) {
-        await showClinicDetails(loggedInClinicId);
-        return;
-    }
+    hideAboutSiteSection();
 
     const section = document.getElementById("clinicOwnerSection");
 
@@ -7777,6 +10166,7 @@ async function showClinicOwnerSection() {
 }
 
 function showClinicLogin() {
+    hideAboutSiteSection();
     showClinicOwnerSection();
     showClinicPortalLogin();
 }
@@ -8063,6 +10453,33 @@ function showAdminLogin() {
             });
         }, 150);
     }
+}
+
+function showHome() {
+  history.pushState({ view: "home" }, "", location.pathname);
+
+  document.getElementById("clinicSearchSection")
+    ?.style.setProperty("display", "none", "important");
+
+  document.getElementById("aboutSiteSection")
+    ?.style.setProperty("display", "none", "important");
+
+  const homeSelectors = [
+    ".home-hero-new",
+    ".reference-feature-grid",
+    ".home-feature-title",
+    ".home-info-row",
+    ".kawasaki-cityscape",
+    ".medical-cta"
+  ];
+
+  homeSelectors.forEach(selector => {
+    document.querySelectorAll(selector).forEach(el => {
+      el.style.removeProperty("display");
+    });
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function hideAdminLogin() {
@@ -8517,41 +10934,31 @@ document
                 return;
             }
 
-            const applicationDepartments =
-                getClinicApplicationDepartments();
+            const applicationEmail =
+                document.getElementById("applicationEmail").value.trim();
 
-            const { error } = await supabaseClient
-                .from("clinic_applications")
-                .insert({
-                    clinic_name:
-                        document.getElementById("applicationClinicName").value,
-                    medical_institution_code:
-                        document.getElementById("applicationMedicalCode").value,
-                    applicant_name:
-                        document.getElementById("applicationApplicantName").value,
-                    email:
-                        document.getElementById("applicationEmail").value,
-                    phone:
-                        document.getElementById("applicationPhone").value,
-                    message:
-                        "標榜診療科：" + applicationDepartments.join("、")
-                });
+            const { error: authError } = await supabaseClient.auth.signInWithOtp({
+                email: applicationEmail,
+                options: {
+                shouldCreateUser: true
+                }
+            });
 
-            if (error) {
-                console.error(error);
+            if (authError) {
+                console.error(authError);
                 result.style.color = "#b91c1c";
                 result.textContent =
-                    "送信できませんでした。もう一度お試しください。";
-                return;
+                "認証メールを送信できませんでした。もう一度お試しください。";
+            return;
             }
+                
+            document.getElementById("clinicApplicationForm").style.display = "none";
 
-            document
-                .getElementById("clinicApplicationForm")
-                .reset();
+            document.getElementById("clinicApplicationOtpArea").style.display = "block";
 
-            hideClinicPortalPanels();
-            document.getElementById("clinicApplicationComplete").style.display =
-                "block";
+            result.textContent = "";
+            
+            
         } catch (error) {
             console.error(error);
             result.style.color = "#b91c1c";
@@ -8739,6 +11146,15 @@ async function rejectClinicApplication(applicationId) {
         action: "reject",
         application_id: applicationId,
         reason: reason
+    }, applicationId);
+}
+
+async function revokeClinicApplication(applicationId) {
+    if (!confirm("この申請の承認を取り消しますか？")) return;
+
+    await invokeClinicApplicationReview({
+        action: "revoke",
+        application_id: applicationId
     }, applicationId);
 }
 
@@ -9082,12 +11498,30 @@ async function loadClinicNotificationSchedule() {
     if (!clinicId) return;
 
     const { data, error } = await supabaseClient.rpc(
-      "get_clinic_notification_schedule",
-      { p_clinic_id: clinicId }
+    "get_public_clinic_notification_schedule",
+    { p_clinic_id: clinicId }
     );
 
     if (error) throw error;
     const setting = Array.isArray(data) ? data[0] : data;
+
+    document.getElementById("clinicWeeklyOffEnabled").checked =
+    Array.isArray(setting.weekly_off_days) &&
+    setting.weekly_off_days.length > 0;
+    
+    const weeklyOffDays = setting.weekly_off_days || [];
+
+    [
+    ["clinicWeeklyOffMon", 1],
+    ["clinicWeeklyOffTue", 2],
+    ["clinicWeeklyOffWed", 3],
+    ["clinicWeeklyOffThu", 4],
+    ["clinicWeeklyOffFri", 5],
+    ["clinicWeeklyOffSat", 6],
+    ["clinicWeeklyOffSun", 0]
+    ].forEach(([id, day]) => {
+    document.getElementById(id).checked = weeklyOffDays.includes(day);
+    });
 
     document.getElementById("clinicDailyNotificationOffEnabled").checked =
       setting?.daily_off_enabled === true;
@@ -9113,6 +11547,21 @@ async function saveClinicNotificationSchedule() {
   const message = document.getElementById("clinicNotificationScheduleMessage");
   const dailyEnabled =
     document.getElementById("clinicDailyNotificationOffEnabled").checked;
+  
+    const weeklyOffEnabled =
+  document.getElementById("clinicWeeklyOffEnabled").checked;
+  
+    const weeklyOffDays = [
+  ["clinicWeeklyOffSun", 0],
+  ["clinicWeeklyOffMon", 1],
+  ["clinicWeeklyOffTue", 2],
+  ["clinicWeeklyOffWed", 3],
+  ["clinicWeeklyOffThu", 4],
+  ["clinicWeeklyOffFri", 5],
+  ["clinicWeeklyOffSat", 6]
+  ]
+  .filter(([id]) => document.getElementById(id).checked)
+  .map(([, day]) => day);
   const dailyStart =
     document.getElementById("clinicDailyNotificationOffStart").value;
   const dailyEnd =
@@ -9156,6 +11605,7 @@ async function saveClinicNotificationSchedule() {
         p_daily_off_enabled: dailyEnabled,
         p_daily_off_start: dailyEnabled ? dailyStart : null,
         p_daily_off_end: dailyEnabled ? dailyEnd : null,
+        p_weekly_off_days: weeklyOffEnabled ? weeklyOffDays : [],
         p_long_term_off_enabled: longTermEnabled,
         p_long_term_off_start: longTermEnabled ? longTermStart : null,
         p_long_term_off_end: longTermEnabled ? longTermEnd : null
@@ -9219,13 +11669,32 @@ async function clinicLogin() {
     }
 
     message.textContent =
-        "医療機関としてログインしました。";
+        "医療機関としてログインしました。GOボタンを押して下さい。";
+
+        message.textContent =
+    "医療機関としてログインしました。GOボタンを押して下さい。";
+
+     document.querySelector('.home-hero-new')?.style.setProperty('display', 'none', 'important');
+     document.querySelector('.reference-feature-grid')?.style.setProperty('display', 'none', 'important');
+     document.querySelector('.home-feature-title')?.style.setProperty('display', 'none', 'important');
+     document.querySelector('.home-info-row')?.style.setProperty('display', 'none', 'important');
+     document.querySelector('.medical-cta')?.style.setProperty('display', 'none', 'important');
+     document.querySelector('.kawasaki-cityscape')?.style.setProperty('display', 'none', 'important');
+     document.getElementById('aboutSiteSection')?.style.setProperty('display', 'none', 'important');
+
+loggedInClinicId = Number(account.clinic_id);
 
      loggedInClinicId = Number(account.clinic_id);
      const portalButton = document.getElementById("clinicPortalButton");
      if (portalButton) portalButton.textContent = "🏥 医療機関の管理画面へ";
 
      document.getElementById("clinicInquiryArea").style.display = "block";
+
+    const managementParking = document.getElementById("clinicManagementParking");
+    if (managementParking) {
+    managementParking.style.display = "none";
+   }
+
      loadClinicImage();
      loadClinicNotificationEmail();
      loadClinicNotificationSchedule();
@@ -9234,7 +11703,18 @@ async function clinicLogin() {
 
      loadClinicInquiries();
 
-     await showClinicDetails(Number(account.clinic_id));
+     const searchSection = document.getElementById("clinicSearchSection");
+
+if (searchSection) {
+    searchSection.style.setProperty("display", "block", "important");
+
+    setTimeout(() => {
+        searchSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 150);
+}
         
 }
 function normalizeReplyMatchText(value) {
@@ -9332,7 +11812,7 @@ function renderSimilarLearnedReplies(inquiryId, candidates) {
                 <p style="margin:0 0 5px;"><strong>候補${index + 1}</strong></p>
                 <p style="margin:0 0 5px; font-size:13px;"><strong>以前の質問：</strong>${escapeHtml(shortenReplyCandidateText(candidate.question_text, 100))}</p>
                 <p style="margin:0 0 8px; font-size:13px;"><strong>以前の回答：</strong>${escapeHtml(shortenReplyCandidateText(candidate.reply_text, 160))}</p>
-                <button
+                <button class="learned-reply-btn"
                     type="button"
                     onclick="useLearnedReplyCandidate(${Number(inquiryId)}, ${Number(candidate.id)})"
                     style="margin:0; background:#2563eb;"
@@ -9445,6 +11925,7 @@ async function loadClinicInquiries() {
 
         container.innerHTML += `
             <div style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
+                <p><strong>送信日時：</strong>${inquiry.created_at ? new Date(inquiry.created_at).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }) : "日時不明"}</p>
                 <p><strong>患者氏名：</strong>${escapeHtml(inquiry.patient_name)}</p>
                 <p><strong>メール：</strong>${escapeHtml(inquiry.email)}</p>
                 <p><strong>電話番号：</strong>${escapeHtml(inquiry.phone)}</p>
@@ -9473,7 +11954,7 @@ async function loadClinicInquiries() {
                   </p>
                 ` : ""}
 
-                ${inquiry.reply_message ? `
+                ${false ? `
     <div style="background:#eef7ff; padding:12px; margin-top:12px; border-radius:6px;">
         <p><strong>医療機関からの回答：</strong></p>
         <p>${escapeHtml(inquiry.reply_message)}</p>
@@ -9492,20 +11973,22 @@ async function loadClinicInquiries() {
 
         ${renderSimilarLearnedReplies(inquiry.id, similarCandidates)}
 
-        <textarea
-            id="reply-${inquiry.id}"
-            rows="5"
-            lang="ja"
-            inputmode="text"
-            autocapitalize="none"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="患者様への回答を入力してください"
-            data-reply-method="manual"
-            data-template-base-text=""
-            oninput="updateEditedReplyCandidateState(${inquiry.id}, this)"
-            style="width:100%; box-sizing:border-box; padding:10px; margin-top:8px; resize:vertical;"
-        ></textarea>
+        
+<textarea
+  id="reply-${inquiry.id}"
+  rows="5"
+  lang="ja"
+  inputmode="text"
+  autocapitalize="none"
+  autocomplete="off"
+  spellcheck="false"
+  placeholder="患者様への回答を入力してください"
+  data-reply-method="manual"
+  data-template-base-text=""
+  oninput="updateEditedReplyCandidateState(${inquiry.id}, this)"
+  style="width:100%; box-sizing:border-box; padding:10px; margin-top:8px; resize:vertical;"
+>${escapeHtml(inquiry.reply_message || "")}</textarea>
+
 
         <p
             id="save-candidate-notice-${inquiry.id}"
@@ -9527,7 +12010,7 @@ async function loadClinicInquiries() {
             </span>
         </label>
 
-        <button
+        <button class="saved-reply-btn"
             type="button"
             onclick="fillSuggestedReply(${inquiry.id})"
             style="background:#0f766e;"
@@ -9535,17 +12018,17 @@ async function loadClinicInquiries() {
             登録済み定型文を回答欄に入れる
         </button>
 
-        <button
-            type="button"
-            onclick="saveInquiryReply(${inquiry.id})"
-        >
-            この内容を患者へメール送信する
-        </button>
+        <button class="send-reply-btn"
+  type="button"
+  onclick="saveInquiryReply(${inquiry.id})"
+>
+  ${inquiry.reply_message ? "訂正内容を患者へ再送信する" : "この内容を患者へメール送信する"}
+</button>
     </div>
 `}
 
 ${inquiry.status === "pending" && !inquiry.reply_message ? `
-    <button
+    <button class="resolved-btn"
         type="button"
         onclick="markInquiryResolved(${inquiry.id})"
     >
@@ -9641,6 +12124,12 @@ async function saveInquiryReply(inquiryId) {
     const candidateCheckbox =
         document.getElementById(`save-candidate-${inquiryId}`);
 
+    const sendButton = document.querySelector(
+    `button.send-reply-btn[onclick="saveInquiryReply(${inquiryId})"]`
+  );
+
+  if (sendButton?.disabled) return;
+
     if (!textarea) {
         alert("回答欄が見つかりません。");
         return;
@@ -9659,6 +12148,7 @@ async function saveInquiryReply(inquiryId) {
     if (!confirmed) return;
 
     textarea.disabled = true;
+    if (sendButton) sendButton.disabled = true;
 
     const { data, error } = await supabaseClient.functions.invoke(
         "send-inquiry-reply",
@@ -10368,7 +12858,35 @@ const { data, error } = await query;
                     return a.distance - b.distance;
                 }
             );
+            clinicsWithDistance.sort(
+    function(a, b) {
+        return a.distance - b.distance;
+    }
+);
 
+const searchButton = document.querySelector(
+    '#clinicSearchSection .patient-search-actions button'
+);
+
+if (searchButton) {
+    searchButton.innerHTML =
+        '<img src="icon_nearby.png" alt="" class="action-icon">現在地から近い順';
+}
+
+const searchSection = document.getElementById("clinicSearchSection");
+
+if (searchSection) {
+    searchSection.style.display = "block";
+
+    setTimeout(() => {
+        searchSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 100);
+}
+
+result.innerHTML = "";
             result.innerHTML = "";
 
            clinicsWithDistance
@@ -10603,6 +13121,86 @@ maybeShowClinicPasswordSetup().catch(function(error) {
 
 </script>
 
+<script>
+document.addEventListener('click', function(e) {
+    const loginSection = document.getElementById('clinicOwnerSection');
+    const loginButton = document.getElementById('clinicPortalButton');
+
+    if (!loginSection) return;
+
+    // 医療機関ログインボタンを押した時は閉じない
+    if (loginButton && loginButton.contains(e.target)) return;
+
+    // ログイン画面内を押した時も閉じない
+    if (loginSection.contains(e.target)) return;
+
+    // その他のボタン・リンクを押したら閉じる
+    if (e.target.closest('button, a')) {
+    if (e.target.closest('.medical-cta-button')) return;
+    loginSection.style.display = "none";
+}
+
+});
+
+    document.getElementById("clinicApplicationOtpButton")
+    .addEventListener("click", async function () {
+    const email = document.getElementById("applicationEmail").value.trim();
+    const token = document.getElementById("clinicApplicationOtpCode").value.trim();
+    const result = document.getElementById("clinicApplicationOtpResult");
+
+    const { error } = await supabaseClient.auth.verifyOtp({
+      email: email,
+      token: token,
+      type: "email"
+    });
+
+    if (error) {
+      result.textContent = "認証コードが正しくありません。";
+      return;
+    }
+
+    result.textContent = "メール認証が完了しました。";
+
+    const applicationDepartments =
+                getClinicApplicationDepartments();
+
+            const { error: saveError } = await supabaseClient
+                .from("clinic_applications")
+                .insert({
+                    clinic_name:
+                        document.getElementById("applicationClinicName").value,
+                    medical_institution_code:
+                        document.getElementById("applicationMedicalCode").value,
+                    applicant_name:
+                        document.getElementById("applicationApplicantName").value,
+                    email:
+                        document.getElementById("applicationEmail").value,
+                    phone:
+                        document.getElementById("applicationPhone").value,
+                    message:
+                        "標榜診療科：" + applicationDepartments.join("、")
+                });
+
+            if (saveError) {
+                console.error(saveError);
+                result.style.color = "#b91c1c";
+                result.textContent =
+                    "送信できませんでした。もう一度お試しください。";
+                return;
+            }
+
+            document
+                .getElementById("clinicApplicationForm")
+                .reset();
+
+            hideClinicPortalPanels();
+            document.getElementById("clinicApplicationComplete").style.display =
+                "block";
+
+  });
+
+</script>
+
 <section class="kawasaki-cityscape">
 
     <img
@@ -10629,8 +13227,7 @@ maybeShowClinicPasswordSetup().catch(function(error) {
       </div>
 
       <h2 class="medical-cta-title">
-        貴院の問い合わせ対応に、<br>
-        AIを活用してみませんか？
+        貴院の問い合わせ対応にAIを活用してみませんか？
       </h2>
 
       <p class="medical-cta-text">
@@ -10638,6 +13235,10 @@ maybeShowClinicPasswordSetup().catch(function(error) {
         AIが患者さんからの問い合わせ対応をサポートします。<br>
         まずは貴院をご登録いただき、スタッフの皆さまで実際の問い合わせを<br>
         想定してお試しください。
+      </p>
+
+      <p class="policy-highlight">
+        ※AIがポリシー違反のメールは自動ブロック、よくある返答は自動記憶します。通知設定も可。
       </p>
 
       <p class="medical-cta-free">
@@ -10657,6 +13258,133 @@ maybeShowClinicPasswordSetup().catch(function(error) {
     </div>
 
   </div>
+</section>
+
+<div class="independent-notice">
+    <span>
+        ※クリニル川崎は、独立した民間サイトです。川崎市（自治体）が運営する公式サイト・関連事業ではありません。
+    </span>
+</div>
+
+<section id="listingSection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#ffffff; border-radius:16px;">
+    <h2>掲載情報について</h2>
+
+    <p>
+        クリニル川崎（以下「本サイト」といいます。）では、
+        医療機関を探している方が必要な情報を確認しやすいよう、
+        医療機関に関する各種情報を掲載しています。
+    </p>
+
+    <h3>1. 掲載情報について</h3>
+    <p>
+        本サイトに掲載している医療機関の名称、所在地、電話番号、診療科目、
+        診療時間、休診日、対応可能な診療・検査等の情報は、
+        各医療機関から提供された情報、各医療機関が公開している情報、
+        その他一般に公開されている情報等をもとに掲載しています。
+    </p>
+
+    <h3>2. 情報の正確性について</h3>
+    <p>
+        本サイトでは、掲載情報の正確性および最新性の確保に努めていますが、
+        掲載後に診療時間、休診日、診療内容、予約方法その他の情報が
+        変更されている場合があります。
+    </p>
+
+    <p>
+        受診や予約、お問い合わせの際には、
+        必要に応じて各医療機関の公式ホームページや電話等で
+        最新の情報をご確認ください。
+    </p>
+
+    <h3>3. 掲載について</h3>
+    <p>
+        本サイトへの掲載は、特定の医療機関を推奨、保証または評価することを
+        意味するものではありません。
+        医療機関の選択および受診に関する最終的な判断は、
+        利用者ご自身で行ってください。
+    </p>
+
+    <h3>4. 診療・医療行為について</h3>
+    <p>
+        本サイトは医療機関に関する情報を提供するものであり、
+        本サイト自体が診断、治療、医療相談その他の医療行為を行うものではありません。
+        診療内容や治療方針等については、各医療機関へ直接ご確認ください。
+    </p>
+
+    <h3>5. 本サイトの運営について</h3>
+    <p>
+        本サイト「クリニル川崎」は、独立した民間サイトです。
+        川崎市（自治体）が運営する公式サイトまたは関連事業ではありません。
+    </p>
+</section>
+
+<section id="privacySection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#ffffff; border-radius:16px;">
+    <h2>個人情報保護方針</h2>
+
+    <p>
+    クリニル川崎（以下「本サイト」といいます。）は、
+    本サイトをご利用いただく方の個人情報を適切に取り扱うことを重要な責務と考え、
+    以下のとおり個人情報保護方針を定めます。
+</p>
+
+<h3>1. 取得する情報</h3>
+<p>
+    本サイトでは、お問い合わせ等の際に、氏名、メールアドレス、電話番号、
+    その他利用者が入力した情報を取得する場合があります。（※問い合わせメールの記録は氏名、
+    電話番号、メールアドレス、内容共に30日後に自動消去されます。）
+</p>
+
+<h3>2. 個人情報の利用目的</h3>
+<p>
+    取得した個人情報は、お問い合わせへの対応、医療機関への問い合わせ内容の伝達、
+    本サイトの運営・改善、不正利用の防止など、本サイトのサービス提供に必要な範囲で利用します。
+</p>
+
+<h3>3. 医療機関への情報提供</h3>
+<p>
+    利用者が医療機関への問い合わせ機能を利用した場合、
+    問い合わせへの対応に必要な情報を、利用者が選択した医療機関へ提供する場合があります。
+</p>
+
+<h3>4. 第三者への提供</h3>
+<p>
+    本サイトは、法令に基づく場合や利用者本人の同意がある場合などを除き、
+    個人情報を第三者へ提供しません。
+</p>
+
+<h3>5. 個人情報の保存・管理</h3>
+<p>
+    本サイトは、取得した個人情報について、不正アクセス、漏えい、紛失、
+    改ざん等を防止するため、適切な安全管理に努めます。
+    また、利用目的に照らして不要となった情報については、適切な方法で削除します。
+</p>
+
+<h3>6. アクセス情報等について</h3>
+<p>
+    本サイトでは、サイトの利用状況の把握やサービス改善のため、
+    Cookie、アクセス日時、閲覧ページ、端末・ブラウザ等に関する情報を
+    取得する場合があります。
+</p>
+
+<h3>7. 外部サービスについて</h3>
+<p>
+    本サイトでは、サイト運営や機能提供のために外部サービスを利用する場合があります。
+    外部サービスにおける情報の取り扱いについては、
+    各サービス提供者のプライバシーポリシー等をご確認ください。
+</p>
+
+<h3>8. 本方針の変更</h3>
+<p>
+    本サイトは、法令の改正やサービス内容の変更等に応じて、
+    本方針を変更することがあります。
+    変更後の内容は、本サイト上に掲載した時点から適用されます。
+</p>
+
+<p>
+    なお、本サイト「クリニル川崎」は、独立した民間サイトであり、
+    川崎市（自治体）が運営する公式サイトまたは関連事業ではありません。
+</p>
+
 </section>
 
 <section id="termsSection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#fff; border-radius:16px; line-height:1.9;">
@@ -10694,7 +13422,7 @@ maybeShowClinicPasswordSetup().catch(function(error) {
     <h2>お問い合わせ</h2>
 
     <p>
-        E-mail : clinics.kanri.unei@gmail.com
+        <a href="mailto:clinics.kikaku.unei@gmail.com">clinics.kikaku.unei@gmail.com</a>
     </p>
 
     <p>
@@ -10711,10 +13439,10 @@ maybeShowClinicPasswordSetup().catch(function(error) {
         </div>
 
         <nav class="footer-links" aria-label="フッターナビゲーション">
-            <a href="#" onclick="showListingInfo(); return false;">掲載情報について</a>
+           <a href="#" onclick="showListingSection(); return false;">掲載情報について</a>
             <span class="footer-separator">|</span>
 
-            <a href="#" onclick="showPrivacyInfo(); return false;">個人情報保護方針</a>
+            <a href="#" onclick="showPrivacySection(); return false;">個人情報保護方針</a>
             <span class="footer-separator">|</span>
 
             <a href="#" onclick="showTerms(); return false;">利用規約・免責事項</a>
@@ -10731,6 +13459,9 @@ maybeShowClinicPasswordSetup().catch(function(error) {
 
     </div>
 </footer>
+
+</footer>
+
 
 </body>
 </html>
