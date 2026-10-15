@@ -7455,24 +7455,7 @@ async function showClinicDetails(clinicId) {
     text-align: center;
   "
 >
-  <img
-    src="${clinicImageUrl}"
-    alt="${escapeHtml(clinic.name)}の医療機関画像"
-    loading="lazy"
-    onerror="this.parentElement.style.display='none';"
-    style="
-      display: block;
-      width: 100%;
-      max-width: 720px;
-      max-height: 420px;
-      margin: 0 auto;
-      object-fit: contain;
-      border-radius: 10px;
-      border: 1px solid #dbe3ec;
-      background: #ffffff;
-    "
-  >
-</div>
+  <div style="display:none;"></div>
 
             <p>
             <span style="
