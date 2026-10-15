@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>医療機関設定の確認 | クリニル川崎</title>
+<style>
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f5f7fa;
+  color: #263445;
+}
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+}
+h1 { font-size: 22px; }
+h2 {
+  font-size: 18px;
+  margin-top: 28px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+.item {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+.label {
+  color: #64748b;
+  font-size: 14px;
+}
+.value {
+  margin-top: 5px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+#message { color: #b91c1c; }
+button {
+  margin-top: 24px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #e2e8f0;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  h2 {
+    font-size: 16px;
+  }
+}
+</style>
+
+<style>
+@media screen and (max-width: 767px) {
+  .back-description {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="pageTitle">設定内容の確認</h1>
+  <p id="clinicName"></p>
+  <p id="message">読み込み中です。</p>
+  <section id="receptionSection" hidden>
+    <h2>受付時間</h2>
+    <div class="item">
+      <div class="label">受付時間</div>
+      <div class="value" id="openingHours"></div>
+    </div>
+    <div class="item">
+      <div class="label">休診日</div>
+      <div class="value" id="closedDays"></div>
+    </div>
+  </section>
+  <section id="notificationSection" hidden>
+    <h2>お問い合わせ通知の休止時間・休止日</h2>
+    <div class="item">
+      <div class="label">毎日の通知休止</div>
+      <div class="value" id="dailyOff"></div>
+    </div>
+
+    <div class="item">
+    <div class="label">曜日指定の通知OFF日</div>
+    <div class="value" id="weeklyOff"></div>
+    </div>
+
+    <p>指定曜日：<span id="weeklyOffDays">設定なし</span></p>
+
+    <div class="item">
+      <div class="label">長期休診中の通知休止</div>
+      <div class="value" id="longTermOff"></div>
+    </div>
+
+  </section>
+  <div style="
+  margin-top: 18px;
+  margin-bottom: 18px;
+  padding: 12px;
+  background: #fff7ed;
+  border: 1px solid #d97706;
+  border-radius: 8px;
+  color: #7c2d12;
+  font-weight: 600;
+  line-height: 1.7;
+">
+  <div style="margin-bottom: 6px;">
+    【通知休止中のお問い合わせについて】
+  </div>
+  通知休止中もお問い合わせは送信され、医療機関側に保存されます。ただし、内容の確認・対応は休止明けからとなりますので、あらかじめご了承ください。
+</div>
+  <p class="back-description">
+この画面から前の画面に戻ると、トップページが表示されます。<br>
+クリニック詳細を再度ご覧になる場合は、お手数ですがクリニック検索からお探しください。
+</p>
+  <button type="button" onclick="history.back()">前の画面に戻る</button>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://oitmusjivaguywhaokzf.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bxuBDdiaKib-Mwh2_y8IzQ_lLEwhwkj";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
+
+const params = new URLSearchParams(location.search);
+const clinicId = params.get("clinicId");
+const section = params.get("section");
+
+function showValue(id, value) {
+  document.getElementById(id).textContent =
+    value === null || value === undefined || value === ""
+      ? "未設定"
+      : String(value);
+}
+
+function formatTime(value) {
+  return value ? String(value).slice(0, 5) : "";
+}
+
+async function loadSettings() {
+  const message = document.getElementById("message");
+
+  if (!clinicId) {
+    message.textContent = "医療機関IDが指定されていません。";
+    return;
+  }
+
+  if (section !== "reception" && section !== "notification") {
+    message.textContent = "表示する設定が指定されていません。";
+    return;
+  }
+
+  document.getElementById("pageTitle").textContent =
+    section === "reception"
+      ? "受付時間・休診日の確認"
+      : "お問い合わせ通知の休止設定";
+
+  try {
+    const { data: sessionData, error: sessionError } =
+  await supabaseClient.auth.getSession();
+
+console.log("現在のセッション:", sessionData.session);
+console.log("セッション取得エラー:", sessionError);
+    const { data: clinic, error } = await supabaseClient
+  .from("clinics")
+  .select(`
+    id,
+    name,
+    clinic_reception_schedules (
+      weekday,
+      session_order,
+      start_time,
+      end_time
+    )
+  `)
+  .eq("id", clinicId)
+  .single();
+
+    if (error) throw error;
+
+    document.getElementById("clinicName").textContent =
+      clinic.name || "";
+
+    if (section === "reception") {
+      document.getElementById("receptionSection").hidden = false;
+      const weekdays = [
+  { value: 1, label: "月曜日" },
+  { value: 2, label: "火曜日" },
+  { value: 3, label: "水曜日" },
+  { value: 4, label: "木曜日" },
+  { value: 5, label: "金曜日" },
+  { value: 6, label: "土曜日" },
+  { value: 0, label: "日曜日" }
+];
+
+const schedules = clinic.clinic_reception_schedules || [];
+
+const receptionText = weekdays.map(day => {
+  const sessions = schedules
+    .filter(item => Number(item.weekday) === day.value)
+    .sort((a, b) => Number(a.session_order) - Number(b.session_order));
+
+  const times = sessions
+    .filter(item => item.start_time && item.end_time)
+    .map(item =>
+      `${String(item.start_time).slice(0, 5)}～${String(item.end_time).slice(0, 5)}`
+    );
+
+  return `${day.label}：${times.length ? times.join(" ／ ") : "休診または未設定"}`;
+}).join("\n");
+
+showValue("openingHours", receptionText);
+showValue("closedDays", clinic.closed_days);
+    } else {
+      document.getElementById("notificationSection").hidden = false;
+
+      const { data, error: scheduleError } = await supabaseClient.rpc(
+  "get_public_clinic_notification_schedule",
+  { p_clinic_id: clinicId }
+);
+
+      if (scheduleError) throw scheduleError;
+
+      const setting = Array.isArray(data) ? data[0] : data;
+
+      if (!setting) {
+        showValue("dailyOff", "設定がありません");
+        showValue("longTermOff", "設定がありません");
+      } else {
+        showValue(
+          "dailyOff",
+          setting.daily_off_enabled
+            ? `${formatTime(setting.daily_off_start)} ～ ${formatTime(setting.daily_off_end)}`
+            : "設定なし"
+        );
+
+        showValue(
+          "longTermOff",
+          setting.long_term_off_enabled
+            ? `${setting.long_term_off_start || "開始日未設定"} ～ ${setting.long_term_off_end || "終了日未設定"}`
+            : "設定なし"
+        );
+        const weeklyOffDays = setting.weekly_off_days || [];
+        const weekdayLabels = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
+
+        showValue(
+        "weeklyOffDays",
+        weeklyOffDays.length
+        ? weeklyOffDays.map(day => weekdayLabels[Number(day)]).join("・")
+        : "指定なし"
+        );
+      }
+    }
+
+    message.textContent = "";
+  } catch (error) {
+    console.error(error);
+    message.textContent =
+      "設定を読み込めませんでした。データ構造またはアクセス権限を確認してください。";
+  }
+}
+
+loadSettings();
+</script>
+</body>
+</html>
