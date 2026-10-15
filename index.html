@@ -7348,15 +7348,8 @@ async function showClinicDetails(clinicId) {
         return;
     }
 
-    const clinicImagePath = clinic.id + "/cover.jpg";
+    const clinicImageUrl = null;
 
-const { data: clinicImageUrlData } =
-  supabaseClient.storage
-    .from("clinic-images")
-    .getPublicUrl(clinicImagePath);
-
-const clinicImageUrl =
-  clinicImageUrlData.publicUrl + "?v=" + Date.now();
 
     const receptionMap = {
         open: {
