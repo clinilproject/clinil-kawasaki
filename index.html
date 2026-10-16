@@ -3542,6 +3542,13 @@ body {
       </p>
 
       <p style="font-size:13px; color:#64748b; margin:28px 0;">
+        本サイトは、問い合わせフォームを備えた地域医療情報サイトです。
+        掲載情報やお問い合わせ機能の安全性についても、<br>
+        AIを活用した定期的な点検と改善に取り組んでいます。
+        
+      </p>
+
+      <p style="font-size:13px; color:#64748b; margin:28px 0; text-align:center;">
         2026年 クリニル川崎企画運営部
       </p>
 
@@ -3601,21 +3608,34 @@ body {
     </div>
 </section>
 
+<div class="mobile-illust-area">
+
+    <div class="mobile-doctor-illust">
+        <img src="doctor-hero.png" alt="">
+    </div>
+
+    <div class="mobile-patient-illust">
+        <img src="patient-hero.png" alt="">
+    </div>
+
+</div>
+
+<div style="clear: both; width: 100%; box-sizing: border-box; margin: 12px 0; padding: 0 8px; font-size: 13px; color: #555;">
+  ※ 画面の移動がわかりにくい場合は、画面内の「クリニル川崎」を押してください。
+</div>
+
 <section class="reference-feature-grid">
 
-    <button
+   <button
         type="button"
         class="reference-feature-card"
-        onclick="
-            history.pushState({ view: 'search' }, '', '');
-            document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
-            document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
-            setTimeout(() => document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'}), 100);
-        "
-    >
+        
+        onclick="openClinicSearch()"
+
+        >
         <div class="reference-feature-icon">
-    <img src="icon_search.png" alt="クリニックを検索">
-</div>
+        <img src="icon_search.png" alt="クリニックを検索">
+        </div>
 
         <div class="reference-feature-content">
             <h3>クリニックを検索</h3>
@@ -3629,15 +3649,20 @@ body {
         type="button"
         class="reference-feature-card"
         onclick="
-            history.pushState({ view: 'search' }, '', '');
+            hideAboutSiteSection();
             document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+            document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
+            document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
+            document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
+            document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
             document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
             setTimeout(() => {
                 document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'});
-                sortByDistance();
+                history.pushState({ page: 'nearby' }, '', '#nearby');
+                showNearbyDepartmentSelector();
             }, 150);
         "
-    >
+        >
         <div class="reference-feature-icon">
     <img src="icon_nearby.png" alt="現在地から近い順">
 </div>
@@ -3654,15 +3679,24 @@ body {
         type="button"
         class="reference-feature-card"
         onclick="
-            history.pushState({ view: 'search' }, '', '');
-            document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
-            document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
-            setTimeout(() => {
-                document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'});
-                showRealtimeVaccineInfo();
-            }, 150);
+        hideAboutSiteSection();
+        document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+        document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
+        document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
+        document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
+        document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
+        document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
+
+        showVaccineWardSelector();
+
+        setTimeout(() => {
+        document.getElementById('clinicSearchSection')?.scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+        }, 150);
         "
-    >
+        >
         <div class="reference-feature-icon">
     <img src="icon_vaccine.png" alt="リアルタイムワクチン情報">
 </div>
@@ -3679,15 +3713,20 @@ body {
         type="button"
         class="reference-feature-card"
         onclick="
-            history.pushState({ view: 'search' }, '', '');
+            hideAboutSiteSection();
             document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+            document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
+            document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
+            document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
+            document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
             document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
             setTimeout(() => {
                 document.getElementById('clinicSearchSection')?.scrollIntoView({behavior:'smooth', block:'start'});
-                showRealtimeReceptionClinics();
+                history.pushState({page:'reception'}, '', '#reception');
+                showReceptionWardSelector();
             }, 150);
         "
-    >
+        >
         <div class="reference-feature-icon">
     <img src="icon_available.png" alt="リアルタイム受付可能施設">
 </div>
@@ -3723,23 +3762,19 @@ body {
         </div>
     </div>
 
-    <button
-    type="button"
-    class="home-info-item home-info-contact"
-    style="cursor: default;"
->
+    <div class="home-info-item">
         <div class="reference-feature-icon">
     <img src="btn_chat.png" alt="問い合わせフォーム">
 </div>
 
         <div>
-            <h3>問い合わせフォーム　›</h3>
+            <h3>問い合わせフォーム</h3>
             <p>
                 気になることを医療機関へ<br>
                 直接問い合わせできます。
             </p>
         </div>
-    </button>
+    </divS>
 
     <div class="home-info-item">
         <div class="reference-feature-icon">
