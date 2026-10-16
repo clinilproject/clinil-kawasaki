@@ -3794,9 +3794,22 @@ body {
 
     <div id="clinicOwnerSection" style="display:none; margin-bottom:25px; background:white; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
         <h2> 医療機関の登録・ログイン</h2>
-        <p style="text-align:center; color:#555; line-height:1.7;">
-            初めて登録する医療機関も、登録済みの医療機関も、こちらからお進みください。
-        </p>
+        <p style="text-align:center; color:#555; line-height:1.8;">
+    初めて登録する医療機関も、登録済みの医療機関も、こちらからお進みください。<br><br>
+
+    <span style="
+        display:inline-block;
+        text-align:left;
+        font-size:15px;
+        font-weight:700;
+        color:#0f3f68;
+        line-height:2;
+    ">
+        ※ログイン後、貴院の詳細ページに移動して編集してください。<br>
+        ※編集終了後は必ず編集画面のログアウトボタンを押してください。<br>
+        ※右上のログインボタンに病院マークがある場合は、ログアウトできていない状態です。
+    </span>
+</p>
 
         <div id="clinicPortalHome">
             <div style="display:grid; gap:14px; margin-top:25px;">
@@ -3994,6 +4007,34 @@ body {
 
             <p id="applicationResult" style="white-space:pre-wrap;"></p>
         </form>
+
+        <div id="clinicApplicationOtpArea"
+            style="display:none; padding:20px; text-align:center;">
+
+                <h3>メールアドレスの確認</h3>
+
+            <p>
+               メールに届いた8桁の認証コードを入力してください。
+            </p>
+
+        <input
+            type="text"
+            id="clinicApplicationOtpCode"
+            inputmode="numeric"
+            maxlength="8"
+            autocomplete="one-time-code"
+            placeholder="8桁の認証コード"
+            style="padding:12px; font-size:18px; text-align:center;"
+        >
+
+        <button type="button" id="clinicApplicationOtpButton">
+          認証する
+        </button>
+
+        <p id="clinicApplicationOtpResult"></p>
+
+        </div>
+
 
         <div id="clinicApplicationComplete" style="display:none; text-align:center; padding:20px 0;">
             <h3 style="color:#166534;">登録申請を受け付けました</h3>
