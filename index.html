@@ -8794,7 +8794,7 @@ const latestNoticeUrl = clinic.news_latest_url || clinic.latest_notice_url || ""
             border-radius:10px;
         ">
             <summary style="padding:16px; font-size:18px; font-weight:bold; cursor:pointer;">
-                ✏️ クリニックページ・コメント編集
+                ✏️ ページ情報・支払い設定・コメント
             </summary>
             <div style="padding:0 18px 18px;">
 
@@ -9071,7 +9071,7 @@ function buildClinicManagementMenu(clinic) {
             <div style="margin:0 0 16px; padding:14px 16px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px;">
             <strong style="color:#075985;">🏥 基本情報の確認・更新をお願いします</strong>
             <p style="margin:6px 0 0; color:#475569; font-size:13px; line-height:1.7;">
-            クリニア川崎市では、医療機関の情報は原則として各医療機関に管理・更新をお願いしています。<br>
+            クリニル川崎市では、医療機関の情報は原則として各医療機関に管理・更新をお願いしています。<br>
             診療科・住所・電話番号・診療時間・休診日・公式サイト・予約ページなどに変更がある場合は、最新の情報へ更新してください。
             </p>
             </div>
@@ -9290,39 +9290,6 @@ async function saveClinicBasicInfo(clinicId) {
   alert("住所・電話番号の設定を保存しました");
 }
 
-  
-async function saveClinicReservationUrl(clinicId) {
-    const input = document.getElementById("basicReservationUrlInput");
-    const reservationUrl = input.value.trim();
-
-    if (
-        reservationUrl &&
-        !/^https?:\/\/.+/i.test(reservationUrl)
-    ) {
-        alert("予約URLは https:// または http:// から入力してください。");
-        return;
-    }
-
-    const confirmed = confirm("予約URLを保存しますか？");
-    if (!confirmed) return;
-
-    const { error } = await supabaseClient.rpc(
-        "update_clinic_reservation_url",
-        {
-            p_clinic_id: Number(clinicId),
-            p_reservation_url: reservationUrl
-        }
-    );
-
-    if (error) {
-        console.error("予約URL保存エラー:", error);
-        alert("予約URLを保存できませんでした。");
-        return;
-    }
-
-    alert("予約URLを保存しました。");
-    await showClinicDetails(clinicId);
-}
 async function saveClinicWebsiteUrl(clinicId) {
 
   const input = document.getElementById("basicWebsiteUrlInput");
@@ -9523,6 +9490,14 @@ async function showClinicDetails(clinicId) {
             ${clinicPublicationNotice}
 
             <h2>${escapeHtml(clinic.name)}</h2>
+           
+            <div class="clinic-detail-grid" style="
+    display:grid;
+    grid-template-columns: 380px 1fr;
+    gap:58px;
+    align-items:start;
+">
+           
             <div
   style="
     margin: 15px 0 20px;
@@ -9558,17 +9533,6 @@ async function showClinicDetails(clinicId) {
 
             <div id="clinicPublicVaccineInfo"></div>
 
-            ${
-                clinic.opening_hours
-                    ? `<p><strong>診療時間：</strong>${escapeHtml(clinic.opening_hours)}</p>`
-                    : ""
-            }
-
-            ${
-                clinic.closed_days
-                    ? `<p><strong>休診日：</strong>${escapeHtml(clinic.closed_days)}</p>`
-                    : ""
-            }
 
             ${
     clinic.clinic_features
@@ -9611,6 +9575,26 @@ ${
         `
         : ""
 }
+
+<div style="margin:20px 0; display:flex; flex-direction:column; gap:10px;">
+  <button type="button"
+    onclick="location.href='clinic-settings-results.html?clinicId=${encodeURIComponent(clinic.id)}&section=reception'">
+    受付時間
+  </button>
+  <button type="button"
+    onclick="location.href='clinic-settings-results.html?clinicId=${encodeURIComponent(clinic.id)}&section=notification'">
+    お問い合わせ通知の休止時間・休止日
+  </button>
+</div>
+
+<div id="clinicSettingsInline" style="display:none;">
+  <h3>受付時間・休診日の確認</h3>
+  <p id="inlineClinicName"></p>
+  <div id="inlineClinicSettingsContent"></div>
+  <button type="button" onclick="closeClinicSettingsInline()">
+    クリニック詳細に戻る
+  </button>
+</div>
 
 ${
     clinic.news_page_url
@@ -9737,6 +9721,71 @@ ${
     </button>
 </div>
 
+${buildWeeklyReceptionScheduleEditor(clinic)}
+                  <div style="margin-top:20px; padding:15px; border:1px solid #ddd; border-radius:8px;">
+
+<h3>住所・電話番号</h3>
+<p><strong>住所：</strong>${escapeHtml(clinic.address || '未登録')}</p>
+<p><strong>電話番号：</strong>${escapeHtml(clinic.phone || '未登録')}</p>
+                `
+                : ""
+            }
+
+${canManageReception ? `
+<section class="clinic-website-section">
+  <h3>ホームページ設定</h3>
+
+   <label for="basicWebsiteUrlInput">ホームページURL</label>
+<input
+    type="url"
+    id="basicWebsiteUrlInput"
+    placeholder="https://example.com"
+    value="${escapeHtml(clinic.website_url || '')}"
+    style="width:100%; box-sizing:border-box;"
+>
+<button
+    type="button"
+    onclick="saveClinicWebsiteUrl('${clinic.id}')"
+    style="margin-top:8px;"
+>
+    ホームページURLを保存
+</button>
+
+<div style="
+    margin:16px 0 22px;
+    padding:16px;
+    background:#ffffff;
+    border:1px solid #d9e4ec;
+    border-radius:8px;
+">
+    <p style="font-weight:bold; margin-top:0;">
+        予約外受付可能医療機関の表示
+    </p>
+
+    <p>
+        現在：
+        <strong>
+            ${clinic.accepts_walk_ins === true ? "表示中" : "表示なし"}
+        </strong>
+    </p>
+
+    <button
+        type="button"
+        onclick="setClinicWalkInAcceptance(${clinic.id}, true)"
+        style="padding:10px; margin-right:8px; cursor:pointer;"
+    >
+        ON（予約外受付可能）
+    </button>
+
+    <button
+        type="button"
+        onclick="setClinicWalkInAcceptance(${clinic.id}, false)"
+        style="padding:10px; cursor:pointer;"
+    >
+        OFF（表示しない）
+    </button>
+</div>
+
                   ${buildWeeklyReceptionScheduleEditor(clinic)}
                   <button type="button" onclick="showClinicManagementSection('')" style="width:auto; margin-top:10px; background:#64748b;">
                       ← 編集メニューに戻る
@@ -9851,6 +9900,7 @@ async function showClinicOwnerSection() {
 }
 
 function showClinicLogin() {
+    hideAboutSiteSection();
     showClinicOwnerSection();
     showClinicPortalLogin();
 }
