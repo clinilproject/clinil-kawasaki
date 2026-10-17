@@ -8724,25 +8724,7 @@ async function loadPublicClinicVaccines(clinicId) {
         return;
     }
 
-    container.innerHTML = `
-        <section style="margin:20px 0; padding:18px; background:#f0fdfa; border-left:5px solid #0f766e; border-radius:8px;">
-            <h3 style="margin-top:0;">💉 ワクチン情報</h3>
-            ${visibleVaccines.map(function(item) {
-                const period = item.availability_status === "limited"
-                    ? `${escapeHtml(item.start_date || "")}～${escapeHtml(item.end_date || "")}`
-                    : "期間設定なし";
-                const reservation = item.reservation_status === "not_required" ? "予約不要" : "要予約";
-
-                return `
-                    <div style="margin-top:10px; padding:12px; background:white; border:1px solid #99f6e4; border-radius:8px;">
-                        <p style="font-weight:bold; margin:0 0 7px;">${escapeHtml(item.vaccine_name)}</p>
-                        <p style="margin:0;">${period}／${reservation}${item.low_stock ? "／<strong style='color:#b45309;'>残りわずか</strong>" : ""}</p>
-                        ${item.note ? `<p style="margin-bottom:0; white-space:pre-wrap;">${escapeHtml(item.note)}</p>` : ""}
-                    </div>
-                `;
-            }).join("")}
-        </section>
-    `;
+    container.innerHTML = "";
 }
 
 function editClinicVaccine(vaccineId) {
@@ -8790,8 +8772,15 @@ async function deleteClinicVaccine(clinicId, vaccineId) {
 
 function buildClinicPageContentEditor(clinic) {
     const features = clinic.clinic_features || "";
+    const customContent = clinic.clinic_page_custom_content || "";
     const patientNotice = clinic.patient_notice || "";
     const newsPageUrl = clinic.news_page_url || "";
+    
+
+const reservationUrl = clinic.reservation_url || "";
+const latestNoticeTitle = clinic.news_latest_title || clinic.latest_notice_title || "";
+const latestNoticeUrl = clinic.news_latest_url || clinic.latest_notice_url || "";
+
     const acceptsWalkIns = clinic.accepts_walk_ins === true;
     const cashlessStatus = ["unknown", "cash_only", "supported"].includes(
         clinic.cashless_status
@@ -9082,7 +9071,7 @@ function buildClinicManagementMenu(clinic) {
             <div style="margin:0 0 16px; padding:14px 16px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px;">
             <strong style="color:#075985;">🏥 基本情報の確認・更新をお願いします</strong>
             <p style="margin:6px 0 0; color:#475569; font-size:13px; line-height:1.7;">
-            クリニア川崎市では、医療機関の基本情報は原則として各医療機関に管理・更新をお願いしています。<br>
+            クリニア川崎市では、医療機関の情報は原則として各医療機関に管理・更新をお願いしています。<br>
             診療科・住所・電話番号・診療時間・休診日・公式サイト・予約ページなどに変更がある場合は、最新の情報へ更新してください。
             </p>
             </div>
@@ -9095,19 +9084,20 @@ function buildClinicManagementMenu(clinic) {
                     🤖 AI分類・返信定型文<br><small>最重要</small>
                 </button>
                 <button type="button" onclick="showClinicManagementSection('reception')" style="min-height:64px;">
-                    📅 受付時間・休診
+                    📅 基本情報設定
                 </button>
                 <button type="button" onclick="showClinicManagementSection('vaccine')" style="min-height:64px; background:#0f766e;">
                     💉 ワクチン情報
                 </button>
                 <button type="button" onclick="showClinicManagementSection('page')" style="min-height:64px;">
-                    ✏️ ページ情報・コメント
+                    ✏️ ページ情報・支払い設定・コメント
                 </button>
-                <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:64px;">
-                    🔔 画像・通知設定
+                <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:72px; background:#9f1239; color:white; font-size:17px; font-weight:bold; 
+                border:2px solid #881337; border-radius:8px; box-shadow:0 3px 6px rgba(0,0,0,0.25);">
+                    🔔 画像・メール通知設定
                 </button>
                 <button type="button" onclick="showClihnicManagementSection('listing')" style="min-height:64px; background:#64748b;">
-                    ⚙️ 掲載状態・登録解除
+                    ⚙️ 掲載状態・登録設定
                 </button>
             </div>
         </div>
@@ -9136,12 +9126,33 @@ function buildClinicManagementSection(sectionKey, content) {
 function showClinicManagementSection(sectionKey) {
     activeClinicManagementSection = sectionKey || "";
 
+    // ページ編集欄が非表示の管理セクション内に
+    // 入っている場合、表示領域のある #result に移動する
+    if (sectionKey === "page") {
+        const pageSection = document.querySelector(
+            '[data-management-section="page"]'
+        );
+        const result = document.getElementById("result");
+
+        if (pageSection && result && !result.contains(pageSection)) {
+            result.appendChild(pageSection);
+        }
+    }
+
     const menu = document.getElementById("clinicManagementMenu");
     if (menu) menu.style.display = sectionKey ? "none" : "block";
 
     document.querySelectorAll(".clinic-management-section").forEach(function(section) {
         section.style.display =
             section.dataset.managementSection === sectionKey ? "block" : "none";
+
+            if (isTarget && sectionKey === "page") {
+            const details = section.querySelector("details");
+            if (details) {
+                details.open = true;
+            }
+        }
+
     });
 
     const destination = sectionKey
@@ -9151,6 +9162,218 @@ function showClinicManagementSection(sectionKey) {
     if (destination) {
         destination.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+
+    if (sectionKey === "reception") {
+        ["Address", "Phone"].forEach(name => {
+            const select = document.getElementById("basic" + name + "Mode");
+            if (!select) return;
+
+            select.value = select.dataset.savedMode === "manual"
+                ? "manual"
+                : "public";
+        });
+    }
+}
+
+function openClinicPageEditor() {
+    const pageSection = document.querySelector(
+        '#result [data-management-section="page"]'
+    );
+
+    if (!pageSection) {
+        alert("ページ編集画面が見つかりません。");
+        return;
+    }
+
+    showClinicManagementSection("page");
+
+    pageSection.style.display = "block";
+
+    const editor = pageSection.querySelector(
+        "#clinicPageCustomContent"
+    );
+
+    if (editor) {
+        editor.focus();
+    }
+
+    pageSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+    const result = document.getElementById("result");
+
+    if (result && !result.contains(pageSection)) {
+        result.appendChild(pageSection);
+    }
+
+    showClinicManagementSection("page");
+
+    pageSection.style.display = "block";
+
+    pageSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+function openClinicPageEditor() {
+    const sections = document.querySelectorAll(
+        '[data-management-section="page"]'
+    );
+
+    if (sections.length === 0) {
+        alert("ページ編集画面が生成されていません。");
+        return;
+    }
+
+    const pageSection = sections[sections.length - 1];
+    const result = document.getElementById("result");
+
+    if (result && !result.contains(pageSection)) {
+        result.appendChild(pageSection);
+    }
+
+    document.querySelectorAll(".clinic-management-section").forEach(
+        function(section) {
+            section.style.display = "none";
+        }
+    );
+
+    const menu = document.getElementById("clinicManagementMenu");
+
+    if (menu) {
+        menu.style.display = "none";
+    }
+
+    pageSection.style.display = "block";
+
+    const details = pageSection.querySelector("details");
+
+    if (details) {
+        details.open = true;
+    }
+
+    pageSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+window.openClinicPageEditor = openClinicPageEditor;
+
+async function saveClinicBasicInfo(clinicId) {
+  const addressMode = document.getElementById("basicAddressMode").value;
+  const phoneMode = document.getElementById("basicPhoneMode").value;
+  const address = document.getElementById("basicAddressInput").value.trim();
+  const phone = document.getElementById("basicPhoneInput").value.trim();
+  const websiteUrl = document.getElementById("basicWebsiteUrlInput").value.trim();
+
+  const { error } = await supabaseClient
+    .from("clinics")
+    .update({
+      address_mode: addressMode,
+      address_manual: addressMode === "manual" ? address : null,
+      phone_mode: phoneMode,
+      phone_manual: phoneMode === "manual" ? phone : null,
+      website_url: websiteUrl || null
+    })
+    .eq("id", clinicId);
+
+  if (error) {
+    console.error(error);
+    alert("保存できませんでした");
+    return;
+  }
+
+  alert("住所・電話番号の設定を保存しました");
+}
+
+  
+async function saveClinicReservationUrl(clinicId) {
+    const input = document.getElementById("basicReservationUrlInput");
+    const reservationUrl = input.value.trim();
+
+    if (
+        reservationUrl &&
+        !/^https?:\/\/.+/i.test(reservationUrl)
+    ) {
+        alert("予約URLは https:// または http:// から入力してください。");
+        return;
+    }
+
+    const confirmed = confirm("予約URLを保存しますか？");
+    if (!confirmed) return;
+
+    const { error } = await supabaseClient.rpc(
+        "update_clinic_reservation_url",
+        {
+            p_clinic_id: Number(clinicId),
+            p_reservation_url: reservationUrl
+        }
+    );
+
+    if (error) {
+        console.error("予約URL保存エラー:", error);
+        alert("予約URLを保存できませんでした。");
+        return;
+    }
+
+    alert("予約URLを保存しました。");
+    await showClinicDetails(clinicId);
+}
+async function saveClinicWebsiteUrl(clinicId) {
+
+  const input = document.getElementById("basicWebsiteUrlInput");
+  const websiteUrl = input.value.trim();
+
+  if (websiteUrl && !/^https?:\/\/.+/i.test(websiteUrl)) {
+    alert("URLは https:// または http:// から入力してください。");
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+  .from("clinics")
+  .update({ website_url: websiteUrl || null })
+  .eq("id", clinicId)
+  .select("id, website_url");
+
+console.log("更新確認:", { data, error, clinicId, websiteUrl });
+
+  if (error) {
+    console.error("ホームページURL保存エラー:", error);
+    alert("保存に失敗しました。");
+    return;
+  }
+
+  alert("ホームページURLを保存しました。");
+}
+
+function toggleBasicAddressMode(select) {
+  const input = document.getElementById("basicAddressInput");
+  if (!input) return;
+
+  input.readOnly = select.value === "public";
+
+  if (select.value === "public") {
+    input.value = input.dataset.publicValue || "";
+  } else {
+    input.value = input.dataset.manualValue || "";
+  }
+}
+
+function toggleBasicPhoneMode(select) {
+  const input = document.getElementById("basicPhoneInput");
+  if (!input) return;
+
+  input.readOnly = select.value === "public";
+
+  if (select.value === "public") {
+    input.value = input.dataset.publicValue || "";
+  } else {
+    input.value = input.dataset.manualValue || "";
+  }
 }
 
 async function showClinicDetails(clinicId) {
@@ -9164,7 +9387,8 @@ async function showClinicDetails(clinicId) {
 
     const sameClinicIsAlreadyOpen =
     currentState &&
-    currentState.view === "clinic" &&
+    currentState
+    .view === "clinic" &&
     Number(currentState.clinicId) === Number(clinicId);
 
     if (!sameClinicIsAlreadyOpen) {
@@ -9197,7 +9421,8 @@ async function showClinicDetails(clinicId) {
         return;
     }
 
-    const clinicImageUrl = null;
+    const clinicImageUrl =
+  clinicImageUrlData.publicUrl + "?v=" + Date.now();
 
 
     const receptionMap = {
