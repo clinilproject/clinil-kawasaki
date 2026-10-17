@@ -5179,13 +5179,13 @@ function resetClinicInactivityTimer() {
 }
 
 function startClinicInactivityTimer() {
-  if (isClinicLoginRemembered()) {
-    stopClinicInactivityTimer();
-    return;
-  }
-
   clinicInactivityMonitoring = true;
   resetClinicInactivityTimer();
+
+  console.log("医療機関の自動ログアウト監視を開始しました", {
+    monitoring: clinicInactivityMonitoring,
+    timer: clinicInactivityTimer
+  });
 }
 
 ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach(
@@ -5214,14 +5214,23 @@ if (clinicAutoLogoutMessage) {
     let savedSearchResultsHtml = "";
     let savedSearchScrollY = 0;
 
-    history.replaceState(
-    {
-        view: "home"
-    },
-    ""
+    const params = new URLSearchParams(window.location.search);
+const clinicIdFromUrl = params.get("clinicId");
+const viewFromUrl = params.get("view");
+
+history.replaceState(
+  {
+    view: viewFromUrl === "clinic" && clinicIdFromUrl
+      ? "clinic"
+      : "search",
+    clinicId: clinicIdFromUrl ? Number(clinicIdFromUrl) : null
+  },
+  "",
+  window.location.href
 );
 
 window.addEventListener("popstate", async function(event) {
+    console.log("戻る時の履歴:", event.state, location.href);
   handlingBrowserHistory = true;
 
   try {
@@ -5243,11 +5252,11 @@ window.addEventListener("popstate", async function(event) {
   );
   return;
 }
-    
+    showClinicDetails
     if (state.view === "clinic" && state.clinicId) {
-      await showClinicDetails(state.clinicId);
-      return;
-    }
+  await showClinicDetails(Number(state.clinicId));
+  return;
+}
 
     if (state.view === "search") {
       parkClinicManagementArea();
@@ -5606,6 +5615,14 @@ function getAutomaticReceptionStatus(clinic) {
 
 async function searchClinics(showMore = false) {
 
+    if (!showMore && location.hash !== "#clinic-search-result") {
+    history.pushState(
+        { page: "clinicSearchResult" },
+        "",
+        "#clinic-search-result"
+    );
+    }
+    
     parkClinicManagementArea();
 
     const department =
@@ -5614,6 +5631,8 @@ async function searchClinics(showMore = false) {
     const ward =
         document.getElementById("ward").value;
 
+    const clinicName = document.getElementById("clinicNameSearch").value.trim();
+    
     const result =
         document.getElementById("result");
 
@@ -5640,6 +5659,10 @@ async function searchClinics(showMore = false) {
         );
     }
 
+    if (clinicName !== "") {
+        query = query.ilike("name", `%${clinicName}%`);
+    }
+    
     if (ward !== "") {
         query = query.eq("ward", ward);
     }
@@ -5665,6 +5688,15 @@ async function searchClinics(showMore = false) {
             "<p>検索エラー：" + error.message + "</p>";
         console.error(error);
         return;
+    }
+
+    const myClinicId = await getLoggedInClinicId().catch(() => null);
+
+    if (myClinicId) {
+    data.sort((a, b) =>
+    Number(String(b.id) === String(myClinicId)) -
+    Number(String(a.id) === String(myClinicId))
+    );
     }
 
     if (data.length === 0) {
@@ -5967,11 +5999,49 @@ async function showRealtimeReceptionClinics() {
     }
 
     result.innerHTML = `
-        <h2>🏥 リアルタイム受付可能施設</h2>
-        <p><strong>${escapeHtml(now)}現在：${availableClinics.length}施設</strong></p>
-        <p style="font-size:13px; color:#666;">
-            各医療機関が登録した受付時間・当日の変更・休診情報から表示しています。予約の成立や受診の確約ではありません。受診前に必ず医療機関へご確認ください。
+        <div style="
+        background:#f4fbff;
+        border:1px solid #d8eef8;
+        border-radius:20px;
+        padding:24px 28px;
+        margin-bottom:20px;
+    ">
+        <div style="
+            font-size:13px;
+            font-weight:800;
+            letter-spacing:2px;
+            color:#1687c9;
+            margin-bottom:7px;
+        ">
+            REALTIME RECEPTION
+        </div>
+
+        <h2 style="
+            margin:0 0 10px;
+            color:#073b96;
+            font-size:26px;
+        ">
+            リアルタイム受付可能施設
+        </h2>
+
+        <p style="
+            margin:0 0 8px;
+            font-size:16px;
+            font-weight:700;
+            color:#173b63;
+        ">
+            ${escapeHtml(now)}現在：${availableClinics.length}施設
         </p>
+
+        <p style="
+            margin:0;
+            font-size:13px;
+            line-height:1.8;
+            color:#66788a;
+        ">
+            各医療機関が登録した受付時間・当日の変更・休診情報から表示しています。予約の成立や受診の確約ではありません。
+        </p>
+    </div>
         ${availableClinics.map(function(item) {
             const clinic = item.clinic;
             const reception = item.reception;
@@ -6008,7 +6078,326 @@ async function showRealtimeReceptionClinics() {
     result.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-async function showRealtimeVaccineInfo() {
+function showReceptionWardSelector() {
+
+    document.getElementById("clinicSearchTitle").style.display = "none";
+    document.getElementById("clinicSearchFields").style.display = "none";
+
+    const result = document.getElementById("result");
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+        <h2>区を選択してください</h2>
+        <p style="margin-bottom:20px;">
+            現在受付可能な医療機関を確認したい区を選択してください。
+        </p>
+
+        <div style="display:grid; gap:10px;">
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('川崎区')">川崎区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('幸区')">幸区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('中原区')">中原区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('高津区')">高津区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('宮前区')">宮前区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('多摩区')">多摩区</button>
+
+    <button onclick="history.pushState({page:'receptionResult'}, '', '#reception-result'); showRealtimeReceptionClinics('麻生区')">麻生区</button>
+        </div>
+    `;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function searchNearbyByDepartment(selectedDepartment) {
+
+    const departmentSelect = document.getElementById("department");
+
+    if (departmentSelect) {
+        departmentSelect.value = selectedDepartment;
+    }
+
+    history.pushState(
+    { page: "nearbyResult", department: selectedDepartment },
+    "",
+    "#nearby-result"
+    );
+    
+    sortByDistance();
+}
+
+function showNearbyDepartmentSelector() {
+
+    const clinicSearchTitle = document.getElementById("clinicSearchTitle");
+    const clinicSearchFields = document.getElementById("clinicSearchFields");
+    const result = document.getElementById("result");
+
+    if (clinicSearchTitle) {
+        clinicSearchTitle.style.display = "none";
+    }
+
+    if (clinicSearchFields) {
+        clinicSearchFields.style.display = "none";
+    }
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+    <h2>診療科を選択してください</h2>
+
+    <p style="margin-bottom:20px;">
+        現在地から近い医療機関を検索する診療科を選択してください。
+    </p>
+
+    <div style="display:grid; gap:10px;">
+        <button onclick="searchNearbyByDepartment('内科')">内科</button>
+        <button onclick="searchNearbyByDepartment('外科')">外科</button>
+        <button onclick="searchNearbyByDepartment('整形外科')">整形外科</button>
+        <button onclick="searchNearbyByDepartment('皮膚科')">皮膚科</button>
+        <button onclick="searchNearbyByDepartment('小児科')">小児科</button>
+        <button onclick="searchNearbyByDepartment('耳鼻咽喉科')">耳鼻咽喉科</button>
+        <button onclick="searchNearbyByDepartment('眼科')">眼科</button>
+        <button onclick="searchNearbyByDepartment('婦人科')">婦人科</button>
+        <button onclick="searchNearbyByDepartment('泌尿器科')">泌尿器科</button>
+        <button onclick="searchNearbyByDepartment('精神科')">精神科</button>
+    </div>
+`;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+
+function openClinicSearch() {
+  hideAboutSiteSection();
+
+  document.querySelector('.home-hero-new')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.reference-feature-grid')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.home-feature-title')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.home-info-row')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.medical-cta')?.style.setProperty('display', 'none', 'important');
+
+  const section = document.getElementById('clinicSearchSection');
+  if (section) {
+    section.style.setProperty('display', 'block', 'important');
+  }
+
+  history.pushState({ page: 'clinicSearch' }, '', '#clinic-search');
+
+  setTimeout(() => {
+    document.getElementById('clinicSearchSection')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}, 150);
+}
+
+
+function hideAboutSiteSection() {
+    const about = document.getElementById("aboutSiteSection");
+
+    if (about) {
+        about.style.display = "none";
+    }
+}
+
+function showVaccineWardSelector() {
+
+    history.pushState({ page: "vaccine" }, "", "#vaccine");
+
+    document.getElementById("clinicSearchTitle").style.display = "none";
+    document.getElementById("clinicSearchFields").style.display = "none";
+
+    const result = document.getElementById("result");
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+        <h2>区を選択してください</h2>
+        <p style="margin-bottom:20px;">
+            ワクチン情報を確認したい区を選択してください。
+        </p>
+
+        <div style="display:grid; gap:10px;">
+    <button onclick="history.pushState({page:'vaccineType', ward:'川崎区'}, '', '#vaccine-type'); showVaccineTypeSelector('川崎区')">川崎区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'幸区'}, '', '#vaccine-type'); showVaccineTypeSelector('幸区')">幸区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'中原区'}, '', '#vaccine-type'); showVaccineTypeSelector('中原区')">中原区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'高津区'}, '', '#vaccine-type'); showVaccineTypeSelector('高津区')">高津区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'宮前区'}, '', '#vaccine-type'); showVaccineTypeSelector('宮前区')">宮前区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'多摩区'}, '', '#vaccine-type'); showVaccineTypeSelector('多摩区')">多摩区</button>
+
+    <button onclick="history.pushState({page:'vaccineType', ward:'麻生区'}, '', '#vaccine-type'); showVaccineTypeSelector('麻生区')">麻生区</button>
+        </div>
+    `;
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+window.addEventListener("popstate", function () {
+
+    if (location.hash === "#vaccine") {
+        showVaccineWardSelector();
+        return;
+    }
+
+    if (location.hash === "#reception") {
+        showReceptionWardSelector();
+        return;
+    }
+
+    if (location.hash === "#nearby") {
+        showNearbyDepartmentSelector();
+        return;
+    }
+
+    if (location.hash === "#clinic-search") {
+    document.getElementById("clinicSearchSection")?.style.setProperty("display", "block", "important");
+
+    const title = document.getElementById("clinicSearchTitle");
+    const fields = document.getElementById("clinicSearchFields");
+    const result = document.getElementById("result");
+
+    if (title) title.style.display = "block";
+    if (fields) fields.style.display = "";
+    if (result) result.innerHTML = "";
+
+    return;
+    }
+
+    if (location.hash === "#clinic-search-result") {
+    searchClinics(false);
+    return;
+    }
+
+    if (location.hash === "#vaccine-type") {
+    const selectedWard = history.state?.ward;
+
+    if (selectedWard) {
+        showVaccineTypeSelector(selectedWard);
+    }
+
+    return;
+    }
+    
+    if (
+        location.hash !== "#vaccine-result" &&
+        location.hash !== "#reception-result" &&
+        location.hash !== "#nearby-result"
+    ) {
+        showHome();
+    }
+
+});
+
+async function showVaccineTypeSelector(selectedWard) {
+    const result = document.getElementById("result");
+    if (!result) return;
+    const { data: vaccineData, error } = await supabaseClient
+    .from("clinic_vaccines")
+    .select("vaccine_name")
+    .neq("availability_status", "ended");
+
+    if (error) {
+    console.error(error);
+    result.innerHTML = "<p>ワクチン情報を読み込めませんでした。</p>";
+    return;
+    }
+
+    const vaccineNames = [
+    ...new Set(
+        (vaccineData || [])
+            .map(item => item.vaccine_name)
+            .filter(name => name && name.trim() !== "")
+    )
+].sort();
+
+    result.className = "result-grid";
+
+    result.innerHTML = `
+        <h2>${escapeHtml(selectedWard)}のワクチン情報</h2>
+
+        <p style="margin-bottom:20px;">
+            ワクチンの種類を選択してください。
+        </p>
+
+        <select id="vaccineTypeSelect"
+            style="
+                width:100%;
+                max-width:500px;
+                padding:14px;
+                font-size:16px;
+                border:1px solid #ccc;
+                border-radius:8px;
+                background:white;
+            ">
+            <option value="">ワクチンを選択</option>
+
+            ${vaccineNames.map(name => `
+            <option value="${escapeHtml(name)}">${escapeHtml(name)}</option>
+            `).join("")}
+        </select>
+
+        <button
+            type="button"
+            onclick="selectRealtimeVaccineType('${selectedWard}')"
+            style="
+                width:100%;
+                max-width:500px;
+                margin-top:15px;
+                padding:14px;
+                border:none;
+                border-radius:8px;
+                background:#0b67c2;
+                color:white;
+                font-size:16px;
+                font-weight:bold;
+                cursor:pointer;
+            ">
+            このワクチンで検索
+        </button>
+    `;
+}
+
+function selectRealtimeVaccineType(selectedWard) {
+    const select = document.getElementById("vaccineTypeSelect");
+    if (!select) return;
+
+    const selectedVaccine = select.value;
+
+    if (!selectedVaccine) {
+        alert("ワクチンの種類を選択してください。");
+        return;
+    }
+
+    history.pushState(
+        {
+            page: "vaccineResult",
+            ward: selectedWard,
+            vaccine: selectedVaccine
+        },
+        "",
+        "#vaccine-result"
+    );
+
+    showRealtimeVaccineInfo(selectedWard, selectedVaccine);
+}
+
+async function showRealtimeVaccineInfo(selectedWard, selectedVaccine = "") {
     parkClinicManagementArea();
 
     const inquirySection = document.getElementById("patientInquirySection");
