@@ -8296,6 +8296,14 @@ async function loadClinicInquiryItemSettings(clinicId) {
         </div>
       `;
     });
+
+if (category === "document" || category === "test" || category === "reception") {
+    html += `
+        </div>
+      </details>
+    `;
+    }
+
   });
 
   html += `
@@ -9098,7 +9106,7 @@ function buildClinicManagementMenu(clinic) {
                 <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:64px;">
                     🔔 画像・通知設定
                 </button>
-                <button type="button" onclick="showClinicManagementSection('listing')" style="min-height:64px; background:#64748b;">
+                <button type="button" onclick="showClihnicManagementSection('listing')" style="min-height:64px; background:#64748b;">
                     ⚙️ 掲載状態・登録解除
                 </button>
             </div>
