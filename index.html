@@ -4778,6 +4778,7 @@ body {
 <script>
     
     let loggedInClinicId = null;
+    let pendingClinicPortalAction = "";
     
     function showClinicSearchScreen() {
     const homeHero = document.querySelector(".home-hero-new");
@@ -9907,7 +9908,7 @@ function showClinicLogin() {
     showClinicPortalLogin();
 }
 
-let pendingClinicPortalAction = "";
+
 
 function hideClinicPortalPanels() {
     [
