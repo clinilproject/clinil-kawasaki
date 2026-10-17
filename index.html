@@ -4038,9 +4038,11 @@ body {
 
         <div id="clinicApplicationComplete" style="display:none; text-align:center; padding:20px 0;">
             <h3 style="color:#166534;">登録申請を受け付けました</h3>
-            <p style="line-height:1.8;">
-                運営者が医療機関情報を確認します。<br>
-                審査結果や追加確認が必要な場合は、入力されたメールアドレスへ運営者からご連絡します。
+            <p>
+               メール認証が完了し、医療機関の登録申請を受け付けました。<br>
+               現在、管理者による審査・承認待ちです。<br>
+               承認後、登録されたメールアドレスにご案内します。<br>
+               管理者からのメールをお待ちください。
             </p>
             <button type="button" onclick="showClinicPortalHome()">最初の画面へ戻る</button>
         </div>
@@ -4097,6 +4099,16 @@ body {
     </p>
 </div>
 
+<div style="margin-bottom:20px;">
+  <label for="clinicNameSearch">クリニック名で検索</label>
+  <input
+    type="search"
+    id="clinicNameSearch"
+    placeholder="クリニック名を入力してください"
+    style="width:100%; min-height:56px; padding:16px; border:1px solid #d7e5f5; border-radius:12px;"
+  >
+</div>
+
 <div class="patient-search-fields">
 <div>
         <label>診療科</label>
@@ -4127,7 +4139,31 @@ body {
     <option value="麻生区">麻生区</option>
 </select>
 </div>
+
+<button
+  type="button"
+  onclick="searchClinics(false)"
+  style="
+    min-width: 30px;
+    height: 56px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 12px;
+    background: #317dd4;
+    color: white;
+    font-size: 15px;
+    font-weight: 300;
+    cursor: pointer;
+  "
+>
+  GO
+</button>
+
 </div>
+
+<p style="font-size:13px; color:#52657a; margin-top:12px; margin-bottom:6px;">
+  ※「現在地から近い順」で検索する場合は、先に「診療科」と「区」を選択してから、「現在地から近い順」ボタンを押してください。
+</p>
 
 <p style="font-size: 13px; color: #666; margin-top: 15px;">
     ※掲載情報は変更されている場合があります。受診前に、診療時間・休診日などを各医療機関の公式サイトまたは電話でご確認ください。
@@ -4539,6 +4575,24 @@ body {
         <input id="clinicDailyNotificationOffEnd" type="time" style="width:100%; box-sizing:border-box;">
       </label>
     </div>
+    <div style="margin:10px 0 16px;">
+  <div style="font-weight:bold; margin-bottom:8px;">
+    曜日指定の通知OFF日
+  </div>
+<label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
+  <input id="clinicWeeklyOffEnabled" type="checkbox">
+  通知OFF指定曜日を使用する
+</label>
+<div style="display:flex; flex-wrap:wrap; gap:12px;">
+    <label><input type="checkbox" id="clinicWeeklyOffMon"> 月</label>
+    <label><input type="checkbox" id="clinicWeeklyOffTue"> 火</label>
+    <label><input type="checkbox" id="clinicWeeklyOffWed"> 水</label>
+    <label><input type="checkbox" id="clinicWeeklyOffThu"> 木</label>
+    <label><input type="checkbox" id="clinicWeeklyOffFri"> 金</label>
+    <label><input type="checkbox" id="clinicWeeklyOffSat"> 土</label>
+    <label><input type="checkbox" id="clinicWeeklyOffSun"> 日</label>
+  </div>
+</div>
     <label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
       <input id="clinicLongTermNotificationOffEnabled" type="checkbox">
       長期休診中の通知をOFFにする
@@ -4668,7 +4722,7 @@ body {
             <h3>医療機関からの登録申請 <span id="clinicApplicationCount" style="font-size:13px; color:#2563eb;"></span></h3>
             <p class="admin-card-note">申請内容を確認し、対象医院を選択して承認してください。承認すると医院アカウントの招待メールが送信されます。</p>
             <div id="clinicApplications">
-                <p>申請を読み込み中...</p>
+                <p>申請を読み込み中</p>
             </div>
         </section>
 
@@ -4749,8 +4803,24 @@ body {
 }
     
     function showAboutSite() {
-    document.getElementById("aboutSiteSection").style.display = "block";
-    document.getElementById("aboutSiteSection").scrollIntoView({
+        const termsSection = document.getElementById("termsSection");
+        if (termsSection) {
+        termsSection.style.display = "none";
+        }
+        const privacySection = document.getElementById("privacySection");
+        if (privacySection) {
+        privacySection.style.setProperty("display", "none", "important");
+        }
+        const contactSection = document.getElementById("contactSection");
+        if (contactSection) {
+        contactSection.style.display = "none";
+        }
+        const listingSection = document.getElementById("listingSection");
+        if (listingSection) {
+        listingSection.style.setProperty("display", "none", "important");
+        }
+        document.getElementById("aboutSiteSection").style.display = "block";
+        document.getElementById("aboutSiteSection").scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
@@ -4781,6 +4851,22 @@ function showListingInfo() {
 
 function showPrivacyInfo() {
     const searchSection = document.getElementById("clinicSearchSection");
+
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.display = "none";
+    }
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.display = "none";
+    }
+
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+    aboutSiteSection.style.display = "none";
+    }
+
     const inquirySection = document.getElementById("patientInquirySection");
     const target = document.getElementById("privacyInfo");
 
@@ -4802,11 +4888,94 @@ function showPrivacyInfo() {
     }, 150);
 }
 
+function showListingSection() {
+    const listingSection = document.getElementById("listingSection");
+
+    if (!listingSection) return;
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+    aboutSiteSection.style.setProperty("display", "none", "important");
+   }
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.setProperty("display", "none", "important");
+    }
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.display = "none";
+    }
+    const privacySection = document.getElementById("privacySection");
+    if (privacySection) {
+    privacySection.style.display = "none";
+    }
+
+    listingSection.style.display = "block";
+
+    setTimeout(() => {
+        listingSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 100);
+}
+
+function showPrivacySection() {
+    const privacySection = document.getElementById("privacySection");
+
+    if (!privacySection) return;
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+    aboutSiteSection.style.setProperty("display", "none", "important");
+    } 
+
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.setProperty("display", "none", "important");
+    }
+
+    const listingSection = document.getElementById("listingSection");
+    if (listingSection) {
+    listingSection.style.display = "none";
+    }
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.setProperty("display", "none", "important");
+    }
+
+    privacySection.style.display = "block";
+
+    setTimeout(() => {
+        privacySection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 100);
+}
+
 function showTerms() {
     const termsSection = document.getElementById("termsSection");
 
     if (!termsSection) return;
+    const privacySection = document.getElementById("privacySection");
+if (privacySection) {
+    privacySection.style.display = "none";
+}
 
+    const listingSection = document.getElementById("listingSection");
+if (listingSection) {
+    listingSection.style.display = "none";
+}
+    
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+if (aboutSiteSection) {
+    aboutSiteSection.style.display = "none";
+}
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+    contactSection.style.display = "none";
+    }
     termsSection.style.display = "block";
 
     setTimeout(() => {
@@ -4821,7 +4990,23 @@ function showContact() {
     const contactSection = document.getElementById("contactSection");
 
     if (!contactSection) return;
+    const privacySection = document.getElementById("privacySection");
+if (privacySection) {
+    privacySection.style.setProperty("display", "none", "important");
+}
+    const listingSection = document.getElementById("listingSection");
+if (listingSection) {
+    listingSection.style.setProperty("display", "none", "important");
+}
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+if (aboutSiteSection) {
+    aboutSiteSection.style.display = "none";
+}
 
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+    termsSection.style.display = "none";
+    }
     contactSection.style.display = "block";
 
     setTimeout(() => {
@@ -4830,6 +5015,14 @@ function showContact() {
             block: "start"
         });
     }, 100);
+}
+
+    function hideAboutSite() {
+    document.getElementById("aboutSiteSection").style.display = "none";
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
     
     const CLINIL_AUTH_HASH_PARAMS = new URLSearchParams(window.location.hash.replace(/^#/, ""));
@@ -5437,7 +5630,7 @@ async function searchClinics(showMore = false) {
         .from("clinics")
         .select("*, clinic_reception_schedules(*)")
         .eq("is_public", true)
-        .order("id", { ascending: true })
+        .order("name", { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
 
     if (department !== "") {
