@@ -3427,6 +3427,31 @@ body {
   }
 }
    
+/* スマホ版ヘッダーの位置調整 */
+@media screen and (max-width: 600px) {
+  .site-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .site-logo {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .site-header-actions {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .site-header-actions .clinic-login-button {
+    max-width: 100%;
+    white-space: nowrap;
+  }
+}
+
    </style>
 </head>
 
