@@ -2772,6 +2772,29 @@ body {
 
 }
 
+/* スマホ横向き：4つのボタンをコンパクトにする */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+
+  .reference-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .reference-feature-card {
+    aspect-ratio: auto !important;
+    min-height: 130px !important;
+    height: 130px !important;
+    padding: 10px !important;
+  }
+
+  .reference-feature-card .reference-feature-icon img {
+    width: 64px !important;
+    height: 64px !important;
+    object-fit: contain !important;
+  }
+
+}
+
    @media screen and (max-width: 767px) {
 
   /* イラストを大きく */
