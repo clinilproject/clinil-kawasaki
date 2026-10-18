@@ -3599,20 +3599,25 @@ body {
 
   .site-header-actions {
     display: flex !important;
-    flex: 0 0 auto !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
     flex-direction: row !important;
     align-items: center !important;
+    justify-content: flex-end !important;
     gap: 8px !important;
   }
 
   .site-header-actions .site-nav {
     display: flex !important;
     flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     gap: 8px !important;
     position: static !important;
     top: auto !important;
     left: auto !important;
+    width: auto !important;
+    margin: 0 !important;
   }
 
   .site-header-actions .site-nav button,
@@ -3622,6 +3627,7 @@ body {
     left: auto !important;
     margin: 0 !important;
     width: auto !important;
+    min-width: 0 !important;
     white-space: nowrap !important;
     font-size: 11px !important;
     padding: 8px !important;
