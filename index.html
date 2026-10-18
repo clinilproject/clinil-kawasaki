@@ -3512,21 +3512,46 @@ body {
   }
 }
 
-/* スマホ版：ヘッダーのボタンを上に移動 */
+/* スマホ版：ヘッダーのボタン位置を固定 */
 @media screen and (max-width: 600px) {
 
-  body:not(:has(#clinicOwnerSection[style*="display: block"]))
   .site-header .site-header-actions .site-nav {
     position: relative !important;
     top: -27px !important;
     left: 31px !important;
   }
 
-  body:not(:has(#clinicOwnerSection[style*="display: block"]))
   .site-header #clinicPortalButton {
     position: relative !important;
     top: -23px !important;
     left: -40px !important;
+  }
+
+}
+
+/* スマホ横向き：検索ボタンを画面内に収める */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+
+  .reference-feature-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .reference-feature-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 180px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 16px 8px !important;
+  }
+
+  .reference-feature-card img {
+    max-width: 100% !important;
+    height: auto !important;
   }
 
 }
@@ -3766,6 +3791,7 @@ body {
         onclick="
             hideAboutSiteSection();
             document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+            document.querySelector('.mobile-illust-area')?.style.setProperty('display','none','important');
             document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
             document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
             document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
@@ -3796,6 +3822,7 @@ body {
         onclick="
         hideAboutSiteSection();
         document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+        document.querySelector('.mobile-illust-area')?.style.setProperty('display','none','important');
         document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
         document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
         document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
@@ -3830,6 +3857,7 @@ body {
         onclick="
             hideAboutSiteSection();
             document.querySelector('.home-hero-new')?.style.setProperty('display','none','important');
+            document.querySelector('.mobile-illust-area')?.style.setProperty('display','none','important');
             document.querySelector('.reference-feature-grid')?.style.setProperty('display','none','important');
             document.querySelector('.home-feature-title')?.style.setProperty('display','none','important');
             document.querySelector('.home-info-row')?.style.setProperty('display','none','important');
@@ -4186,9 +4214,17 @@ body {
     type="button"
     onclick="
         document.getElementById('clinicSearchSection')?.style.setProperty('display','none','important');
+
         document.querySelector('.home-hero-new')?.style.setProperty('display','block','important');
+        document.querySelector('.reference-feature-grid')?.style.setProperty('display','grid','important');
+        document.querySelector('.mobile-illust-area')?.style.removeProperty('display');
+
+        document.querySelector('.home-feature-title')?.style.removeProperty('display');
+        document.querySelector('.home-info-row')?.style.removeProperty('display');
+        document.querySelector('.medical-cta')?.style.removeProperty('display');
+
         window.scrollTo({ top:0, behavior:'smooth' });
-    "
+        "
     style="
         margin-bottom:22px;
         border:none;
@@ -6296,6 +6332,7 @@ function openClinicSearch() {
   hideAboutSiteSection();
 
   document.querySelector('.home-hero-new')?.style.setProperty('display', 'none', 'important');
+  document.querySelector('.mobile-illust-area')?.style.setProperty('display', 'none', 'important');
   document.querySelector('.reference-feature-grid')?.style.setProperty('display', 'none', 'important');
   document.querySelector('.home-feature-title')?.style.setProperty('display', 'none', 'important');
   document.querySelector('.home-info-row')?.style.setProperty('display', 'none', 'important');
