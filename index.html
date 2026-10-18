@@ -646,9 +646,12 @@
 @media (max-width: 900px) {
     .site-header-inner {
         padding: 12px 12px;
-        flex-wrap: wrap;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
         gap: 8px;
-        padding-bottom: 0px;
+        padding-bottom: 0;
     }
 
     .site-logo-title {
@@ -671,18 +674,13 @@
     }
 
     #clinicPortalButton {
-        margin-left: auto;
-        /* ボタンを小さくする */
-        font-size: 12px;
-        padding: 6px 9px;
-
-        /* 少し上に移動 */
-        position: relative;
-        top: -20px;
-
-        /* 文字の折り返し防止 */
-        white-space: nowrap;
-    }
+    margin-left: auto;
+    font-size: 12px;
+    padding: 6px 9px;
+    position: relative;
+    top: -20px;
+    white-space: nowrap;
+}
 
     .site-header-inner > :first-child {
         text-align: left;
@@ -703,6 +701,12 @@
     .site-header-actions .site-nav {
         position: relative;
         top: -8px;
+    }
+
+    .site-nav button[onclick="showAboutSite()"] {
+    position: relative;
+    top: 15px;
+    left: 120px;
     }
 
 
@@ -3449,6 +3453,71 @@ body {
   .site-header-actions .clinic-login-button {
     max-width: 100%;
     white-space: nowrap;
+  }
+}
+
+  /* スマホ版：ヘッダーロゴの折り返し防止 */
+/* スマホ版ヘッダー：ロゴとボタンを表示領域に収める */
+@media screen and (max-width: 600px) {
+  .site-header-inner {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+
+  .site-logo {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+  }
+
+  .site-logo-title {
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  .site-header-actions {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    max-width: 100% !important;
+  }
+
+  #clinicPortalButton {
+    position: relative !important;
+    top: -10px !important;
+    margin-left: 0 !important;
+  }
+
+  .site-header-actions .site-nav {
+    position: relative !important;
+    top: -10px !important;
+  }
+
+}
+
+/* スマホ版：ヘッダーボタンを前面に表示 */
+@media screen and (max-width: 600px) {
+  .site-header {
+    position: relative !important;
+    z-index: 1000 !important;
+  }
+
+  .site-header-inner {
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  .site-header-actions {
+    position: relative !important;
+    z-index: 1002 !important;
+  }
+
+  #clinicPortalButton,
+  .site-header-actions .site-nav button {
+    position: relative !important;
+    z-index: 1003 !important;
   }
 }
 
