@@ -2776,9 +2776,9 @@ body {
 @media screen and (max-width: 900px) and (orientation: landscape) {
 
   .reference-feature-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+}
 
   .reference-feature-card {
     aspect-ratio: auto !important;
@@ -3575,6 +3575,56 @@ body {
   .reference-feature-card img {
     max-width: 100% !important;
     height: auto !important;
+  }
+
+}
+
+/* スマホ横向き：ヘッダーのボタンを横並びにする */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+
+  .site-header-inner {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 10px 16px !important;
+  }
+
+  .site-logo {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .site-header-actions {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .site-header-actions .site-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+  }
+
+  .site-header-actions .site-nav button,
+  .site-header #clinicPortalButton {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    width: auto !important;
+    white-space: nowrap !important;
+    font-size: 11px !important;
+    padding: 8px !important;
   }
 
 }
