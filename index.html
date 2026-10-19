@@ -3647,6 +3647,23 @@ body {
   }
 }
 
+/* スマホ版：著作権表示を画面中央に配置 */
+@media screen and (max-width: 600px) {
+    .site-footer .footer-copyright {
+        grid-column: 1 / -1 !important;
+        justify-self: center !important;
+        align-self: center !important;
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0 !important;
+        margin: 10px 0 0 !important;
+        transform: none !important;
+        position: static !important;
+        box-sizing: border-box !important;
+    }
+}
+
+
    </style>
 </head>
 
@@ -4413,6 +4430,8 @@ body {
 
 <div id="result"></div>
 
+
+
 <div id="patientInquirySection" style="display: none; margin-top: 25px;">
 
     <h2 id="patientInquiryClinicName">患者様専用 お問い合わせ</h2>
@@ -4437,16 +4456,7 @@ body {
 
 <p>以下の内容をご確認のうえ、ご利用ください。</p>
 
-<h4 id="listingInfo">1. 掲載情報について</h4>
-<p>
-  診療時間、受付状況、休診情報、対応可能な症状その他の掲載内容は、
-  原則として各医療機関が登録・更新しています。
-</p>
-<p>
-  最新かつ正確な情報の掲載に努めていますが、内容の完全性や正確性を
-  保証するものではありません。受診前に、各医療機関の公式ホームページ
-  または電話などで最新情報をご確認ください。
-</p>
+
 
 <h4>2．お問い合わせについて</h4>
 <p style="padding:10px 12px; border:2px solid #2563eb; border-radius:8px; background:#eff6ff; color:#1e3a8a; font-weight:bold;">
@@ -5068,87 +5078,29 @@ body {
     });
 }
 
-function showListingInfo() {
-    const searchSection = document.getElementById("clinicSearchSection");
-    const inquirySection = document.getElementById("patientInquirySection");
-    const target = document.getElementById("listingInfo");
-
-    if (searchSection) {
-        searchSection.style.setProperty("display", "block", "important");
-    }
-
-    if (inquirySection) {
-        inquirySection.style.display = "block";
-    }
-
-    setTimeout(() => {
-        if (target) {
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
-    }, 150);
-}
-
-function showPrivacyInfo() {
-    const searchSection = document.getElementById("clinicSearchSection");
-
-    const termsSection = document.getElementById("termsSection");
-    if (termsSection) {
-    termsSection.style.display = "none";
-    }
-
-    const contactSection = document.getElementById("contactSection");
-    if (contactSection) {
-    contactSection.style.display = "none";
-    }
-
-    const aboutSiteSection = document.getElementById("aboutSiteSection");
-    if (aboutSiteSection) {
-    aboutSiteSection.style.display = "none";
-    }
-
-    const inquirySection = document.getElementById("patientInquirySection");
-    const target = document.getElementById("privacyInfo");
-
-    if (searchSection) {
-        searchSection.style.setProperty("display", "block", "important");
-    }
-
-    if (inquirySection) {
-        inquirySection.style.display = "block";
-    }
-
-    setTimeout(() => {
-        if (target) {
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
-    }, 150);
-}
-
 function showListingSection() {
     const listingSection = document.getElementById("listingSection");
 
     if (!listingSection) return;
-    const aboutSiteSection = document.getElementById("aboutSiteSection");
-    if (aboutSiteSection) {
-    aboutSiteSection.style.setProperty("display", "none", "important");
-   }
-    const contactSection = document.getElementById("contactSection");
-    if (contactSection) {
-    contactSection.style.setProperty("display", "none", "important");
-    }
-    const termsSection = document.getElementById("termsSection");
-    if (termsSection) {
-    termsSection.style.display = "none";
-    }
+
     const privacySection = document.getElementById("privacySection");
     if (privacySection) {
-    privacySection.style.display = "none";
+        privacySection.style.display = "none";
+    }
+
+    const termsSection = document.getElementById("termsSection");
+    if (termsSection) {
+        termsSection.style.display = "none";
+    }
+
+    const aboutSiteSection = document.getElementById("aboutSiteSection");
+    if (aboutSiteSection) {
+        aboutSiteSection.style.display = "none";
+    }
+
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+        contactSection.style.display = "none";
     }
 
     listingSection.style.display = "block";
@@ -6322,8 +6274,11 @@ async function showRealtimeReceptionClinics() {
 
 function showReceptionWardSelector() {
 
-    document.getElementById("clinicSearchTitle").style.display = "none";
-    document.getElementById("clinicSearchFields").style.display = "none";
+    const title = document.getElementById("clinicSearchTitle");
+    if (title) title.style.display = "none";
+
+    const fields = document.getElementById("clinicSearchFields");
+    if (fields) fields.style.display = "none";
 
     const result = document.getElementById("result");
 
@@ -6455,8 +6410,11 @@ function showVaccineWardSelector() {
 
     history.pushState({ page: "vaccine" }, "", "#vaccine");
 
-    document.getElementById("clinicSearchTitle").style.display = "none";
-    document.getElementById("clinicSearchFields").style.display = "none";
+    const title = document.getElementById("clinicSearchTitle");
+    if (title) title.style.display = "none";
+
+    const fields = document.getElementById("clinicSearchFields");
+    if (fields) fields.style.display = "none";
 
     const result = document.getElementById("result");
 
@@ -12751,6 +12709,74 @@ maybeShowClinicPasswordSetup().catch(function(error) {
   </div>
 </section>
 
+<section id="listingSection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#fff; border-radius:16px; line-height:1.9;">
+    <h2>掲載情報について</h2>
+
+    <p>
+        診療時間、受付状況、休診情報、対応可能な症状その他の掲載内容は、
+        原則として各医療機関が登録・更新しています。
+    </p>
+
+    <p>
+        最新かつ正確な情報の掲載に努めていますが、内容の完全性や正確性を
+        保証するものではありません。受診前に、各医療機関の公式ホームページ
+        または電話などで最新情報をご確認ください。
+    </p>
+</section>
+
+<section id="privacySection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#fff; border-radius:16px; line-height:1.9;">
+    <h2>個人情報保護方針</h2>
+
+    <p>
+        クリニル川崎（以下「本サイト」といいます。）は、
+        利用者の個人情報を適切に取り扱い、その保護に努めます。
+    </p>
+
+    <h3>1．個人情報の取得について</h3>
+    <p>
+        本サイトでは、お問い合わせ等のサービス提供に必要な範囲で、
+        氏名、メールアドレス、お問い合わせ内容その他の情報を取得する場合があります。
+    </p>
+
+    <h3>2．個人情報の利用目的</h3>
+    <p>
+        取得した情報は、お問い合わせの医療機関への伝達、連絡への対応、
+        サービスの運営・改善、不正利用の防止のために利用します。
+    </p>
+
+    <h3>3．第三者への提供</h3>
+    <p>
+        お問い合わせ内容は、送信先として選択された医療機関に提供されます。
+        法令に基づく場合等を除き、本人の同意なく目的外に第三者へ提供しません。
+    </p>
+
+    <h3>4．安全管理</h3>
+    <p>
+        個人情報への不正アクセス、漏えい、紛失等を防止するため、
+        適切な安全管理に努めます。
+    </p>
+
+    <h3>5．個人情報の管理・削除</h3>
+    <p>
+        取得した情報は、利用目的に必要な期間および法令上必要な期間、
+        適切に管理します。
+    </p>
+
+    <h3>6．方針の変更</h3>
+    <p>
+        本方針は、必要に応じて見直し、変更することがあります。
+    </p>
+
+    <h3>7．お問い合わせ窓口</h3>
+    <p>
+        個人情報の取り扱いに関するお問い合わせは、以下までご連絡ください。
+    </p>
+    <p>
+        クリニル川崎企画運営部<br>
+        E-mail：clinics.kikaku.unei@gmail.com
+    </p>
+</section>
+
 <section id="termsSection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#fff; border-radius:16px; line-height:1.9;">
     <h2>利用規約・免責事項</h2>
 
@@ -12785,9 +12811,9 @@ maybeShowClinicPasswordSetup().catch(function(error) {
 <section id="contactSection" style="display:none; max-width:900px; margin:40px auto; padding:30px; background:#fff; border-radius:16px; line-height:1.9; text-align:center;">
     <h2>お問い合わせ</h2>
 
-    <p>
-        E-mail : clinics.kanri.unei@gmail.com
-    </p>
+    <a href="mailto:clinics.kikaku.unei@gmail.com">
+    clinics.kikaku.unei@gmail.com
+    </a>
 
     <p>
         クリニル川崎企画運営部
@@ -12803,10 +12829,10 @@ maybeShowClinicPasswordSetup().catch(function(error) {
         </div>
 
         <nav class="footer-links" aria-label="フッターナビゲーション">
-            <a href="#" onclick="showListingInfo(); return false;">掲載情報について</a>
+            <a href="#" onclick="showListingSection(); return false;">掲載情報について</a>
             <span class="footer-separator">|</span>
 
-            <a href="#" onclick="showPrivacyInfo(); return false;">個人情報保護方針</a>
+            <a href="#" onclick="showPrivacySection(); return false;">個人情報保護方針</a>
             <span class="footer-separator">|</span>
 
             <a href="#" onclick="showTerms(); return false;">利用規約・免責事項</a>
