@@ -3663,6 +3663,44 @@ body {
     }
 }
 
+/* 患者問い合わせ：保存期間と削除に関する重要表示 */
+.inquiry-security-notice {
+    margin: 18px 0;
+    padding: 16px;
+    background: #fff1f2;
+    border: 2px solid #dc2626;
+    border-radius: 10px;
+    color: #7f1d1d;
+    line-height: 1.8;
+    box-sizing: border-box;
+}
+
+.inquiry-security-notice strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #b91c1c;
+    font-size: 15px;
+}
+
+.inquiry-security-notice p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 600px) {
+    .inquiry-security-notice {
+        padding: 12px;
+    }
+
+    .inquiry-security-notice strong {
+        font-size: 14px;
+    }
+
+    .inquiry-security-notice p {
+        font-size: 13px;
+    }
+}
 
    </style>
 </head>
@@ -4492,10 +4530,13 @@ body {
   お問い合わせの際に入力された氏名、メールアドレス、電話番号、患者ID
   および問い合わせ内容は、選択した医療機関への問い合わせ対応に使用されます。
 </p>
-<p>
-  これらの情報は、30日間保存された後、システムから自動的に削除されます。
-  一度削除された情報は、原則として復元できません。
-</p>
+<div class="inquiry-security-notice">
+    <strong>🔒 個人情報・セキュリティに関する重要なお知らせ</strong>
+    <p>
+        これらの情報は、30日間保存された後、システムから自動的に削除されます。
+        一度削除された情報は、原則として復元できません。
+    </p>
+</div>
 <p>
   ただし、医療機関が回答内容や対応記録を電子カルテその他の院内記録へ
   転記した場合、その情報は各医療機関の管理方針および法令に基づいて管理されます。
