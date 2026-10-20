@@ -3802,6 +3802,113 @@ body {
     }
 }
 
+@media screen and (max-width: 600px) {
+    .clinic-ai-settings-summary {
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .clinic-inquiry-item-title {
+        font-size: 12px !important;
+    }
+
+    .clinic-inquiry-item-description {
+        font-size: 10px !important;
+        line-height: 1.5;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .clinic-symptom-department-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 4px !important;
+    }
+
+    .clinic-symptom-department-grid label {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 6px 8px !important;
+        margin: 0 !important;
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        text-align: left !important;
+    }
+
+    .clinic-symptom-department-grid input[type="checkbox"] {
+        flex: 0 0 auto !important;
+        width: 16px;
+        height: 16px;
+        margin: 0 8px 0 0 !important;
+    }
+
+    .clinic-symptom-department-grid label span {
+        flex: 1;
+        min-width: 0;
+        white-space: normal;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    /* 3分野の設定項目をコンパクトに */
+    #clinicInquiryItemSettingsList [data-inquiry-item-id] {
+        padding: 8px !important;
+        margin-bottom: 6px !important;
+    }
+
+    /* 各項目名 */
+    #clinicInquiryItemSettingsList [data-inquiry-item-id] > p {
+        font-size: 13px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* 患者からの質問例 */
+    #clinicInquiryItemSettingsList [data-inquiry-item-id] > div {
+        margin-bottom: 6px !important;
+        padding: 6px !important;
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* 選択欄・入力欄 */
+    #clinicInquiryItemSettingsList select,
+    #clinicInquiryItemSettingsList input[type="text"] {
+        padding: 7px !important;
+        margin-bottom: 6px !important;
+        font-size: 13px !important;
+        min-height: 34px;
+    }
+
+    /* 定型文を使用するチェック欄 */
+    #clinicInquiryItemSettingsList label {
+        gap: 6px !important;
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+    }
+
+    #clinicInquiryItemSettingsList label input[type="checkbox"] {
+        flex-shrink: 0;
+    }
+
+    /* 受信後の返信方法・定型文プレビュー */
+    #clinicInquiryItemSettingsList .inquiryItemAiAction,
+    #clinicInquiryItemSettingsList .inquiryItemReplyPreview {
+        font-size: 11px !important;
+        line-height: 1.4 !important;
+    }
+}
+
    </style>
 </head>
 
@@ -7695,7 +7802,7 @@ async function openClinicSymptomDepartmentSelector(clinicId) {
         ここで選択しても、患者向けの標榜診療科は変更されません。
       </p>
 
-      <div style="
+        <div class="clinic-symptom-department-grid" style="
         display:grid;
         grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
         gap:10px;
@@ -7711,21 +7818,36 @@ async function openClinicSymptomDepartmentSelector(clinicId) {
     html += `
       <label style="
         display:flex;
+        flex-direction:row;
         align-items:center;
+        justify-content:flex-start;
         gap:8px;
-        padding:10px;
+        min-width:0;
+        padding:6px 8px;
         background:white;
         border:1px solid #dbeafe;
         border-radius:8px;
         cursor:pointer;
+        box-sizing:border-box;
+        text-align:left;
+        font-size:13px;
+        line-height:1.4;
       ">
         <input
           type="checkbox"
           class="clinicSymptomDepartmentCheckbox"
           value="${escapeHtml(department)}"
           ${checked}
+          style="flex:0 0 auto; margin:0;"
         >
-        ${escapeHtml(department)}
+        <span style="
+          display:block;
+          flex:1;
+          min-width:0;
+          white-space:normal;
+          word-break:keep-all;
+          overflow-wrap:anywhere;
+        ">${escapeHtml(department)}</span>
       </label>
     `;
   });
@@ -8445,16 +8567,26 @@ async function loadClinicInquiryItemSettings(clinicId) {
       return;
     }
 
-    html += `
-      <h4 style="
-        margin:24px 0 10px;
-        padding-bottom:8px;
-        border-bottom:2px solid #1976d2;
+        html += `
+      <details style="
+        margin:12px 0;
+        background:#ffffff;
+        border:1px solid #bfdbfe;
+        border-radius:8px;
       ">
-        ${escapeHtml(
-          getInquiryItemCategoryLabel(category)
-        )}
-      </h4>
+        <summary style="
+          padding:12px;
+          font-weight:bold;
+          color:#0f4c81;
+          cursor:pointer;
+          background:#eff6ff;
+          border-radius:8px;
+        ">
+          ${escapeHtml(
+            getInquiryItemCategoryLabel(category)
+          )}
+        </summary>
+        <div style="padding:10px;">
     `;
 
     categoryItems.forEach(function(item) {
@@ -8605,28 +8737,50 @@ async function loadClinicInquiryItemSettings(clinicId) {
           >
 
           <label style="
-            display:flex;
-            align-items:center;
-            gap:8px;
-          ">
-            <input
-              type="checkbox"
-              class="inquiryItemAutoReply"
-              ${
-                autoReplyEnabled
-                  ? "checked"
-                  : ""
-              }
-              ${
-                status === ""
-                  ? "disabled"
-                  : ""
-              }
-              onchange="updateInquiryItemAutoReplyCount()"
-              onclick="updateInquiryItemPreview(this.closest('[data-inquiry-item-id]'))"
-            >
-            この定型文を返信候補として使用する
-          </label>
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    padding:6px 0;
+    font-size:12px;
+    line-height:1.5;
+    text-align:left;
+">
+    <input
+        type="checkbox"
+        class="inquiryItemAutoReply"
+        ${
+            autoReplyEnabled
+                ? "checked"
+                : ""
+        }
+        ${
+            status === ""
+                ? "disabled"
+                : ""
+        }
+        onchange="updateInquiryItemAutoReplyCount()"
+        onclick="updateInquiryItemPreview(this.closest('[data-inquiry-item-id]'))"
+        style="
+            flex:0 0 18px;
+            width:18px;
+            height:18px;
+            margin:0;
+        "
+    >
+    <span style="
+        display:block;
+        flex:1 1 auto;
+        min-width:0;
+        white-space:normal;
+        word-break:normal;
+        overflow-wrap:break-word;
+    ">この定型文を返信候補として使用する</span>
+</label>
 
           <div style="margin-top:9px; padding:9px; border:1px solid #bfdbfe; border-radius:6px; background:#ffffff; font-size:12px; line-height:1.5;">
             <strong>受信後の返信方法：</strong>
@@ -8639,12 +8793,10 @@ async function loadClinicInquiryItemSettings(clinicId) {
       `;
     });
 
-if (category === "document" || category === "test" || category === "reception") {
     html += `
         </div>
       </details>
     `;
-    }
 
   });
 
@@ -8792,12 +8944,14 @@ async function setClinicListingPaused(clinicId, shouldPause) {
     await showClinicDetails(clinicId);
 }
 
+
 function buildClinicAiSettingsEditor(clinic) {
     return `
         <details open style="margin:24px 0; background:#eff6ff; border:3px solid #1976d2; border-radius:12px; box-shadow:0 4px 12px rgba(25,118,210,0.15);">
-            <summary style="padding:18px; font-size:20px; font-weight:bold; color:#0f4c81; cursor:pointer;">
+            <summary class="clinic-ai-settings-summary" style="padding:18px; font-size:20px; font-weight:bold; color:#0f4c81; cursor:pointer;">
                 🤖 AI分類・返信定型文設定（最重要）
             </summary>
+
             <div style="padding:0 18px 18px;">
                 <p style="margin-top:0; color:#334155;">
                     AIは内容の分類だけを行います。問い合わせ受信後、定型文を使うか自分で文章を入力するかを医療機関が選びます。
@@ -8815,31 +8969,40 @@ function buildClinicAiSettingsEditor(clinic) {
                     </div>
                 </div>
 
-                <div style="margin:16px 0; padding:16px; background:#ffffff; border:1px solid #bfdbfe; border-radius:8px;">
-                    <p style="font-weight:bold; margin-top:0;">① 症状別の診療対応・返信定型文</p>
-                    <p style="font-size:13px; color:#666;">
-                        診療科ごとの症状について、対応状況と返信候補の定型文を設定します。
-                    </p>
-                    <button type="button" onclick="openClinicSymptomDepartmentSelector(${Number(clinic.id)})">
-                        診療分野・症状設定を開く
-                    </button>
-                    <div id="clinicSymptomSettingsArea" style="margin-top:16px;"></div>
-                </div>
+                <details style="margin:16px 0; padding:0; background:#ffffff; border:1px solid #bfdbfe; border-radius:8px;">
+                    <summary style="padding:14px; font-weight:bold; cursor:pointer; color:#0f4c81;">
+                        ① 症状別の診療対応・返信定型文
+                    </summary>
+                    <div style="padding:0 14px 14px;">
+                        <p style="font-size:13px; color:#666;">
+                            診療科ごとの症状について、対応状況と返信候補の定型文を設定します。
+                        </p>
+                        <button type="button" onclick="openClinicSymptomDepartmentSelector(${Number(clinic.id)})">
+                            診療分野・症状設定を開く
+                        </button>
+                        <div id="clinicSymptomSettingsArea" style="margin-top:16px;"></div>
+                    </div>
+                </details>
 
-                <div style="margin:16px 0 0; padding:16px; background:#ffffff; border:1px solid #bfdbfe; border-radius:8px;">
-                    <p style="font-weight:bold; margin-top:0;">② よくある問い合わせ・返信定型文</p>
-                    <p style="font-size:13px; color:#666;">
-                        診断書・検査・診察や受付時間について、返信候補の定型文を設定します。
-                    </p>
-                    <button type="button" onclick="loadClinicInquiryItemSettings(${Number(clinic.id)})">
-                        診断書・検査・受付設定を開く
-                    </button>
-                    <div id="clinicInquiryItemSettingsArea" style="margin-top:16px;"></div>
-                </div>
+                <details style="margin:16px 0 0; padding:0; background:#ffffff; border:1px solid #bfdbfe; border-radius:8px;">
+                    <summary style="padding:14px; font-weight:bold; cursor:pointer; color:#0f4c81;">
+                        ② よくある問い合わせ・返信定型文
+                    </summary>
+                    <div style="padding:0 14px 14px;">
+                        <p style="font-size:13px; color:#666;">
+                            診断書・検査・診察や受付時間について、返信候補の定型文を設定します。
+                        </p>
+                        <button type="button" onclick="loadClinicInquiryItemSettings(${Number(clinic.id)})">
+                            診断書・検査・受付設定を開く
+                        </button>
+                        <div id="clinicInquiryItemSettingsArea" style="margin-top:16px;"></div>
+                    </div>
+                </details>
             </div>
         </details>
     `;
 }
+
 
 const commonClinicVaccines = [
     "インフルエンザワクチン",
