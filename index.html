@@ -3702,6 +3702,106 @@ body {
     }
 }
 
+/* 問い合わせ画面：スマホ表示を改善 */
+@media screen and (max-width: 600px) {
+
+    #clinicInquiryList {
+        width: 100%;
+        max-width: 100%;
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: left;
+    }
+
+    #clinicInquiryList > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 14px !important;
+        margin: 0 0 16px !important;
+        text-align: left;
+    }
+
+    #clinicInquiryList p {
+        margin: 8px 0;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    #clinicInquiryList textarea {
+        display: block;
+        width: 100% !important;
+        min-height: 130px;
+        box-sizing: border-box;
+        font-size: 16px;
+        line-height: 1.6;
+        padding: 12px;
+    }
+
+    #clinicInquiryList button {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 10px 0;
+        padding: 12px 10px;
+        font-size: 14px;
+        line-height: 1.5;
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
+    #clinicInquiryList label {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #clinicInquiryList button[onclick^="fillSuggestedReply"] {
+        white-space: nowrap;
+        font-size: 11px;
+        padding: 10px 4px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #clinicInquiryList [style*="background:#eef7ff"],
+    #clinicInquiryList [style*="background: #eef7ff"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    #clinicInquiryList [style*="background:#eef7ff"] button,
+    #clinicInquiryList [style*="background: #eef7ff"] button {
+        white-space: nowrap !important;
+        font-size: 11px !important;
+        padding: 10px 4px !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #clinicInquiryList .similar-replies-panel {
+        padding: 8px !important;
+        margin: 8px 0 !important;
+        width: 100%;
+    }
+
+    #clinicInquiryList .similar-reply-card {
+        padding: 8px !important;
+        margin-top: 6px !important;
+    }
+
+    #clinicInquiryList .similar-reply-card button {
+        width: 100%;
+        box-sizing: border-box;
+        white-space: nowrap;
+        font-size: 12px;
+        padding: 10px 3px;
+    }
+}
+
    </style>
 </head>
 
@@ -9573,7 +9673,7 @@ async function showClinicDetails(clinicId) {
             <p><strong>電話番号：</strong>${escapeHtml(clinic.phone || "未登録")}</p>
             <p><strong>支払い方法：</strong>${cashlessLabel}</p>
 
-            <div id="clinicPublicVaccineInfo"></div>
+            <div id="clinicPublicVaccineInfo" style="display:none;"></div>
 
             ${
                 clinic.opening_hours
@@ -11296,11 +11396,21 @@ async function clinicLogin() {
         return;
     }
 
-    const { data: account, error: accountError } =
-        await supabaseClient
-            .from("clinic_accounts")
-            .select("clinic_id")
-            .maybeSingle();
+    const { data: { user }, error: userError } =
+    await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+    await supabaseClient.auth.signOut();
+    message.textContent = "ログイン情報を確認できません。";
+    return;
+}
+
+const { data: account, error: accountError } =
+    await supabaseClient
+        .from("clinic_accounts")
+        .select("clinic_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
 
     if (accountError || !account) {
         await supabaseClient.auth.signOut();
@@ -11405,10 +11515,11 @@ function shortenReplyCandidateText(value, maximumLength) {
         : text;
 }
 
+
 function renderSimilarLearnedReplies(inquiryId, candidates) {
     if (!Array.isArray(candidates) || candidates.length === 0) {
         return `
-            <div style="margin:10px 0; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; color:#64748b; font-size:13px;">
+            <div class="similar-replies-empty" style="margin:10px 0; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; color:#64748b; font-size:13px;">
                 過去の回答から、似た質問の候補は見つかりませんでした。
             </div>
         `;
@@ -11419,7 +11530,7 @@ function renderSimilarLearnedReplies(inquiryId, candidates) {
         learnedReplyCandidateCache.set(cacheKey, candidate.reply_text);
 
         return `
-            <div style="margin-top:8px; padding:10px; background:white; border:1px solid #bfdbfe; border-radius:7px;">
+            <div class="similar-reply-card" style="margin-top:8px; padding:10px; background:white; border:1px solid #bfdbfe; border-radius:7px; box-sizing:border-box;">
                 <p style="margin:0 0 5px;"><strong>候補${index + 1}</strong></p>
                 <p style="margin:0 0 5px; font-size:13px;"><strong>以前の質問：</strong>${escapeHtml(shortenReplyCandidateText(candidate.question_text, 100))}</p>
                 <p style="margin:0 0 8px; font-size:13px;"><strong>以前の回答：</strong>${escapeHtml(shortenReplyCandidateText(candidate.reply_text, 160))}</p>
@@ -11435,13 +11546,14 @@ function renderSimilarLearnedReplies(inquiryId, candidates) {
     }).join("");
 
     return `
-        <div style="margin:10px 0; padding:12px; background:#eff6ff; border:1px solid #93c5fd; border-radius:8px;">
+        <div class="similar-replies-panel" style="margin:10px 0; padding:12px; background:#eff6ff; border:1px solid #93c5fd; border-radius:8px; box-sizing:border-box; min-width:0;">
             <p style="margin:0;"><strong>💡 似た過去質問の回答候補</strong></p>
             <p style="margin:4px 0 0; font-size:12px; color:#475569;">内容を必ず確認・修正してから送信してください。</p>
             ${cards}
         </div>
     `;
 }
+
 
 function useLearnedReplyCandidate(inquiryId, candidateId) {
     const textarea = document.getElementById(`reply-${Number(inquiryId)}`);
@@ -11536,6 +11648,19 @@ async function loadClinicInquiries() {
 
         container.innerHTML += `
             <div style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
+                <p>
+                <strong>送信日時：</strong>
+                ${inquiry.created_at
+                ? new Date(inquiry.created_at).toLocaleString("ja-JP", {
+                timeZone: "Asia/Tokyo",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+                })
+                : "日時不明"}
+                </p>
                 <p><strong>患者氏名：</strong>${escapeHtml(inquiry.patient_name)}</p>
                 <p><strong>メール：</strong>${escapeHtml(inquiry.email)}</p>
                 <p><strong>電話番号：</strong>${escapeHtml(inquiry.phone)}</p>
@@ -11564,85 +11689,51 @@ async function loadClinicInquiries() {
                   </p>
                 ` : ""}
 
-                ${inquiry.reply_message ? `
-    <div style="background:#eef7ff; padding:12px; margin-top:12px; border-radius:6px;">
-        <p><strong>医療機関からの回答：</strong></p>
-        <p>${escapeHtml(inquiry.reply_message)}</p>
-        <p style="font-size:12px; color:#666;">
-            回答日時：
-            ${inquiry.replied_at
-                ? new Date(inquiry.replied_at).toLocaleString("ja-JP")
-                : ""}
-        </p>
-    </div>
-` : `
-    <div style="margin-top:15px;">
-        <label for="reply-${inquiry.id}">
-            <strong>患者様への回答</strong>
-        </label>
+                
+<div style="margin-top:15px; background:#eef7ff; padding:15px; border-radius:8px;">
+    <p><strong>患者様への回答（修正・再送信可能）</strong></p>
 
-        ${renderSimilarLearnedReplies(inquiry.id, similarCandidates)}
+    <p style="font-size:13px; color:#555;">
+        ${inquiry.reply_message ? "現在送信済みの回答を修正できます。" : "回答内容を入力してください。"}
+    </p>
 
-        <textarea
-            id="reply-${inquiry.id}"
-            rows="5"
-            lang="ja"
-            inputmode="text"
-            autocapitalize="none"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="患者様への回答を入力してください"
-            data-reply-method="manual"
-            data-template-base-text=""
-            oninput="updateEditedReplyCandidateState(${inquiry.id}, this)"
-            style="width:100%; box-sizing:border-box; padding:10px; margin-top:8px; resize:vertical;"
-        ></textarea>
+    <textarea
+        id="reply-${inquiry.id}"
+        style="width:100%; min-height:150px; box-sizing:border-box; padding:10px;"
+        placeholder="患者様への回答を入力してください"
+        data-reply-method="manual"
+        data-template-base-text=""
+        oninput="updateEditedReplyCandidateState(${inquiry.id}, this)"
+    >${inquiry.reply_message ? escapeHtml(inquiry.reply_message) : ""}</textarea>
 
-        <p
-            id="save-candidate-notice-${inquiry.id}"
-            style="display:none; margin:7px 0 0; padding:8px 10px; color:#166534; background:#f0fdf4; border:1px solid #86efac; border-radius:6px; font-size:13px;"
-        ></p>
+    <p style="font-size:13px; color:#555;">
+        ${inquiry.reply_message && inquiry.replied_at
+            ? "前回の回答日時：" + new Date(inquiry.replied_at).toLocaleString("ja-JP")
+            : ""}
+    </p>
 
-        <label
-            for="save-candidate-${inquiry.id}"
-            style="display:flex; align-items:flex-start; gap:8px; margin:10px 0; padding:10px; background:#f0fdf4; border:1px solid #86efac; border-radius:6px;"
-        >
-            <input
-                type="checkbox"
-                id="save-candidate-${inquiry.id}"
-                style="width:auto; margin-top:3px;"
-            >
-            <span>
-                <strong>この回答を今後の回答候補として保存する</strong><br>
-                <small>定型文へ追記・修正した場合は自動でチェックされ、送信する最終文章を新しい候補として記録します。</small>
-            </span>
-        </label>
+    ${renderSimilarLearnedReplies(inquiry.id, similarCandidates)}
 
-        <button
-            type="button"
-            onclick="fillSuggestedReply(${inquiry.id})"
-            style="background:#0f766e;"
-        >
-            登録済み定型文を回答欄に入れる
-        </button>
+    <p id="save-candidate-notice-${inquiry.id}" style="font-size:13px;"></p>
 
-        <button
-            type="button"
-            onclick="saveInquiryReply(${inquiry.id})"
-        >
-            この内容を患者へメール送信する
-        </button>
-    </div>
-`}
+    <label for="save-candidate-${inquiry.id}" style="display:block; margin:10px 0;">
+        <input type="checkbox" id="save-candidate-${inquiry.id}">
+        この回答を今後の回答候補として保存する
+    </label>
 
-${inquiry.status === "pending" && !inquiry.reply_message ? `
+    <button type="button" onclick="fillSuggestedReply(${inquiry.id})">
+        登録済み定型文を回答欄に入れる
+    </button>
+
     <button
         type="button"
-        onclick="markInquiryResolved(${inquiry.id})"
+        onclick="saveInquiryReply(${inquiry.id})"
+        style="display:block; margin-top:12px; padding:10px 18px; background:#a52a2a; color:white; border:none; border-radius:6px; cursor:pointer;"
     >
-        回答せず対応済みにする
+        ${inquiry.reply_message ? "修正した回答を患者へ再送信する" : "この内容を患者へメール送信する"}
     </button>
-` : ""}
+</div>
+
             </div>
         `;
     });
