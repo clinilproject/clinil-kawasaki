@@ -9607,6 +9607,46 @@ async function syncClinicNews(clinicId) {
     await showClinicDetails(clinicId);
 }
 
+
+async function saveClinicWebsiteUrl(clinicId) {
+    const input = document.getElementById("basicWebsiteUrlInput");
+
+    if (!input) {
+        alert("ホームページURLの入力欄が見つかりません。");
+        return;
+    }
+
+    const websiteUrl = input.value.trim();
+
+    if (websiteUrl && !/^https?:\/\/.+/i.test(websiteUrl)) {
+        alert("URLは https:// または http:// から入力してください。");
+        return;
+    }
+
+    const confirmed = confirm("公式ホームページのURLを保存しますか？");
+    if (!confirmed) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("clinics")
+        .update({
+            website_url: websiteUrl || null
+        })
+        .eq("id", Number(clinicId));
+
+    if (error) {
+        console.error("ホームページURL保存エラー:", error);
+        alert("保存できませんでした。詳細はコンソールを確認してください。");
+        return;
+    }
+
+    alert("公式ホームページのURLを保存しました。");
+
+    await showClinicDetails(Number(clinicId));
+}
+
+
 let activeClinicManagementSection = "";
 
 function buildClinicManagementMenu(clinic) {
@@ -9638,7 +9678,7 @@ function buildClinicManagementMenu(clinic) {
                     🤖 AI分類・返信定型文<br><small>最重要</small>
                 </button>
                 <button type="button" onclick="showClinicManagementSection('reception')" style="min-height:64px;">
-                    📅 受付時間・休診
+                    📅 基本設定・受付時間
                 </button>
                 <button type="button" onclick="showClinicManagementSection('vaccine')" style="min-height:64px; background:#0f766e;">
                     💉 ワクチン情報
@@ -9874,6 +9914,71 @@ async function showClinicDetails(clinicId) {
             <p><strong>電話番号：</strong>${escapeHtml(clinic.phone || "未登録")}</p>
             <p><strong>支払い方法：</strong>${cashlessLabel}</p>
 
+                        <details style="
+                margin:12px 0;
+                border:1px solid #cbd5e1;
+                border-radius:8px;
+                background:#f8fafc;
+            ">
+                <summary style="
+                    padding:12px 14px;
+                    cursor:pointer;
+                    font-weight:bold;
+                    color:#075985;
+                ">
+                    受付時間 ▽
+                </summary>
+
+                <div style="
+                    padding:0 14px 14px;
+                    white-space:pre-line;
+                    line-height:1.8;
+                    overflow-wrap:anywhere;
+                ">
+                    ${
+                        (() => {
+                            const weekdays = [
+                                { value: 1, label: "月曜日" },
+                                { value: 2, label: "火曜日" },
+                                { value: 3, label: "水曜日" },
+                                { value: 4, label: "木曜日" },
+                                { value: 5, label: "金曜日" },
+                                { value: 6, label: "土曜日" },
+                                { value: 0, label: "日曜日" }
+                            ];
+
+                            const schedules =
+                                clinic.clinic_reception_schedules || [];
+
+                            return weekdays.map(day => {
+                                const sessions = schedules
+                                    .filter(item =>
+                                        Number(item.weekday) === day.value
+                                    )
+                                    .sort((a, b) =>
+                                        Number(a.session_order) -
+                                        Number(b.session_order)
+                                    );
+
+                                const times = sessions
+                                    .filter(item =>
+                                        item.start_time && item.end_time
+                                    )
+                                    .map(item =>
+                                        `${String(item.start_time).slice(0, 5)}～${String(item.end_time).slice(0, 5)}`
+                                    );
+
+                                return `${day.label}：${
+                                    times.length
+                                        ? times.join(" ／ ")
+                                        : "休診または未設定"
+                                }`;
+                            }).join("\n");
+                        })()
+                    }
+                </div>
+            </details>
+
             <div id="clinicPublicVaccineInfo" style="display:none;"></div>
 
             ${
@@ -10056,6 +10161,42 @@ ${
 </div>
 
                   ${buildWeeklyReceptionScheduleEditor(clinic)}
+
+
+                  <div style="
+                      margin-top:20px;
+                      padding:15px;
+                      background:#ffffff;
+                      border:1px solid #bfdbfe;
+                      border-radius:8px;
+                  ">
+                      <h3 style="margin-top:0;">公式ホームページ</h3>
+
+                      <label
+                          for="basicWebsiteUrlInput"
+                          style="display:block; margin-bottom:6px; font-weight:bold;"
+                      >
+                          ホームページURL
+                      </label>
+
+                      <input
+                          type="url"
+                          id="basicWebsiteUrlInput"
+                          placeholder="https://example.com"
+                          value="${escapeHtml(clinic.website_url || '')}"
+                          style="width:100%; box-sizing:border-box; padding:10px;"
+                      >
+
+                      <button
+                          type="button"
+                          onclick="saveClinicWebsiteUrl(${Number(clinic.id)})"
+                          style="margin-top:10px; padding:10px 16px;"
+                      >
+                          公式ホームページを保存
+                      </button>
+                  </div>
+
+
                   <button type="button" onclick="showClinicManagementSection('')" style="width:auto; margin-top:10px; background:#64748b;">
                       ← 編集メニューに戻る
                   </button>
