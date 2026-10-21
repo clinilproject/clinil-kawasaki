@@ -8183,10 +8183,19 @@ let html = `
                     </option>
                 </select>
 
-                <label style="
+                
+                <label class="symptom-auto-reply-label" style="
                     display:flex;
-                    align-items:center;
-                    gap:8px;
+                    flex-direction:row;
+                    align-items:flex-start;
+                    justify-content:flex-start;
+                    gap:6px;
+                    width:100%;
+                    min-width:0;
+                    box-sizing:border-box;
+                    font-size:13px;
+                    line-height:1.5;
+                    text-align:left;
                 ">
                     <input
                         type="checkbox"
@@ -8202,9 +8211,24 @@ let html = `
                                 ? "disabled"
                                 : ""
                         }
+                        style="
+                            flex:0 0 18px;
+                            width:18px;
+                            height:18px;
+                            margin:2px 0 0;
+                        "
                     >
-                    この定型文を返信候補として使用する
+                    <span style="
+                        display:block;
+                        flex:1 1 auto;
+                        min-width:0;
+                        white-space:normal;
+                        word-break:normal;
+                        overflow-wrap:anywhere;
+                        writing-mode:horizontal-tb;
+                    ">この定型文を返信候補として使用する</span>
                 </label>
+
 
                 <div style="margin-top:9px; padding:9px; border:1px solid #bfdbfe; border-radius:6px; background:#ffffff; font-size:12px; line-height:1.5;">
                     <strong>受信後の返信方法：</strong>
