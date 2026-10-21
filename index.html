@@ -3820,10 +3820,11 @@ body {
     }
 }
 
+
 @media screen and (max-width: 600px) {
     .clinic-symptom-department-grid {
         display: grid !important;
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 4px !important;
     }
 
@@ -3835,28 +3836,32 @@ body {
         width: 100%;
         min-width: 0;
         box-sizing: border-box;
-        padding: 6px 8px !important;
+        padding: 5px 6px !important;
         margin: 0 !important;
-        font-size: 13px !important;
-        line-height: 1.4 !important;
+        font-size: 12px !important;
+        line-height: 1.3 !important;
         text-align: left !important;
     }
 
     .clinic-symptom-department-grid input[type="checkbox"] {
-        flex: 0 0 auto !important;
+        flex: 0 0 16px !important;
         width: 16px;
         height: 16px;
-        margin: 0 8px 0 0 !important;
+        margin: 0 5px 0 0 !important;
     }
 
     .clinic-symptom-department-grid label span {
-        flex: 1;
+        display: block;
+        flex: 1 1 auto;
         min-width: 0;
-        white-space: normal;
-        word-break: keep-all;
-        overflow-wrap: anywhere;
+        white-space: normal !important;
+        word-break: keep-all !important;
+        overflow-wrap: break-word !important;
+        writing-mode: horizontal-tb !important;
+        font-size: 12px !important;
     }
 }
+
 
 @media screen and (max-width: 600px) {
 
@@ -7803,10 +7808,12 @@ async function openClinicSymptomDepartmentSelector(clinicId) {
       </p>
 
         <div class="clinic-symptom-department-grid" style="
-        display:grid;
-        grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
-        gap:10px;
-      ">
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:6px;
+    width:100%;
+    box-sizing:border-box;
+">
   `;
 
   departments.forEach(function(department) {
@@ -7816,40 +7823,47 @@ async function openClinicSymptomDepartmentSelector(clinicId) {
         : "";
 
     html += `
-      <label style="
-        display:flex;
-        flex-direction:row;
-        align-items:center;
-        justify-content:flex-start;
-        gap:8px;
-        min-width:0;
-        padding:6px 8px;
-        background:white;
-        border:1px solid #dbeafe;
-        border-radius:8px;
-        cursor:pointer;
-        box-sizing:border-box;
-        text-align:left;
-        font-size:13px;
-        line-height:1.4;
-      ">
-        <input
-          type="checkbox"
-          class="clinicSymptomDepartmentCheckbox"
-          value="${escapeHtml(department)}"
-          ${checked}
-          style="flex:0 0 auto; margin:0;"
-        >
-        <span style="
-          display:block;
-          flex:1;
-          min-width:0;
-          white-space:normal;
-          word-break:keep-all;
-          overflow-wrap:anywhere;
-        ">${escapeHtml(department)}</span>
-      </label>
-    `;
+  <label style="
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    padding:6px 8px;
+    background:white;
+    border:1px solid #dbeafe;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:12px;
+    line-height:1.5;
+    text-align:left;
+  ">
+    <input
+      type="checkbox"
+      class="clinicSymptomDepartmentCheckbox"
+      value="${escapeHtml(department)}"
+      ${checked}
+      style="
+        flex:0 0 18px;
+        width:18px;
+        height:18px;
+        margin:0;
+      "
+    >
+    <span style="
+      display:block;
+      flex:1 1 auto;
+      min-width:0;
+      white-space:normal;
+      word-break:normal;
+      overflow-wrap:break-word;
+      writing-mode:horizontal-tb;
+    ">${escapeHtml(department)}</span>
+  </label>
+`;
   });
 
   html += `
