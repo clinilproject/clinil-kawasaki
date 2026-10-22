@@ -3914,6 +3914,22 @@ body {
     }
 }
 
+/* 診断書・検査・受付設定は常に1列表示 */
+#clinicInquiryItemSettingsList {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-auto-flow: row !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#clinicInquiryItemSettingsList > * {
+    grid-column: 1 / -1 !important;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
    </style>
 </head>
 
@@ -8065,22 +8081,44 @@ if (departments.length === 0) {
 }).length;
 
 let html = `
-  <div id="clinicSymptomSettingsList">
-    <div style="
-      padding:12px;
-      margin-bottom:16px;
-      background:#eff6ff;
-      border:1px solid #bfdbfe;
-      border-radius:8px;
-    ">
-      <strong id="clinicAutoReplyUsageCount">
-        登録済み定型文数：${autoReplyUsageCount}件
-      </strong>
-      <div style="font-size:12px; color:#475569; margin-top:4px;">
-        患者が症状を選択した場合に限り、登録済みの定型文を返信します。AIが診断を行うものではありません。
-        チェックした定型文は、問い合わせ受信後に返信候補として選べます。
-      </div>
-    </div>
+  <div style="
+    margin-bottom:16px;
+    border:1px solid #bfdbfe;
+    border-radius:10px;
+    background:#ffffff;
+    overflow:hidden;
+  ">
+    <details>
+        <summary style="
+        padding:14px;
+        cursor:pointer;
+        font-weight:bold;
+        color:#ffffff;
+        background:#0759b5;
+        text-align:center;
+        list-style-position:inside;
+      ">
+        選択した診療分野の症状を表示
+      </summary>
+
+      <div style="padding:12px;">
+        <div style="
+          padding:12px;
+          margin-bottom:16px;
+          background:#eff6ff;
+          border:1px solid #bfdbfe;
+          border-radius:8px;
+        ">
+          <strong id="clinicAutoReplyUsageCount">
+            登録済み定型文数：${autoReplyUsageCount}件
+          </strong>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">
+            患者が症状を選択した場合に限り、登録済みの定型文を返信します。AIが診断を行うものではありません。
+            チェックした定型文は、問い合わせ受信後に返信候補として選べます。
+          </div>
+        </div>
+
+        <div id="clinicSymptomSettingsList">
 `;
 
     let currentDepartment = "";
@@ -8241,8 +8279,10 @@ let html = `
         `;
     });
 
-    html += `
+            html += `
         </div>
+        </div>
+    </details>
 
         <button
             type="button"
@@ -8845,12 +8885,14 @@ async function loadClinicInquiryItemSettings(clinicId) {
           clinicId
         )})"
         style="
-          width:100%;
-          margin-top:16px;
-          padding:12px;
-          font-weight:bold;
-          cursor:pointer;
-        "
+    width:100%;
+    padding:12px 10px;
+    min-height:48px;
+    height:auto;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+"
       >
         問い合わせ・返信定型文を保存
       </button>
@@ -9926,7 +9968,7 @@ async function showClinicDetails(clinicId) {
                     font-weight:bold;
                     color:#075985;
                 ">
-                    受付時間 ▽
+                    受付時間 
                 </summary>
 
                 <div style="
