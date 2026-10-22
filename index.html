@@ -3947,35 +3947,6 @@ body {
   }
 }
 
-/* 通知OFF設定：スマホ版のはみ出し防止 */
-@media screen and (max-width: 600px) {
-  details:has(#clinicDailyNotificationOffEnabled) {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  details:has(#clinicDailyNotificationOffEnabled) > div {
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  details:has(#clinicDailyNotificationOffEnabled) label {
-    white-space: normal !important;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  details:has(#clinicDailyNotificationOffEnabled) input[type="time"],
-  details:has(#clinicDailyNotificationOffEnabled) input[type="date"] {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-}
-
    </style>
 </head>
 
@@ -5134,9 +5105,9 @@ body {
     </p>
 
     <div style="padding:12px; margin-bottom:10px; border:1px solid #dbeafe; border-radius:8px; background:#ffffff;">
-      <label style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:nowrap;">
-        <input id="clinicDailyNotificationOffEnabled" type="checkbox">
-        毎日の通知OFF時間を使用する
+      <label style="display:flex; flex-direction:row; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:normal; min-width:0; overflow-wrap:anywhere;">
+      <input id="clinicDailyNotificationOffEnabled" type="checkbox" style="flex-shrink:0;">
+      毎日の通知OFF時間を使用する
       </label>
 
       <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;">
@@ -5156,9 +5127,9 @@ body {
         曜日指定の通知OFF日
       </div>
 
-      <label style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:nowrap;">
-        <input id="clinicWeeklyOffEnabled" type="checkbox">
-        通知OFF指定曜日を使用する
+      <label style="display:flex; flex-direction:row; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:normal; min-width:0; overflow-wrap:anywhere;">
+      <input id="clinicWeeklyOffEnabled" type="checkbox" style="flex-shrink:0;">
+      通知OFF指定曜日を使用する
       </label>
 
       <div style="display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; text-align:center;">
@@ -5173,9 +5144,9 @@ body {
     </div>
 
     <div style="padding:12px; margin-bottom:12px; border:1px solid #dbeafe; border-radius:8px; background:#ffffff;">
-      <label style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:nowrap;">
-        <input id="clinicLongTermNotificationOffEnabled" type="checkbox">
-        長期休診中の通知をOFFにする
+      <label style="display:flex; flex-direction:row; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:normal; min-width:0; overflow-wrap:anywhere;">
+      <input id="clinicLongTermNotificationOffEnabled" type="checkbox" style="flex-shrink:0;">
+      長期休診中の通知をOFFにする
       </label>
 
       <div class="long-term-date-grid" style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;">
