@@ -5076,62 +5076,82 @@ body {
 </div>
 </details>
 
-<details style="margin:20px 0; border:2px solid #93c5fd; border-radius:10px; background:#f8fbff;">
-  <summary style="padding:14px; font-size:17px; font-weight:bold; cursor:pointer;">
+
+<details style="margin:16px 0; border:1px solid #93c5fd; border-radius:10px; background:#f8fbff;">
+  <summary style="padding:12px 14px; font-size:16px; font-weight:bold; cursor:pointer;">
     🔕 通知OFF時間・長期休診
   </summary>
-  <div style="padding:0 14px 14px;">
-    <p style="font-size:13px; color:#475569;">
+
+  <div style="padding:0 12px 12px;">
+    <p style="font-size:12px; line-height:1.5; color:#475569; margin:0 0 12px;">
       OFF中も問い合わせは保存されます。通知再開後、保留件数をまとめてメールでお知らせします。
     </p>
-    <label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
-      <input id="clinicDailyNotificationOffEnabled" type="checkbox">
-      毎日の通知OFF時間を使用する
-    </label>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
-      <label>OFF開始
-        <input id="clinicDailyNotificationOffStart" type="time" style="width:100%; box-sizing:border-box;">
+
+    <div style="padding:12px; margin-bottom:10px; border:1px solid #dbeafe; border-radius:8px; background:#ffffff;">
+      <label style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:nowrap;">
+        <input id="clinicDailyNotificationOffEnabled" type="checkbox">
+        毎日の通知OFF時間を使用する
       </label>
-      <label>通知再開
-        <input id="clinicDailyNotificationOffEnd" type="time" style="width:100%; box-sizing:border-box;">
-      </label>
+
+      <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;">
+        <label style="font-size:12px; min-width:0;">
+          OFF開始
+          <input id="clinicDailyNotificationOffStart" type="time" style="display:block; width:100%; box-sizing:border-box; padding:8px; margin-top:4px;">
+        </label>
+        <label style="font-size:12px; min-width:0;">
+          通知再開
+          <input id="clinicDailyNotificationOffEnd" type="time" style="display:block; width:100%; box-sizing:border-box; padding:8px; margin-top:4px;">
+        </label>
+      </div>
     </div>
-    <div style="margin:10px 0 16px;">
-  <div style="font-weight:bold; margin-bottom:8px;">
-    曜日指定の通知OFF日
-  </div>
-<label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
-  <input id="clinicWeeklyOffEnabled" type="checkbox">
-  通知OFF指定曜日を使用する
-</label>
-<div style="display:flex; flex-wrap:wrap; gap:12px;">
-    <label><input type="checkbox" id="clinicWeeklyOffMon"> 月</label>
-    <label><input type="checkbox" id="clinicWeeklyOffTue"> 火</label>
-    <label><input type="checkbox" id="clinicWeeklyOffWed"> 水</label>
-    <label><input type="checkbox" id="clinicWeeklyOffThu"> 木</label>
-    <label><input type="checkbox" id="clinicWeeklyOffFri"> 金</label>
-    <label><input type="checkbox" id="clinicWeeklyOffSat"> 土</label>
-    <label><input type="checkbox" id="clinicWeeklyOffSun"> 日</label>
-  </div>
-</div>
-    <label style="display:flex; align-items:center; gap:8px; margin:10px 0; font-weight:bold;">
-      <input id="clinicLongTermNotificationOffEnabled" type="checkbox">
-      長期休診中の通知をOFFにする
-    </label>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
-      <label>休診開始日
-        <input id="clinicLongTermNotificationOffStart" type="date" style="width:100%; box-sizing:border-box;">
+
+    <div style="padding:12px; margin-bottom:10px; border:1px solid #dbeafe; border-radius:8px; background:#ffffff;">
+      <div style="font-weight:bold; font-size:14px; margin-bottom:8px; white-space:nowrap;">
+        曜日指定の通知OFF日
+      </div>
+
+      <label style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:nowrap;">
+        <input id="clinicWeeklyOffEnabled" type="checkbox">
+        通知OFF指定曜日を使用する
       </label>
-      <label>休診終了日
-        <input id="clinicLongTermNotificationOffEnd" type="date" style="width:100%; box-sizing:border-box;">
-      </label>
+
+      <div style="display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; text-align:center;">
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffMon"><br>月</label>
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffTue"><br>火</label>
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffWed"><br>水</label>
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffThu"><br>木</label>
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffFri"><br>金</label>
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffSat"><br>土</label>
+        <label style="font-size:12px;"><input type="checkbox" id="clinicWeeklyOffSun"><br>日</label>
+      </div>
     </div>
-    <button type="button" onclick="saveClinicNotificationSchedule()">
+
+    <div style="padding:12px; margin-bottom:12px; border:1px solid #dbeafe; border-radius:8px; background:#ffffff;">
+      <label style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:8px; margin:0 0 10px; font-weight:bold; font-size:14px; white-space:nowrap;">
+        <input id="clinicLongTermNotificationOffEnabled" type="checkbox">
+        長期休診中の通知をOFFにする
+      </label>
+
+      <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;">
+        <label style="font-size:12px; min-width:0;">
+          休診開始日
+          <input id="clinicLongTermNotificationOffStart" type="date" style="display:block; width:100%; box-sizing:border-box; padding:8px; margin-top:4px;">
+        </label>
+        <label style="font-size:12px; min-width:0;">
+          休診終了日
+          <input id="clinicLongTermNotificationOffEnd" type="date" style="display:block; width:100%; box-sizing:border-box; padding:8px; margin-top:4px;">
+        </label>
+      </div>
+    </div>
+
+    <button type="button" onclick="saveClinicNotificationSchedule()" style="width:100%; padding:11px; font-weight:bold; cursor:pointer;">
       通知時間設定を保存
     </button>
-    <p id="clinicNotificationScheduleMessage"></p>
+
+    <p id="clinicNotificationScheduleMessage" style="margin:8px 0 0; font-size:12px; text-align:center;"></p>
   </div>
 </details>
+
 
     <details
   id="clinicImageManagement"
@@ -5607,6 +5627,77 @@ async function saveClinicInitialPassword() {
   await checkLoginStatus();
   showClinicPortal();
 }
+
+
+async function changeClinicAccountEmail() {
+    const input = document.getElementById("clinicNewEmail");
+    const message = document.getElementById("clinicAccountChangeMessage");
+    const email = input.value.trim();
+
+    if (!email) {
+        message.textContent = "新しいメールアドレスを入力してください。";
+        return;
+    }
+
+    const confirmed = confirm(
+        "アカウントのメールアドレスを変更しますか？確認メールが送信される場合があります。"
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabaseClient.auth.updateUser({
+        email: email
+    });
+
+    if (error) {
+        console.error(error);
+        message.textContent =
+            "メールアドレスを変更できませんでした：" + error.message;
+        return;
+    }
+
+    message.textContent =
+        "変更手続きを開始しました。受信した確認メールの案内に従ってください。";
+}
+
+async function changeClinicAccountPassword() {
+    const password =
+        document.getElementById("clinicChangePassword").value;
+    const confirmation =
+        document.getElementById("clinicChangePasswordConfirm").value;
+    const message =
+        document.getElementById("clinicAccountChangeMessage");
+
+    if (password.length < 10) {
+        message.textContent = "パスワードは10文字以上で入力してください。";
+        return;
+    }
+
+    if (password !== confirmation) {
+        message.textContent = "2つのパスワードが一致しません。";
+        return;
+    }
+
+    const confirmed = confirm("パスワードを変更しますか？");
+    if (!confirmed) return;
+
+    const { error } = await supabaseClient.auth.updateUser({
+        password: password
+    });
+
+    if (error) {
+        console.error(error);
+        message.textContent =
+            "パスワードを変更できませんでした：" + error.message;
+        return;
+    }
+
+    document.getElementById("clinicChangePassword").value = "";
+    document.getElementById("clinicChangePasswordConfirm").value = "";
+
+    message.textContent = "パスワードを変更しました。";
+}
+
 
 function isClinicLoginRemembered() {
   return localStorage.getItem(CLINIC_REMEMBER_LOGIN_KEY) === "true";
@@ -7220,64 +7311,88 @@ function buildWeeklyReceptionScheduleEditor(clinic) {
             </p>
         `;
 
-    const rows = receptionWeekdays.map(day => {
-        const firstStart = getReceptionScheduleTime(
-            clinic, day.value, 1, "start_time"
-        );
-        const firstEnd = getReceptionScheduleTime(
-            clinic, day.value, 1, "end_time"
-        );
-        const secondStart = getReceptionScheduleTime(
-            clinic, day.value, 2, "start_time"
-        );
-        const secondEnd = getReceptionScheduleTime(
-            clinic, day.value, 2, "end_time"
-        );
+    
+const rows = receptionWeekdays.map(day => {
+    const firstStart = getReceptionScheduleTime(
+        clinic, day.value, 1, "start_time"
+    );
+    const firstEnd = getReceptionScheduleTime(
+        clinic, day.value, 1, "end_time"
+    );
+    const secondStart = getReceptionScheduleTime(
+        clinic, day.value, 2, "start_time"
+    );
+    const secondEnd = getReceptionScheduleTime(
+        clinic, day.value, 2, "end_time"
+    );
 
-        return `
-            <tr>
-                <th style="padding:5px 6px; white-space:nowrap; width:52px;">
-                    ${day.label}
-                </th>
+    const isClosed =
+        !firstStart && !firstEnd && !secondStart && !secondEnd;
 
-                <td style="padding:4px 6px;">
-                    <div style="display:flex; align-items:center; gap:5px; white-space:nowrap;">
-                        <input
-                            type="time"
-                            id="schedule-${day.value}-1-start"
-                            value="${firstStart}"
-                            style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
-                        >
-                        <span>～</span>
-                        <input
-                            type="time"
-                            id="schedule-${day.value}-1-end"
-                            value="${firstEnd}"
-                            style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
-                        >
-                    </div>
-                </td>
+    return `
+        <tr>
+            <th style="padding:5px 6px; white-space:nowrap; width:52px;">
+                ${day.label}
+            </th>
 
-                <td style="padding:4px 6px;">
-                    <div style="display:flex; align-items:center; gap:5px; white-space:nowrap;">
-                        <input
-                            type="time"
-                            id="schedule-${day.value}-2-start"
-                            value="${secondStart}"
-                            style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
-                        >
-                        <span>～</span>
-                        <input
-                            type="time"
-                            id="schedule-${day.value}-2-end"
-                            value="${secondEnd}"
-                            style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
-                        >
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join("");
+            <td style="padding:4px 6px;">
+                <div style="display:flex; align-items:center; gap:5px; white-space:nowrap;">
+                    <input
+                        type="time"
+                        id="schedule-${day.value}-1-start"
+                        value="${firstStart}"
+                        style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
+                    >
+                    <span>～</span>
+                    <input
+                        type="time"
+                        id="schedule-${day.value}-1-end"
+                        value="${firstEnd}"
+                        style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
+                    >
+                </div>
+            </td>
+
+            <td style="padding:4px 6px;">
+                <div style="display:flex; align-items:center; gap:5px; white-space:nowrap;">
+                    <input
+                        type="time"
+                        id="schedule-${day.value}-2-start"
+                        value="${secondStart}"
+                        style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
+                    >
+                    <span>～</span>
+                    <input
+                        type="time"
+                        id="schedule-${day.value}-2-end"
+                        value="${secondEnd}"
+                        style="width:108px; min-width:0; height:34px; padding:4px 5px; margin:0; box-sizing:border-box;"
+                    >
+                </div>
+            </td>
+
+            <td style="padding:4px 6px; text-align:center;">
+                <button
+                    type="button"
+                    id="closedDayButton-${day.value}"
+                    onclick="toggleReceptionClosedDay(${day.value}, ${clinicId})"
+                    style="
+                        width:auto;
+                        min-width:64px;
+                        margin:0;
+                        padding:7px 10px;
+                        background:${isClosed ? '#b91c1c' : '#64748b'};
+                        color:#fff;
+                        font-size:13px;
+                    "
+                >
+                    ${isClosed ? "休診中" : "休診"}
+                </button>
+            </td>
+        </tr>
+    `;
+}).join("");
+
 
     return `
         <details style="
@@ -7287,12 +7402,28 @@ function buildWeeklyReceptionScheduleEditor(clinic) {
             border-radius:10px;
         ">
             <summary style="padding:12px 14px; font-size:17px; font-weight:bold; cursor:pointer;">
-                📅 受付時間・祝日・長期休診の設定
+                📅 受付時間・休診日・祝日・長期休診の設定
             </summary>
             <div style="padding:0 12px 12px;">
             <p style="font-weight:bold; margin-top:0;">
                 通常の受付時間設定
             </p>
+
+            <label style="display:block; margin:12px 0;">
+            <span style="display:block; font-weight:bold; margin-bottom:6px;">
+               通常の休診日
+            </span>
+            <input
+            type="text"
+            id="closedDays-${clinicId}"
+            value="${escapeHtml(clinic.closed_days || "")}"
+            placeholder="例：木曜日・日曜日"
+            maxlength="200"
+            style="width:100%; box-sizing:border-box;"
+            >
+            </label>
+
+
 
             <p style="font-size:13px; color:#555;">
                 受付を行わない曜日・時間帯は空欄にしてください。
@@ -7310,6 +7441,7 @@ function buildWeeklyReceptionScheduleEditor(clinic) {
                             <th>曜日</th>
                             <th style="padding:5px;">午前・第1受付</th>
                             <th style="padding:5px;">午後・第2受付</th>
+                            <th style="padding:5px;">休診設定</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -7329,7 +7461,7 @@ function buildWeeklyReceptionScheduleEditor(clinic) {
                     font-weight:bold;
                     cursor:pointer;
                 ">
-                通常の受付時間を保存
+                通常の受付時間・休診日を保存
             </button>
 
             <div style="
@@ -7486,31 +7618,144 @@ async function saveWeeklyReceptionSchedule(clinicId) {
         }
     }
 
-    const confirmed = confirm(
-        "通常の受付時間を保存しますか？"
+    const closedDaysInput = document.getElementById(
+    `closedDays-${clinicId}`
+);
+
+if (!closedDaysInput) {
+    alert("休診日の入力欄が見つかりません。");
+    return;
+}
+
+const closedDays = closedDaysInput.value.trim();
+
+const confirmed = confirm(
+    "通常の受付時間・休診日を保存しますか？"
+);
+
+if (!confirmed) {
+    return;
+}
+
+const { error: scheduleError } = await supabaseClient.rpc(
+    "replace_clinic_reception_schedule",
+    {
+        p_clinic_id: clinicId,
+        p_schedules: schedules
+    }
+);
+
+if (scheduleError) {
+    console.error(scheduleError);
+    alert("通常の受付時間を保存できませんでした。");
+    return;
+}
+
+const { error: closedDaysError } = await supabaseClient
+    .from("clinics")
+    .update({ closed_days: closedDays })
+    .eq("id", clinicId);
+
+if (closedDaysError) {
+    console.error(closedDaysError);
+    alert(
+        "受付時間は保存されましたが、休診日は保存できませんでした。"
     );
+    return;
+}
+
+alert("通常の受付時間・休診日を保存しました。");
+await showClinicDetails(clinicId);
+}
+
+async function saveClinicClosedDays(clinicId) {
+    const input = document.getElementById(`closedDays-${clinicId}`);
+
+    if (!input) {
+        alert("休診日の入力欄が見つかりません。");
+        return;
+    }
+
+    const closedDays = input.value.trim();
+
+    const confirmed = confirm("通常の休診日を保存しますか？");
 
     if (!confirmed) {
         return;
     }
 
-    const { error } = await supabaseClient.rpc(
-        "replace_clinic_reception_schedule",
-        {
-            p_clinic_id: clinicId,
-            p_schedules: schedules
-        }
-    );
+    const { error } = await supabaseClient
+        .from("clinics")
+        .update({ closed_days: closedDays })
+        .eq("id", clinicId);
 
     if (error) {
         console.error(error);
-        alert("通常の受付時間を保存できませんでした。");
+        alert("通常の休診日を保存できませんでした。");
         return;
     }
 
-    alert("通常の受付時間を保存しました。");
+    alert("通常の休診日を保存しました。");
     await showClinicDetails(clinicId);
 }
+
+
+function toggleReceptionClosedDay(dayValue, clinicId) {
+    const input = document.getElementById(
+    `closedDays-${clinicId}`
+    );
+
+    if (!input) {
+        alert("休診日の入力欄が見つかりません。");
+        return;
+    }
+
+    const weekdays = [
+        { value: 1, label: "月曜日" },
+        { value: 2, label: "火曜日" },
+        { value: 3, label: "水曜日" },
+        { value: 4, label: "木曜日" },
+        { value: 5, label: "金曜日" },
+        { value: 6, label: "土曜日" },
+        { value: 0, label: "日曜日" }
+    ];
+
+    const day = weekdays.find(item => item.value === dayValue);
+
+    if (!day) return;
+
+    const currentDays = input.value
+        .split(/[、,・\s]+/)
+        .map(value => value.trim())
+        .filter(Boolean);
+
+    const isClosed = currentDays.includes(day.label);
+
+    const updatedDays = isClosed
+        ? currentDays.filter(value => value !== day.label)
+        : [...currentDays, day.label];
+
+    input.value = updatedDays.join("・");
+
+    const timeIds = [
+    `schedule-${dayValue}-1-start`,
+    `schedule-${dayValue}-1-end`,
+    `schedule-${dayValue}-2-start`,
+    `schedule-${dayValue}-2-end`
+];
+
+const isNowClosed = updatedDays.includes(day.label);
+
+if (isNowClosed) {
+    timeIds.forEach(id => {
+        const timeInput = document.getElementById(id);
+        if (timeInput) {
+            timeInput.value = "";
+        }
+    });
+}
+}
+
 
 async function saveClinicClosureSettings(
     clinicId,
@@ -8975,6 +9220,7 @@ async function saveClinicInquiryItemSettings(clinicId) {
   await loadClinicInquiryItemSettings(clinicId);
 }
 
+
 function buildClinicListingControl(clinic) {
     const isPaused = clinic.listing_paused === true;
 
@@ -8993,9 +9239,53 @@ function buildClinicListingControl(clinic) {
             >
                 ${isPaused ? "掲載を再開する" : "掲載を一時停止（登録解除）"}
             </button>
+
+            <div style="margin-top:24px; padding-top:18px; border-top:1px solid #d1d5db;">
+                <p style="font-weight:bold;">アカウントメールの変更</p>
+                <input
+                    type="email"
+                    id="clinicNewEmail"
+                    autocomplete="email"
+                    placeholder="新しいメールアドレス"
+                    style="width:100%; box-sizing:border-box;"
+                >
+                <button
+                    type="button"
+                    onclick="changeClinicAccountEmail()"
+                    style="margin-top:8px;"
+                >
+                    メールアドレスを変更
+                </button>
+
+                <p style="font-weight:bold; margin-top:24px;">パスワードの変更</p>
+                <input
+                    type="password"
+                    id="clinicChangePassword"
+                    autocomplete="new-password"
+                    placeholder="新しいパスワード（10文字以上）"
+                    style="width:100%; box-sizing:border-box;"
+                >
+                <input
+                    type="password"
+                    id="clinicChangePasswordConfirm"
+                    autocomplete="new-password"
+                    placeholder="新しいパスワード（確認用）"
+                    style="width:100%; box-sizing:border-box; margin-top:8px;"
+                >
+                <button
+                    type="button"
+                    onclick="changeClinicAccountPassword()"
+                    style="margin-top:8px;"
+                >
+                    パスワードを変更
+                </button>
+
+                <p id="clinicAccountChangeMessage" style="font-size:13px;"></p>
+            </div>
         </div>
     `;
 }
+
 
 async function setClinicListingPaused(clinicId, shouldPause) {
     const confirmed = confirm(
@@ -9496,6 +9786,7 @@ function buildClinicPageContentEditor(clinic) {
                 ${patientNotice.length}/300文字
             </div>
 
+            <div style="display:none;">
             <label
                 for="clinicNewsPageUrl"
                 style="display:block; font-weight:bold; margin-top:15px;">
@@ -9515,6 +9806,7 @@ function buildClinicPageContentEditor(clinic) {
                 ブラウザ上部のURLをコピーして貼り付けてください。
                 一度登録すれば、通常は変更する必要はありません。
             </p>
+            </div>
 
             <button
                 type="button"
@@ -9530,15 +9822,16 @@ function buildClinicPageContentEditor(clinic) {
             </button>
 
             <button
-                 type="button"
-                 onclick="syncClinicNews(${clinic.id})"
-                 style="
-                 width:100%;
-                 margin-top:10px;
-                 padding:12px;
-                 font-weight:bold;
-                 cursor:pointer;
-                "
+                type="button"
+                onclick="syncClinicNews(${clinic.id})"
+                style="
+                    display:none;
+                    width:100%;
+                    margin-top:10px;
+                    padding:12px;
+                    font-weight:bold;
+                    cursor:pointer;
+               "
                 >
                 公式HPのお知らせを今すぐ更新
             </button>
@@ -9726,13 +10019,13 @@ function buildClinicManagementMenu(clinic) {
                     💉 ワクチン情報
                 </button>
                 <button type="button" onclick="showClinicManagementSection('page')" style="min-height:64px;">
-                    ✏️ ページ情報・コメント
+                    ✏️ クリニック情報・コメント
                 </button>
-                <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:64px;">
-                    🔔 画像・通知設定
+                <button type="button" onclick="showClinicManagementSection('contact')" style="min-height:64px; background: #c66a0a;">
+                    🔔 画像・問い合わせ設定
                 </button>
                 <button type="button" onclick="showClinicManagementSection('listing')" style="min-height:64px; background:#64748b;">
-                    ⚙️ 掲載状態・登録解除
+                    ⚙️ 登録設定・登録解除
                 </button>
             </div>
         </div>
@@ -9822,7 +10115,12 @@ async function showClinicDetails(clinicId) {
         return;
     }
 
-    const clinicImageUrl = null;
+    const { data: clinicImageData } =
+    supabaseClient.storage
+        .from("clinic-images")
+        .getPublicUrl(`${clinic.id}/cover.jpg`);
+
+    const clinicImageUrl = clinicImageData.publicUrl;
 
 
     const receptionMap = {
@@ -9923,13 +10221,14 @@ async function showClinicDetails(clinicId) {
             ${clinicPublicationNotice}
 
             <h2>${escapeHtml(clinic.name)}</h2>
-            <div
-  style="
-    margin: 15px 0 20px;
-    text-align: center;
-  "
->
-  <div style="display:none;"></div>
+            <div style="margin:15px 0 20px; text-align:center;">
+            <img
+            src="${clinicImageUrl}?v=${Date.now()}"
+            alt="${escapeHtml(clinic.name)}の画像"
+            onerror="this.style.display='none';"
+            style="display:block; width:100%; max-width:600px; max-height:400px; object-fit:cover; margin:0 auto; border-radius:10px;"
+            >
+            </div>
 
             <p>
             <span style="
@@ -9956,7 +10255,7 @@ async function showClinicDetails(clinicId) {
             <p><strong>電話番号：</strong>${escapeHtml(clinic.phone || "未登録")}</p>
             <p><strong>支払い方法：</strong>${cashlessLabel}</p>
 
-                        <details style="
+                <details style="
                 margin:12px 0;
                 border:1px solid #cbd5e1;
                 border-radius:8px;
@@ -9968,7 +10267,7 @@ async function showClinicDetails(clinicId) {
                     font-weight:bold;
                     color:#075985;
                 ">
-                    受付時間 
+                    受付時間・休診日
                 </summary>
 
                 <div style="
@@ -9992,33 +10291,66 @@ async function showClinicDetails(clinicId) {
                             const schedules =
                                 clinic.clinic_reception_schedules || [];
 
-                            return weekdays.map(day => {
-                                const sessions = schedules
-                                    .filter(item =>
-                                        Number(item.weekday) === day.value
-                                    )
-                                    .sort((a, b) =>
-                                        Number(a.session_order) -
-                                        Number(b.session_order)
-                                    );
+                            const weeklySchedule = weekdays.map(day => {
+                            const sessions = schedules
+                                .filter(item =>
+                                Number(item.weekday) === day.value
+                                )
+                                .sort((a, b) =>
+                                Number(a.session_order) -
+                                Number(b.session_order)
+                                );
 
-                                const times = sessions
-                                    .filter(item =>
-                                        item.start_time && item.end_time
-                                    )
-                                    .map(item =>
-                                        `${String(item.start_time).slice(0, 5)}～${String(item.end_time).slice(0, 5)}`
-                                    );
+                            const times = sessions
+                                .filter(item =>
+                                item.start_time && item.end_time
+                                )
+                                .map(item =>
+                                `${String(item.start_time).slice(0, 5)}～${String(item.end_time).slice(0, 5)}`
+                                );
 
-                                return `${day.label}：${
-                                    times.length
-                                        ? times.join(" ／ ")
-                                        : "休診または未設定"
-                                }`;
-                            }).join("\n");
-                        })()
-                    }
-                </div>
+                            return `${day.label}：${
+                                times.length
+                                ? times.join(" ／ ")
+                                : "休診または未設定"
+    }`;
+                                }).join("\n");
+
+            const closedDays = clinic.closed_days
+            ? `通常の休診日：${clinic.closed_days}`
+            : "";
+
+                            return closedDays
+                            ? `${weeklySchedule}\n\n${closedDays}`
+                            : weeklySchedule;
+                            })()
+                            }
+                            </div>
+            </details>
+
+            <details style="
+                margin:12px 0;
+                border:2px solid #93c5fd;
+                border-radius:8px;
+                background:#eff6ff;
+                " ontoggle="if(this.open) loadPublicClinicNotificationSchedule('${clinic.id}')">
+            
+            <summary style="
+                padding:12px 14px;
+                cursor:pointer;
+                font-weight:bold;
+                color:#1d4ed8;
+            ">
+            お問い合わせ通知の休止時間・休止日
+            </summary>
+
+            <div id="publicClinicNotificationSchedule-${clinic.id}" style="
+            padding:0 14px 14px;
+            line-height:1.8;
+            overflow-wrap:anywhere;
+            ">
+            通知設定を読み込んでいます…
+            </div>
             </details>
 
             <div id="clinicPublicVaccineInfo" style="display:none;"></div>
@@ -10031,7 +10363,7 @@ async function showClinicDetails(clinicId) {
 
             ${
                 clinic.closed_days
-                    ? `<p><strong>休診日：</strong>${escapeHtml(clinic.closed_days)}</p>`
+                    ? `<p style="display:none;"><strong>休診日：</strong>${escapeHtml(clinic.closed_days)}</p>`
                     : ""
             }
 
@@ -10265,7 +10597,7 @@ ${
                         type="button"
                         data-clinic-name="${escapeHtml(clinic.name)}"
                         onclick="showPatientInquiryForm(${clinic.id}, this.dataset.clinicName)"
-                        style="display:block; width:100%; min-height:64px; margin:0; padding:15px 18px; border:0; border-radius:12px; background:#075fd8; color:white; font-size:19px; font-weight:bold; line-height:1.35; box-shadow:0 4px 10px rgba(7, 95, 216, 0.28); cursor:pointer;"
+                        style="display:block; width:100%; min-height:64px; margin:0; padding:15px 18px; border:0; border-radius:12px; background:#075fd8; color:white; font-size:16px; font-weight:bold; line-height:1.35; box-shadow:0 4px 10px rgba(7, 95, 216, 0.28); cursor:pointer;"
                     >
                         ✉️ この医療機関に問い合わせる
                     </button>
@@ -11676,6 +12008,30 @@ async function loadClinicNotificationSchedule() {
       setting?.long_term_off_start || "";
     document.getElementById("clinicLongTermNotificationOffEnd").value =
       setting?.long_term_off_end || "";
+
+    // 曜日指定の通知OFF設定を復元
+    document.getElementById("clinicWeeklyOffEnabled").checked =
+      Array.isArray(setting?.weekly_off_days) &&
+      setting.weekly_off_days.length > 0;
+
+    const savedWeeklyOffDays = (setting?.weekly_off_days || [])
+      .map(Number);
+
+    document.getElementById("clinicWeeklyOffSun").checked =
+      savedWeeklyOffDays.includes(0);
+    document.getElementById("clinicWeeklyOffMon").checked =
+      savedWeeklyOffDays.includes(1);
+    document.getElementById("clinicWeeklyOffTue").checked =
+      savedWeeklyOffDays.includes(2);
+    document.getElementById("clinicWeeklyOffWed").checked =
+      savedWeeklyOffDays.includes(3);
+    document.getElementById("clinicWeeklyOffThu").checked =
+      savedWeeklyOffDays.includes(4);
+    document.getElementById("clinicWeeklyOffFri").checked =
+      savedWeeklyOffDays.includes(5);
+    document.getElementById("clinicWeeklyOffSat").checked =
+      savedWeeklyOffDays.includes(6);
+
     message.textContent = "";
   } catch (error) {
     console.error(error);
@@ -11684,14 +12040,98 @@ async function loadClinicNotificationSchedule() {
   }
 }
 
+async function loadPublicClinicNotificationSchedule(clinicId) {
+    const target = document.getElementById(
+        `publicClinicNotificationSchedule-${clinicId}`
+    );
+
+    if (!target || target.dataset.loaded === "true") return;
+
+    try {
+        const { data, error } = await supabaseClient.rpc(
+            "get_public_clinic_notification_schedule",
+            { p_clinic_id: clinicId }
+        );
+
+        if (error) throw error;
+
+        const setting = Array.isArray(data) ? data[0] : data;
+
+        if (!setting) {
+            target.textContent = "通知設定は登録されていません。";
+            return;
+        }
+
+        const lines = [];
+        const formatTime = value =>
+            value ? String(value).slice(0, 5) : "";
+
+        lines.push(
+            setting.daily_off_enabled
+                ? `毎日の通知OFF時間：${formatTime(setting.daily_off_start)}～${formatTime(setting.daily_off_end)}`
+                : "毎日の通知OFF時間：設定なし"
+        );
+
+        const dayLabels = ["日", "月", "火", "水", "木", "金", "土"];
+        const offDays = (setting.weekly_off_days || [])
+            .map(Number)
+            .filter(day => day >= 0 && day <= 6)
+            .map(day => dayLabels[day] + "曜日");
+
+        lines.push(
+            offDays.length
+                ? `曜日指定の通知OFF：${offDays.join("・")}`
+                : "曜日指定の通知OFF：設定なし"
+        );
+
+        lines.push(
+            setting.long_term_off_enabled
+                ? `長期休診：${setting.long_term_off_start || "未設定"}～${setting.long_term_off_end || "未設定"}`
+                : "長期休診中の通知OFF：設定なし"
+        );
+
+        target.replaceChildren();
+
+        lines.forEach(line => {
+            const p = document.createElement("p");
+            p.style.margin = "6px 0";
+            p.textContent = line;
+            target.appendChild(p);
+        });
+
+        target.dataset.loaded = "true";
+
+    } catch (error) {
+        console.error(error);
+        target.textContent = "通知設定を読み込めませんでした。";
+    }
+}
+
 async function saveClinicNotificationSchedule() {
   const message = document.getElementById("clinicNotificationScheduleMessage");
+
   const dailyEnabled =
     document.getElementById("clinicDailyNotificationOffEnabled").checked;
   const dailyStart =
     document.getElementById("clinicDailyNotificationOffStart").value;
   const dailyEnd =
     document.getElementById("clinicDailyNotificationOffEnd").value;
+
+  const weeklyEnabled =
+    document.getElementById("clinicWeeklyOffEnabled").checked;
+
+  const weeklyOffDays = [
+    ["clinicWeeklyOffSun", 0],
+    ["clinicWeeklyOffMon", 1],
+    ["clinicWeeklyOffTue", 2],
+    ["clinicWeeklyOffWed", 3],
+    ["clinicWeeklyOffThu", 4],
+    ["clinicWeeklyOffFri", 5],
+    ["clinicWeeklyOffSat", 6]
+  ]
+    .filter(([id]) => document.getElementById(id).checked)
+    .map(([, day]) => day);
+
   const longTermEnabled =
     document.getElementById("clinicLongTermNotificationOffEnabled").checked;
   const longTermStart =
@@ -11702,6 +12142,12 @@ async function saveClinicNotificationSchedule() {
   if (dailyEnabled && (!dailyStart || !dailyEnd)) {
     message.style.color = "#b91c1c";
     message.textContent = "毎日のOFF開始時刻と通知再開時刻を入力してください。";
+    return;
+  }
+
+  if (weeklyEnabled && weeklyOffDays.length === 0) {
+    message.style.color = "#b91c1c";
+    message.textContent = "通知OFFにする曜日を1つ以上選択してください。";
     return;
   }
 
@@ -11733,17 +12179,20 @@ async function saveClinicNotificationSchedule() {
         p_daily_off_end: dailyEnabled ? dailyEnd : null,
         p_long_term_off_enabled: longTermEnabled,
         p_long_term_off_start: longTermEnabled ? longTermStart : null,
-        p_long_term_off_end: longTermEnabled ? longTermEnd : null
+        p_long_term_off_end: longTermEnabled ? longTermEnd : null,
+        p_weekly_off_days: weeklyEnabled ? weeklyOffDays : []
       }
     );
 
     if (error) throw error;
+
     message.style.color = "#166534";
     message.textContent = "通知時間設定を保存しました。";
   } catch (error) {
     console.error(error);
     message.style.color = "#b91c1c";
-    message.textContent = error.message || "通知時間設定を保存できませんでした。";
+    message.textContent =
+      error.message || "通知時間設定を保存できませんでした。";
   }
 }
 
