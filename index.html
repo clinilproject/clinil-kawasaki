@@ -3947,19 +3947,20 @@ body {
   }
 }
 
-/* 通知OFFの時間・日付入力欄：スマホ版のみ */
+/* 通知OFF設定：スマホ版のみグレーの入力欄を縮小 */
 @media screen and (max-width: 600px) {
   #clinicDailyNotificationOffStart,
   #clinicDailyNotificationOffEnd,
   #clinicLongTermNotificationOffStart,
   #clinicLongTermNotificationOffEnd {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 85% !important;
+    max-width: 85% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
   }
 
-  details:has(#clinicDailyNotificationOffEnabled) div[style*="grid-template-columns"] {
+  details:has(#clinicDailyNotificationOffEnabled)
+  .long-term-date-grid {
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
