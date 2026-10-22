@@ -5309,27 +5309,78 @@ body {
 </div>
 </div>
 
+
 <div id="clinicPasswordSetupArea" style="display:none; position:fixed; inset:0; z-index:1000; padding:20px; background:rgba(15,23,42,0.55); overflow:auto;">
-    <div style="max-width:460px; margin:8vh auto; padding:20px; border-radius:12px; background:#fff; box-shadow:0 12px 40px rgba(0,0,0,0.25);">
-        <h2 style="margin-top:0; color:#0f4c81;">医院アカウントのパスワード設定</h2>
-        <p style="font-size:13px; color:#475569; line-height:1.6;">招待された医院アカウントで使用するパスワードを設定してください。</p>
-        <input id="clinicNewPassword" type="password" minlength="10" autocomplete="new-password" placeholder="新しいパスワード（10文字以上）">
-        <input id="clinicNewPasswordConfirm" type="password" minlength="10" autocomplete="new-password" placeholder="新しいパスワードをもう一度入力" style="margin-top:8px;">
-        <button id="clinicPasswordSetupButton" type="button" onclick="saveClinicInitialPassword()" style="margin-top:10px;">パスワードを設定して管理画面へ進む</button>
-        <p id="clinicPasswordSetupMessage" style="font-size:13px;"></p>
+  <div style="max-width:460px; margin:8vh auto; padding:20px; border-radius:12px; background:#fff; box-shadow:0 12px 40px rgba(0,0,0,0.25);">
+    <h2 style="margin-top:0; color:#0f4c81;">医院アカウントの初期設定</h2>
+
+    <p style="font-size:13px; color:#475569; line-height:1.6;">
+      メールで届いた8桁の認証コードを入力してください。
+    </p>
+
+    <input
+      id="clinicSetupEmail"
+      type="email"
+      autocomplete="email"
+      placeholder="メールアドレス"
+      style="width:100%; box-sizing:border-box; margin-top:8px;"
+    >
+
+    <input
+      id="clinicSetupCode"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]{8}"
+      maxlength="8"
+      autocomplete="one-time-code"
+      placeholder="8桁の認証コード"
+      style="width:100%; box-sizing:border-box; margin-top:8px;"
+    >
+
+    <button
+      id="clinicVerifyCodeButton"
+      type="button"
+      onclick="verifyClinicInitialCode()"
+      style="width:100%; margin-top:10px;"
+    >認証コードを確認</button>
+
+    <div id="clinicPasswordFields" style="display:none; margin-top:16px;">
+      <p style="font-size:13px; color:#475569;">
+        認証できました。10文字以上のパスワードを設定してください。
+      </p>
+
+      <input
+        id="clinicNewPassword"
+        type="password"
+        minlength="10"
+        maxlength="128"
+        autocomplete="new-password"
+        placeholder="新しいパスワード（10文字以上）"
+        style="width:100%; box-sizing:border-box;"
+      >
+
+      <input
+        id="clinicNewPasswordConfirm"
+        type="password"
+        minlength="10"
+        maxlength="128"
+        autocomplete="new-password"
+        placeholder="新しいパスワードをもう一度入力"
+        style="width:100%; box-sizing:border-box; margin-top:8px;"
+      >
+
+      <button
+        id="clinicPasswordSetupButton"
+        type="button"
+        onclick="saveClinicInitialPassword()"
+        style="width:100%; margin-top:10px;"
+      >パスワードを設定</button>
     </div>
+
+    <p id="clinicPasswordSetupMessage" style="font-size:13px; line-height:1.6;"></p>
+  </div>
 </div>
 
-<div id="adminLoginArea" style="display:none; max-width:420px; margin:18px auto; padding:14px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px;">
-    <h3 style="margin:0 0 10px; font-size:16px; color:#475569;">運営管理ログイン</h3>
-    <input id="adminEmail" type="email" placeholder="メールアドレス" autocomplete="username">
-    <input id="adminPassword" type="password" placeholder="パスワード" autocomplete="current-password" style="margin-top:8px;">
-    <div style="display:flex; gap:8px; margin-top:8px;">
-        <button type="button" onclick="adminLogin()" style="margin:0;">ログイン</button>
-        <button type="button" onclick="hideAdminLogin()" style="margin:0; background:#64748b;">閉じる</button>
-    </div>
-    <p id="loginMessage" style="margin-bottom:0; font-size:13px;"></p>
-</div>
 
 <div id="adminArea" style="display: none;">
     <div class="admin-dashboard-header">
@@ -5653,60 +5704,124 @@ async function waitForClinicInviteSession() {
   return null;
 }
 
-async function maybeShowClinicPasswordSetup() {
-  if (!CLINIL_PASSWORD_SETUP_FLOW) return;
-  const area = document.getElementById("clinicPasswordSetupArea");
-  if (area) area.style.display = "block";
-  const button = document.getElementById("clinicPasswordSetupButton");
-  const message = document.getElementById("clinicPasswordSetupMessage");
-  if (button) button.disabled = true;
-  if (message) message.textContent = "招待情報を確認しています…";
+function maybeShowClinicPasswordSetup() {
+  const params = new URLSearchParams(window.location.search);
 
-  const session = await waitForClinicInviteSession();
-  if (session) {
-    if (button) button.disabled = false;
-    if (message) message.textContent = "新しいパスワードを入力してください。";
-  } else {
-    if (message) message.textContent = "招待リンクの有効期限が切れている可能性があります。管理者に招待メールの再送を依頼してください。";
+  if (params.get("clinic_setup") !== "1") return;
+
+  const area = document.getElementById("clinicPasswordSetupArea");
+  const emailInput = document.getElementById("clinicSetupEmail");
+  const passwordFields = document.getElementById("clinicPasswordFields");
+  const message = document.getElementById("clinicPasswordSetupMessage");
+
+  if (area) area.style.display = "block";
+  if (emailInput) emailInput.value = params.get("email") || "";
+  if (passwordFields) passwordFields.style.display = "none";
+
+  if (message) {
+    message.textContent = "メールに届いた8桁の認証コードを入力してください。";
+  }
+}
+
+async function verifyClinicInitialCode() {
+  const email = document.getElementById("clinicSetupEmail").value.trim().toLowerCase();
+  const code = document.getElementById("clinicSetupCode").value.trim();
+  const message = document.getElementById("clinicPasswordSetupMessage");
+  const button = document.getElementById("clinicVerifyCodeButton");
+
+  if (!email || !/^\d{8}$/.test(code)) {
+    message.textContent = "メールアドレスと8桁の認証コードを入力してください。";
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = "認証コードを確認しています…";
+
+  try {
+    const { data, error } = await supabaseClient.functions.invoke(
+      "setup-clinic-initial-password",
+      {
+        body: { action: "verify", email, code }
+      }
+    );
+
+    if (error) throw error;
+    if (!data?.ok) {
+      throw new Error(data?.message || "認証に失敗しました。");
+    }
+
+    document.getElementById("clinicPasswordFields").style.display = "block";
+    message.textContent = data.message;
+  } catch (error) {
+    console.error(error);
+    message.textContent = error.message || "認証に失敗しました。";
+  } finally {
+    button.disabled = false;
   }
 }
 
 async function saveClinicInitialPassword() {
+  const email = document.getElementById("clinicSetupEmail").value.trim().toLowerCase();
+  const code = document.getElementById("clinicSetupCode").value.trim();
   const password = document.getElementById("clinicNewPassword").value;
   const confirmation = document.getElementById("clinicNewPasswordConfirm").value;
   const message = document.getElementById("clinicPasswordSetupMessage");
+  const button = document.getElementById("clinicPasswordSetupButton");
 
-  if (password.length < 10) {
-    message.textContent = "パスワードは10文字以上で入力してください。";
+  if (!email || !/^\d{8}$/.test(code)) {
+    message.textContent = "メールアドレスと8桁の認証コードを確認してください。";
     return;
   }
+
+  if (password.length < 10) {
+    message.textContent = "パスワードは10文字以上にしてください。";
+    return;
+  }
+
+  if (password.length > 128) {
+    message.textContent = "パスワードが長すぎます。";
+    return;
+  }
+
   if (password !== confirmation) {
     message.textContent = "2つのパスワードが一致しません。";
     return;
   }
 
-  message.textContent = "設定中です...";
-  const session = await waitForClinicInviteSession();
-  if (!session) {
-    message.textContent = "招待リンクの認証を確認できません。招待メールを再送して、新しいリンクを開いてください。";
-    return;
-  }
-  const { error } = await supabaseClient.auth.updateUser({ password: password });
-  if (error) {
+  button.disabled = true;
+  message.textContent = "パスワードを設定しています…";
+
+  try {
+    const { data, error } = await supabaseClient.functions.invoke(
+      "setup-clinic-initial-password",
+      {
+        body: {
+          action: "set_password",
+          email,
+          code,
+          password
+        }
+      }
+    );
+
+    if (error) throw error;
+
+    if (!data?.ok) {
+      throw new Error(data?.message || "設定に失敗しました。");
+    }
+
+    message.textContent =
+      "初期パスワードを設定しました。医療機関ログイン画面からログインしてください。";
+
+    document.getElementById("clinicPasswordFields").style.display = "none";
+    button.disabled = true;
+  } catch (error) {
     console.error(error);
-    message.textContent = "設定できませんでした（" + (error.message || "認証エラー") + "）。新しい招待メールのリンクからやり直してください。";
-    return;
+    message.textContent =
+      error.message || "パスワードを設定できませんでした。";
+    button.disabled = false;
   }
-
-  localStorage.setItem(CLINIC_REMEMBER_LOGIN_KEY, "true");
-  sessionStorage.setItem(CURRENT_TAB_LOGIN_KEY, "true");
-  message.textContent = "パスワードを設定しました。";
-  window.history.replaceState({}, document.title, window.location.pathname);
-  document.getElementById("clinicPasswordSetupArea").style.display = "none";
-  await checkLoginStatus();
-  showClinicPortal();
 }
-
 
 async function changeClinicAccountEmail() {
     const input = document.getElementById("clinicNewEmail");
@@ -11561,9 +11676,9 @@ document
             const applicationDepartments =
                 getClinicApplicationDepartments();
 
-            const { error } = await supabaseClient
-                .from("clinic_applications")
-                .insert({
+            const { data: application, error } = await supabaseClient
+    .from("clinic_applications")
+    .insert({
                     clinic_name:
                         document.getElementById("applicationClinicName").value,
                     medical_institution_code:
@@ -11576,7 +11691,9 @@ document
                         document.getElementById("applicationPhone").value,
                     message:
                         "標榜診療科：" + applicationDepartments.join("、")
-                });
+                })
+                .select("id")
+                .single();
 
             if (error) {
                 console.error(error);
@@ -11584,6 +11701,27 @@ document
                 result.textContent =
                     "送信できませんでした。もう一度お試しください。";
                 return;
+
+                            const { data: mailResult, error: mailError } =
+                await supabaseClient.functions.invoke(
+                    "send-clinic-application-receipt",
+                    {
+                        body: {
+                            application_id: application.id
+                        }
+                    }
+                );
+
+            if (mailError || !mailResult?.ok) {
+                console.error(
+                    "受付メール送信エラー:",
+                    mailError || mailResult
+                );
+                result.style.color = "#b91c1c";
+                result.textContent =
+                    "申請は登録されましたが、受付メールを送信できませんでした。";
+                return;
+            }
             }
 
             document
@@ -13746,9 +13884,7 @@ checkLoginStatus().catch(function(error) {
     console.error("ログイン状態を確認できませんでした。", error);
 });
 
-maybeShowClinicPasswordSetup().catch(function(error) {
-    console.error("パスワード設定画面を開けませんでした。", error);
-});
+maybeShowClinicPasswordSetup();
 
 </script>
 
