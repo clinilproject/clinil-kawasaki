@@ -3965,6 +3965,17 @@ body {
   }
 }
 
+/* スマホ版：受付時間・休診日の長期休診日入力欄だけ縮小 */
+@media screen and (max-width: 600px) {
+  input[id^="longTermStart-"],
+  input[id^="longTermEnd-"] {
+    width: 85% !important;
+    max-width: 85% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
    </style>
 </head>
 
