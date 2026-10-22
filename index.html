@@ -3965,12 +3965,12 @@ body {
   }
 }
 
-/* 長期休診日の設定：スマホ版のみ開始日・終了日のグレーの入力欄を縮小 */
+/* スマホ版：長期休診日の開始日・終了日の入力欄だけ縮小 */
 @media screen and (max-width: 600px) {
   input[id^="longTermStart-"],
   input[id^="longTermEnd-"] {
     width: 85% !important;
-    max-width: calc(100% - 20px) !important;
+    max-width: 85% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
   }
