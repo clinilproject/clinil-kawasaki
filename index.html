@@ -3947,6 +3947,23 @@ body {
   }
 }
 
+/* 通知OFFの時間・日付入力欄：スマホ版のみ */
+@media screen and (max-width: 600px) {
+  #clinicDailyNotificationOffStart,
+  #clinicDailyNotificationOffEnd,
+  #clinicLongTermNotificationOffStart,
+  #clinicLongTermNotificationOffEnd {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  details:has(#clinicDailyNotificationOffEnabled) div[style*="grid-template-columns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
    </style>
 </head>
 
