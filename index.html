@@ -3976,6 +3976,51 @@ body {
   }
 }
 
+
+/* iPad mini：ヘッダー右上の2つのボタンを横並びにする */
+@media screen and (min-width: 601px) and (max-width: 800px) {
+    .site-header-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+        white-space: nowrap;
+    }
+
+    .site-header-actions .site-nav button[onclick="showAboutSite()"] {
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        margin: 0 !important;
+    }
+
+    .site-header-actions #clinicPortalButton {
+        position: relative !important;
+        top: -20px !important;
+        margin: 0 !important;
+    }
+}
+
+
+/* iPad mini・iPad Pro：通知OFF設定の3項目を中央揃え */
+@media screen and (min-width: 601px) {
+    #clinicDailyNotificationOffEnabled,
+    #clinicWeeklyOffEnabled,
+    #clinicLongTermNotificationOffEnabled {
+        margin: 0;
+    }
+
+    label:has(> #clinicDailyNotificationOffEnabled),
+    label:has(> #clinicWeeklyOffEnabled),
+    label:has(> #clinicLongTermNotificationOffEnabled) {
+        justify-content: center !important;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+
    </style>
 </head>
 
@@ -4632,19 +4677,7 @@ body {
     <div class="box" id="clinicSearchSection" style="display:none; background:#ffffff; border-radius:24px; padding:36px 32px; margin-top:28px; box-shadow:0 10px 35px rgba(15, 76, 129, 0.08); border:1px solid #e6f2fa;">
          <button
     type="button"
-    onclick="
-        document.getElementById('clinicSearchSection')?.style.setProperty('display','none','important');
-
-        document.querySelector('.home-hero-new')?.style.setProperty('display','block','important');
-        document.querySelector('.reference-feature-grid')?.style.setProperty('display','grid','important');
-        document.querySelector('.mobile-illust-area')?.style.removeProperty('display');
-
-        document.querySelector('.home-feature-title')?.style.removeProperty('display');
-        document.querySelector('.home-info-row')?.style.removeProperty('display');
-        document.querySelector('.medical-cta')?.style.removeProperty('display');
-
-        window.scrollTo({ top:0, behavior:'smooth' });
-        "
+    onclick="returnToHome();"
     style="
         margin-bottom:22px;
         border:none;
@@ -6811,6 +6844,61 @@ function hideAboutSiteSection() {
         about.style.display = "none";
     }
 }
+
+
+function showHome() {
+    // 検索画面を閉じる
+    const searchSection = document.getElementById("clinicSearchSection");
+    if (searchSection) {
+        searchSection.style.setProperty("display", "none", "important");
+    }
+
+    // トップ画面の各要素を再表示する
+    document.querySelector(".home-hero-new")
+        ?.style.removeProperty("display");
+
+    document.querySelector(".reference-feature-grid")
+        ?.style.removeProperty("display");
+
+    document.querySelector(".mobile-illust-area")
+        ?.style.removeProperty("display");
+
+    document.querySelector(".home-feature-title")
+        ?.style.removeProperty("display");
+
+    document.querySelector(".home-info-row")
+        ?.style.removeProperty("display");
+
+    document.querySelector(".medical-cta")
+        ?.style.removeProperty("display");
+
+    // 検索画面の表示状態を初期化する
+    const title = document.getElementById("clinicSearchTitle");
+    const fields = document.getElementById("clinicSearchFields");
+    const result = document.getElementById("result");
+
+    if (title) title.style.removeProperty("display");
+    if (fields) fields.style.removeProperty("display");
+
+    if (result) {
+        result.innerHTML = "";
+        result.className = "";
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function returnToHome() {
+    showHome();
+
+    // URLの画面識別用ハッシュを解除する
+    history.replaceState(
+        { page: "home" },
+        "",
+        location.pathname + location.search
+    );
+}
+
 
 function showVaccineWardSelector() {
 
