@@ -3965,10 +3965,10 @@ body {
   }
 }
 
-/* スマホ版：長期休診日の開始日・終了日の入力欄だけ縮小 */
+/* スマホ版のみ：長期休診日の開始日・終了日の入力欄を縮小 */
 @media screen and (max-width: 600px) {
-  input[id^="longTermStart-"],
-  input[id^="longTermEnd-"] {
+  input[id^="specialClosureStart-"],
+  input[id^="specialClosureEnd-"] {
     width: 85% !important;
     max-width: 85% !important;
     min-width: 0 !important;
