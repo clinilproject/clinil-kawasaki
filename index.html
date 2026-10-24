@@ -12751,7 +12751,9 @@ async function loadClinicInquiries() {
                        allow: "通常の問い合わせ",
                        medical: "医学的判断を含む可能性",
                        sales: "営業・勧誘の可能性",
-                       abuse: "不適切表現の可能性",
+                       offensive: "侮辱的な表現の可能性",
+                       abuse: "脅迫・悪質な嫌がらせの可能性",
+                       nonsense: "無意味な投稿の可能性",
                        unknown: "未分類"
                      }[inquiry.ai_classification] || "未分類")}
                      <br><small>※AI分類は参考表示です。送信可否を決めるものではありません。</small>
