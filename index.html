@@ -12742,8 +12742,12 @@ async function loadClinicInquiries() {
                 <p><strong>お問い合わせカテゴリー：</strong>${escapeHtml(inquiry.category || "未選択")}</p>
                 <p><strong>お問い合わせ内容：</strong>${escapeHtml(inquiry.message)}</p>
                 <p>
-                     <strong>状態：</strong>
-                     ${inquiry.status === "pending" ? "未対応" : "対応済み"}
+                <strong>状態：</strong>
+                ${
+                inquiry.status === "pending"
+                ? '<span style="display:inline-block; padding:5px 12px; background:#fff3cd; color:#856404; border:1px solid #e0b84c; border-radius:6px; font-weight:bold;">未対応</span>'
+                : '<span style="display:inline-block; padding:6px 14px; background:#198754; color:#ffffff; border:1px solid #146c43; border-radius:6px; font-size:16px; font-weight:bold;">✓ 対応済み</span>'
+                }
                 </p>
                 <p>
                      <strong>内容分類：</strong>
@@ -12808,7 +12812,16 @@ async function loadClinicInquiries() {
     >
         ${inquiry.reply_message ? "修正した回答を患者へ再送信する" : "この内容を患者へメール送信する"}
     </button>
-</div>
+
+    <button
+    type="button"
+    onclick="if (confirm('患者様へ回答メールを送信せず、対応済みにしますか？')) markInquiryResolved(${inquiry.id})"
+    style="display:block; margin-top:10px; padding:10px 18px; background:#64748b; color:white; border:none; border-radius:6px; cursor:pointer;"
+    >
+    回答せず対応済みにする
+    </button>
+
+    </div>
 
             </div>
         `;
