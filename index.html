@@ -5821,10 +5821,14 @@ async function saveClinicInitialPassword() {
     }
 
     message.textContent =
-      "初期パスワードを設定しました。医療機関ログイン画面からログインしてください。";
+    "初期パスワードを設定しました。ホームページTOPへ移動します。";
 
     document.getElementById("clinicPasswordFields").style.display = "none";
     button.disabled = true;
+
+    setTimeout(() => {
+    window.location.href = window.location.origin + window.location.pathname;
+    }, 2000);
   } catch (error) {
     console.error(error);
     message.textContent =
