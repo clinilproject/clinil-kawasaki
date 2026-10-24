@@ -11569,129 +11569,21 @@ updateInquiryConsentButton();
 }
 
 document
-  .getElementById("patientInquiryForm")
-  .addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-    const honeypot =
-      document.getElementById("inquiryWebsite").value;
-
-    if (honeypot !== "") {
-      return;
-    }
-
-    const result =
-      document.getElementById("patientInquiryResult");
-    const submitButton = event.submitter;
-
-    result.style.color = "";
-    result.textContent = "送信内容を確認しています...";
-
-    if (submitButton) {
-      submitButton.disabled = true;
-    }
-
-    try {
-      const { data, error } =
-        await supabaseClient.functions.invoke(
-          "classify-inquiry",
-          {
-            body: {
-              clinic_id: Number(
-                document.getElementById("inquiryClinicId").value
-              ),
-              clinic_name:
-                document.getElementById("inquiryClinicName").value,
-              patient_name:
-                document.getElementById("inquiryPatientName").value,
-              email:
-                document.getElementById("inquiryEmail").value,
-              phone:
-                document.getElementById("inquiryPhone").value,
-              patient_id:
-                document.getElementById("inquiryPatientId").value,
-              category:
-                document.getElementById("inquiryCategory").value,
-              symptom_id:
-                Number(document.getElementById("inquirySymptom").value) || null,
-              inquiry_item_id:
-                Number(document.getElementById("inquiryCommonItem").value) || null,
-              message:
-                document.getElementById("inquiryMessage").value,
-              website: honeypot
-            }
-          }
-        );
-
-      if (error) {
-        throw error;
-      }
-
-      if (!data || data.ok !== true) {
-        throw new Error(
-          data && data.error
-            ? data.error
-            : "AI確認処理に失敗しました。"
-        );
-      }
-
-      if (data.submitted !== true) {
-        result.style.color = "#b91c1c";
-        result.textContent =
-          data.guidance ||
-          "入力内容を確認した結果、送信されませんでした。";
-        return;
-      }
-
-      result.style.color = "#166534";
-result.style.whiteSpace = "pre-wrap";
-
-result.textContent =
-  data.guidance ||
-  "お問い合わせを受け付けました。医療機関が内容を確認して返信します。";
-
-if (data.notification_off === true) {
-  result.textContent +=
-    "\n\n" +
-    (data.notification_message ||
-      "現在、問い合わせ通知がOFFの時間帯です。返信は一定時間経過後になる可能性があります。");
-}
-
-      saveRememberedPatientContactIfRequested();
-      const shouldRestoreContact =
-          document.getElementById("rememberPatientContact")?.checked === true;
-
-      form.reset();
-
-      if (shouldRestoreContact) {
-          restoreRememberedPatientContact();
-      }
-    } catch (error) {
-      console.error(error);
-      result.style.color = "#b91c1c";
-      result.textContent =
-        "送信できませんでした。時間をおいて、もう一度お試しください。";
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-      }
-    }
-  });
-
-document
     .getElementById("clinicApplicationForm")
     .addEventListener("submit", async function(event) {
-
         event.preventDefault();
 
         const result =
             document.getElementById("applicationResult");
 
+        const submitButton = event.submitter;
+
+        result.style.color = "";
         result.textContent = "送信中...";
 
-        const submitButton = event.submitter;
-        if (submitButton) submitButton.disabled = true;
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
 
         try {
             const registeredClinic =
@@ -11708,52 +11600,39 @@ document
             const applicationDepartments =
                 getClinicApplicationDepartments();
 
-            const { data: application, error } = await supabaseClient
-    .from("clinic_applications")
-    .insert({
-                    clinic_name:
-                        document.getElementById("applicationClinicName").value,
-                    medical_institution_code:
-                        document.getElementById("applicationMedicalCode").value,
-                    applicant_name:
-                        document.getElementById("applicationApplicantName").value,
-                    email:
-                        document.getElementById("applicationEmail").value,
-                    phone:
-                        document.getElementById("applicationPhone").value,
-                    message:
-                        "標榜診療科：" + applicationDepartments.join("、")
-                })
-                .select("id")
-                .single();
-
-            if (error) {
-                console.error(error);
-                result.style.color = "#b91c1c";
-                result.textContent =
-                    "送信できませんでした。もう一度お試しください。";
-                return;
-
-                            const { data: mailResult, error: mailError } =
+            const { data: submitResult, error: submitError } =
                 await supabaseClient.functions.invoke(
-                    "send-clinic-application-receipt",
+                    "submit-clinic-application",
                     {
                         body: {
-                            application_id: application.id
+                            clinic_name:
+                                document.getElementById("applicationClinicName").value.trim(),
+                            medical_institution_code:
+                                document.getElementById("applicationMedicalCode").value.trim(),
+                            applicant_name:
+                                document.getElementById("applicationApplicantName").value.trim(),
+                            email:
+                                document.getElementById("applicationEmail").value.trim(),
+                            phone:
+                                document.getElementById("applicationPhone").value.trim(),
+                            message:
+                                "標榜診療科：" +
+                                applicationDepartments.join("、")
                         }
                     }
                 );
 
-            if (mailError || !mailResult?.ok) {
+            if (submitError || !submitResult?.ok) {
                 console.error(
-                    "受付メール送信エラー:",
-                    mailError || mailResult
+                    "登録申請エラー:",
+                    submitError || submitResult
                 );
+
                 result.style.color = "#b91c1c";
                 result.textContent =
-                    "申請は登録されましたが、受付メールを送信できませんでした。";
+                    submitResult?.message ||
+                    "送信できませんでした。もう一度お試しください。";
                 return;
-            }
             }
 
             document
@@ -11761,16 +11640,23 @@ document
                 .reset();
 
             hideClinicPortalPanels();
-            document.getElementById("clinicApplicationComplete").style.display =
-                "block";
+
+            document
+                .getElementById("clinicApplicationComplete")
+                .style.display = "block";
+
         } catch (error) {
-            console.error(error);
+            console.error("登録申請エラー:", error);
+
             result.style.color = "#b91c1c";
             result.textContent =
-                "医院登録状況を確認できませんでした。" +
+                "申請処理に失敗しました。" +
                 "時間をおいて、もう一度お試しください。";
+
         } finally {
-            if (submitButton) submitButton.disabled = false;
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
         }
     });
 
