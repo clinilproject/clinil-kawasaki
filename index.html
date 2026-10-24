@@ -5381,6 +5381,7 @@ body {
   </div>
 </div>
 
+</div>
 
 <div id="adminLoginArea" style="display:none; max-width:420px; margin:18px auto; padding:14px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px;">
     <h3 style="margin:0 0 10px; font-size:16px; color:#475569;">運営管理ログイン</h3>
@@ -5392,7 +5393,6 @@ body {
     </div>
     <p id="loginMessage" style="margin-bottom:0; font-size:13px;"></p>
 </div>
-
 
 <div id="adminArea" style="display: none;">
     <div class="admin-dashboard-header">
@@ -5451,8 +5451,6 @@ body {
             </div>
         </section>
     </div>
-
-</div>
 
 </div>
 
@@ -6663,24 +6661,41 @@ async function searchClinics(showMore = false) {
 currentSearchResults = data;
 displayedClinicCount = clinicsToShow;
 
+
 if (data.length > CLINICS_PER_PAGE) {
+    const hasMore = clinicsToShow < data.length;
+
     result.innerHTML += `
-        <div class="results-more" style="text-align:center; margin:20px 0;">
-            <button onclick="searchClinics(true)" style="
-                padding:14px 28px;
-                font-size:16px;
-                border:none;
-                border-radius:10px;
-                background:#1976d2;
-                color:white;
-                font-weight:bold;
-                cursor:pointer;
-            ">
-                もっと見る
+        <div class="results-more" style="
+            margin:20px 0;
+            text-align:center;
+        ">
+            <button
+                type="button"
+                onclick="searchClinics(${hasMore})"
+                aria-expanded="${hasMore}"
+                style="
+                    display:inline-flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:10px;
+                    padding:12px 24px;
+                    font-size:16px;
+                    border:1px solid #bfdbfe;
+                    border-radius:10px;
+                    background:#eff6ff;
+                    color:#075985;
+                    font-weight:bold;
+                    cursor:pointer;
+                "
+            >
+                <span>${hasMore ? "▼" : "▲"}</span>
+                <span>${hasMore ? "もっと見る" : "閉じる"}</span>
             </button>
         </div>
     `;
 }
+
 
 }
 
@@ -11216,13 +11231,18 @@ function updateClinicApplicationReview() {
 function showAdminLogin() {
     const searchSection = document.getElementById("clinicSearchSection");
     const area = document.getElementById("adminLoginArea");
+    const adminArea = document.getElementById("adminArea");
 
     if (searchSection) {
-        searchSection.style.setProperty("display", "block", "important");
+        searchSection.style.setProperty("display", "none", "important");
+    }
+
+    if (adminArea) {
+        adminArea.style.setProperty("display", "none", "important");
     }
 
     if (area) {
-        area.style.display = "block";
+        area.style.setProperty("display", "block", "important");
 
         setTimeout(() => {
             area.scrollIntoView({
