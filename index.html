@@ -5676,6 +5676,53 @@ if (aboutSiteSection) {
   }
 );
 
+// 患者問い合わせフォームの送信処理
+document.getElementById("patientInquiryForm")?.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const result = document.getElementById("patientInquiryResult");
+    const button = this.querySelector('button[type="submit"]');
+
+    result.textContent = "送信しています...";
+    button.disabled = true;
+
+    try {
+        const { data, error } = await supabaseClient.functions.invoke(
+            "classify-inquiry",
+            {
+                body: {
+                    clinic_id: document.getElementById("inquiryClinicId").value,
+                    clinic_name: document.getElementById("inquiryClinicName").value,
+                    patient_name: document.getElementById("inquiryPatientName").value.trim(),
+                    email: document.getElementById("inquiryEmail").value.trim(),
+                    phone: document.getElementById("inquiryPhone").value.trim(),
+                    patient_id: document.getElementById("inquiryPatientId").value.trim(),
+                    category: document.getElementById("inquiryCategory").value,
+                    inquiry_item_id: document.getElementById("inquiryCommonItem").value || null,
+                    symptom_id: document.getElementById("inquirySymptom").value || null,
+                    message: document.getElementById("inquiryMessage").value.trim(),
+                    website: document.getElementById("inquiryWebsite").value
+                }
+            }
+        );
+
+        if (error) throw error;
+        if (!data?.ok || !data?.submitted) {
+            throw new Error(data?.error || "送信できませんでした。");
+        }
+
+        result.textContent = data.guidance || "お問い合わせを受け付けました。";
+        this.reset();
+
+    } catch (error) {
+        console.error("患者問い合わせ送信エラー:", error);
+        result.textContent =
+            error.message || "送信に失敗しました。時間をおいて再度お試しください。";
+    } finally {
+        button.disabled = false;
+    }
+});
+
 const CLINIC_INACTIVITY_LIMIT_MS = 5 * 60 * 1000;
 const CLINIC_REMEMBER_LOGIN_KEY = "clinilRememberClinicLogin";
 const CURRENT_TAB_LOGIN_KEY = "clinilCurrentTabLogin";
