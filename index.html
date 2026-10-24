@@ -5382,6 +5382,18 @@ body {
 </div>
 
 
+<div id="adminLoginArea" style="display:none; max-width:420px; margin:18px auto; padding:14px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px;">
+    <h3 style="margin:0 0 10px; font-size:16px; color:#475569;">運営管理ログイン</h3>
+    <input id="adminEmail" type="email" placeholder="メールアドレス" autocomplete="username">
+    <input id="adminPassword" type="password" placeholder="パスワード" autocomplete="current-password" style="margin-top:8px;">
+    <div style="display:flex; gap:8px; margin-top:8px;">
+        <button type="button" onclick="adminLogin()" style="margin:0;">ログイン</button>
+        <button type="button" onclick="hideAdminLogin()" style="margin:0; background:#64748b;">閉じる</button>
+    </div>
+    <p id="loginMessage" style="margin-bottom:0; font-size:13px;"></p>
+</div>
+
+
 <div id="adminArea" style="display: none;">
     <div class="admin-dashboard-header">
         <h2>運営管理画面</h2>
