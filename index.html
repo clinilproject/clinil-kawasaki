@@ -6527,8 +6527,8 @@ async function searchClinics(showMore = false) {
     }
 
     const clinicsToShow = showMore
-      ? Math.min(displayedClinicCount + CLINICS_PER_PAGE, data.length)
-      : Math.min(CLINICS_PER_PAGE, data.length);
+    ? Math.min(displayedClinicCount + CLINICS_PER_PAGE, data.length)
+    : Math.min(CLINICS_PER_PAGE, data.length);
 
     result.innerHTML = `
     <p style="
@@ -6722,7 +6722,12 @@ async function searchClinics(showMore = false) {
     `;
 });
 currentSearchResults = data;
-displayedClinicCount = clinicsToShow;
+
+if (!showMore) {
+  displayedClinicCount = clinicsToShow;
+} else {
+  displayedClinicCount = Math.max(displayedClinicCount, clinicsToShow);
+}
 
 
 if (data.length > CLINICS_PER_PAGE) {
@@ -13575,10 +13580,12 @@ async function sortByDistance(resetCount = true) {
     }
 
     const result =
-        document.getElementById("result");
+    document.getElementById("result");
 
+    if (resetCount) {
     result.innerHTML =
         "<p>現在地を取得しています...</p>";
+    }
 
     if (!navigator.geolocation) {
         result.innerHTML =
