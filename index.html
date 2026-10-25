@@ -13579,11 +13579,14 @@ function getDistance(lat1, lon1, lat2, lon2) {
 }
 
 function showMoreByDistance() {
+    const savedScrollY = window.scrollY;
+
     displayedClinicCount += CLINICS_PER_PAGE;
-    sortByDistance(false);
+
+    sortByDistance(false, savedScrollY);
 }
 
-async function sortByDistance(resetCount = true) {
+async function sortByDistance(resetCount = true, savedScrollY = null) {
     if (resetCount) {
         displayedClinicCount = CLINICS_PER_PAGE;
     }
@@ -13883,6 +13886,17 @@ result.innerHTML += `
         </div>
     `;
 } 
+
+if (savedScrollY !== null) {
+    requestAnimationFrame(() => {
+        window.scrollTo(0, savedScrollY);
+
+        requestAnimationFrame(() => {
+            window.scrollTo(0, savedScrollY);
+        });
+    });
+}
+
         },
 
         function(error) {
