@@ -6458,7 +6458,11 @@ async function searchClinics(showMore = false) {
         document.getElementById("result");
 
     result.className = "result-grid";
+    const savedScrollY = window.scrollY;
+
+    if (!showMore) {
     result.innerHTML = "<p>検索中...</p>";
+    }
 
     let data = [];
     let error = null;
@@ -6764,6 +6768,11 @@ if (data.length > CLINICS_PER_PAGE) {
     `;
 }
 
+if (showMore) {
+    requestAnimationFrame(() => {
+        window.scrollTo(0, savedScrollY);
+    });
+}
 
 }
 
