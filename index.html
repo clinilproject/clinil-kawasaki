@@ -5711,7 +5711,19 @@ document.getElementById("patientInquiryForm")?.addEventListener("submit", async 
             throw new Error(data?.error || "送信できませんでした。");
         }
 
-        result.textContent = data.guidance || "お問い合わせを受け付けました。";
+        
+        result.style.whiteSpace = "pre-wrap";
+
+        result.textContent =
+        data.guidance || "お問い合わせを受け付けました。";
+
+        if (data.notification_off === true) {
+        result.textContent +=
+        "\n\n" +
+        (data.notification_message ||
+        "現在、問い合わせ通知がOFFの時間帯です。返信は一定時間経過後になる可能性があります。");
+        }
+
         this.reset();
 
     } catch (error) {
