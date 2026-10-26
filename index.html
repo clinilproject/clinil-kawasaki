@@ -4294,13 +4294,13 @@ body {
         document.querySelector('.medical-cta')?.style.setProperty('display','none','important');
         document.getElementById('clinicSearchSection')?.style.setProperty('display','block','important');
 
-        showVaccineWardSelector();
-
         setTimeout(() => {
         document.getElementById('clinicSearchSection')?.scrollIntoView({
-            behavior:'smooth',
-            block:'start'
+        behavior: 'smooth',
+        block: 'start'
         });
+        history.pushState({page:'vaccine'}, '', '#vaccine');
+        showVaccineWardSelector();
         }, 150);
         "
         >
@@ -7156,7 +7156,7 @@ function showVaccineWardSelector() {
         </div>
     `;
 
-    result.scrollIntoView({
+        result.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
