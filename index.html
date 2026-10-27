@@ -4146,12 +4146,15 @@ body {
         それが、クリニル川崎の目指す未来です。
       </p>
 
-      <p style="font-size:13px; color:#64748b; margin:28px 0;">
+      
+      <div style="margin:28px 0; padding:18px 20px; background:#f0f7ff; border-left:4px solid #2878b5; border-radius:8px; text-align:left;">
+      <p style="font-size:13px; line-height:1.9; color:#334155; margin:0;">
         本サイトは、問い合わせフォームを備えた地域医療情報サイトです。
-        掲載情報やお問い合わせ機能の安全性についても、<br>
-        AIを活用した定期的な点検と改善に取り組んでいます。
-        
+        掲載情報やお問い合わせ機能の安全性についても、AIを活用した定期的な点検と改善に取り組んでいます。
+        また、不正アクセスの標的とされる氏名・住所・電話番号・クレジットカード番号等の個人情報をデータベースに保存しない設計にしています。
       </p>
+      </div>
+
 
       <p style="font-size:13px; color:#64748b; margin:28px 0; text-align:center;">
         2026年 クリニル川崎企画運営部
@@ -4805,7 +4808,10 @@ body {
 
 <h4>2．お問い合わせについて</h4>
 <p style="padding:10px 12px; border:2px solid #2563eb; border-radius:8px; background:#eff6ff; color:#1e3a8a; font-weight:bold;">
-  ポリシー違反に該当しないお問い合わせは、医院側へ必ず届く仕組みです。宛先と内容を十分に確認してから送信してください。
+  ポリシー違反に該当しないお問い合わせは、基本的に医院側へ届く仕組みです。宛先と内容を十分に確認してから送信してください。
+</p>
+<p style="padding:10px 12px; border:2px solid #2563eb; border-radius:8px; background:#eff6ff; color:#1e3a8a; font-weight:bold;">
+  ※AIがポリシー違反と判断したお問い合わせは送信できません。
 </p>
 <p>
   お問い合わせは、選択した医療機関へ直接送信されます。回答の有無、
@@ -7319,7 +7325,7 @@ async function showRealtimeVaccineInfo(selectedWard, selectedVaccine = "") {
 
     const result = document.getElementById("result");
     result.className = "result-grid";
-    const ward = document.getElementById("ward").value;
+    const ward = selectedWard || document.getElementById("ward").value;
     result.innerHTML = "<p>リアルタイムワクチン情報を読み込んでいます...</p>";
 
     const { data: vaccineData, error: vaccineError } = await supabaseClient
