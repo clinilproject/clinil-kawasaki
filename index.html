@@ -10923,10 +10923,12 @@ ${
                       <button
                           type="button"
                           onclick="saveClinicWebsiteUrl(${Number(clinic.id)})"
-                          style="margin-top:10px; padding:10px 16px;"
-                      >
+                          ontouchend="event.preventDefault(); saveClinicWebsiteUrl(${Number(clinic.id)})"
+                          style="margin-top:10px; padding:10px 16px; touch-action:manipulation; position:relative; z-index:10;"
+                          >
                           公式ホームページを保存
-                      </button>
+                          </button>
+
                   </div>
 
 
