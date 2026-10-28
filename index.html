@@ -9784,7 +9784,7 @@ function buildClinicVaccineEditor(clinic) {
                     <option value="ended">終了</option>
                 </select>
 
-                <div id="clinicVaccinePeriodFields" style="display:none; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-top:12px;">
+                <div id="clinicVaccinePeriodFields" style="display:none; grid-template-columns:minmax(0,1fr); gap:10px; margin-top:12px; width:100%; max-width:100%; box-sizing:border-box;">
                     <label>開始日<input id="clinicVaccineStartDate" type="date" style="width:100%; box-sizing:border-box;"></label>
                     <label>終了日<input id="clinicVaccineEndDate" type="date" style="width:100%; box-sizing:border-box;"></label>
                 </div>
