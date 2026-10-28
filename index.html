@@ -9784,15 +9784,27 @@ function buildClinicVaccineEditor(clinic) {
                     <option value="ended">終了</option>
                 </select>
 
-                <div id="clinicVaccinePeriodFields" style="display:none; grid-template-columns:minmax(0,1fr); gap:8px; margin-top:12px; width:100%; max-width:100%; box-sizing:border-box;">
+                <div id="clinicVaccinePeriodFields"
+                style="display:none; grid-template-columns:minmax(0,1fr); gap:8px; margin-top:12px; width:100%; max-width:100%; box-sizing:border-box;">
+
                 <label style="display:block; min-width:0;">
                 開始日
-                <input id="clinicVaccineStartDate" type="date" style="display:block; width:100%; max-width:100%; min-width:0; box-sizing:border-box; padding:8px; margin-top:4px;">
+                <input
+                id="clinicVaccineStartDate"
+                type="date"
+                style="display:block; width:85%; max-width:85%; min-width:0; box-sizing:border-box; padding:8px; margin-top:4px;"
+                >
                 </label>
+
                 <label style="display:block; min-width:0;">
                 終了日
-                <input id="clinicVaccineEndDate" type="date" style="display:block; width:100%; max-width:100%; min-width:0; box-sizing:border-box; padding:8px; margin-top:4px;">
+                <input
+                id="clinicVaccineEndDate"
+                type="date"
+                style="display:block; width:85%; max-width:85%; min-width:0; box-sizing:border-box; padding:8px; margin-top:4px;"
+                >
                 </label>
+                </div>
                 </div>
 
                 <label style="display:block; font-weight:bold; margin-top:14px;">予約</label>
