@@ -6038,11 +6038,21 @@ const clinicAutoLogoutMessage =
 if (clinicAutoLogoutMessage) {
   sessionStorage.removeItem("clinicAutoLogoutMessage");
 
+  const loginArea = document.getElementById("clinicLoginArea");
   const message = document.getElementById("clinicLoginMessage");
+
+  if (loginArea) {
+    loginArea.style.display = "block";
+  }
 
   if (message) {
     message.textContent = clinicAutoLogoutMessage;
     message.style.color = "#b91c1c";
+    message.style.fontWeight = "bold";
+    message.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
   }
 }
     
