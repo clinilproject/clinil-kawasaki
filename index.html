@@ -6036,10 +6036,20 @@ const clinicAutoLogoutMessage =
   sessionStorage.getItem("clinicAutoLogoutMessage");
 
 if (clinicAutoLogoutMessage) {
-  sessionStorage.removeItem("clinicAutoLogoutMessage");
+  const ownerSection =
+    document.getElementById("clinicOwnerSection");
+  const loginArea =
+    document.getElementById("clinicLoginArea");
+  const message =
+    document.getElementById("clinicLoginMessage");
 
-  const loginArea = document.getElementById("clinicLoginArea");
-  const message = document.getElementById("clinicLoginMessage");
+  if (ownerSection) {
+    ownerSection.style.display = "block";
+  }
+
+  if (typeof hideClinicPortalPanels === "function") {
+    hideClinicPortalPanels();
+  }
 
   if (loginArea) {
     loginArea.style.display = "block";
@@ -6049,9 +6059,14 @@ if (clinicAutoLogoutMessage) {
     message.textContent = clinicAutoLogoutMessage;
     message.style.color = "#b91c1c";
     message.style.fontWeight = "bold";
-    message.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
+  }
+
+  sessionStorage.removeItem("clinicAutoLogoutMessage");
+
+  if (ownerSection) {
+    ownerSection.scrollIntoView({
+      behavior: "auto",
+      block: "start"
     });
   }
 }
@@ -6061,8 +6076,8 @@ if (clinicAutoLogoutMessage) {
     let savedSearchScrollY = 0;
 
     const params = new URLSearchParams(window.location.search);
-const clinicIdFromUrl = params.get("clinicId");
-const viewFromUrl = params.get("view");
+    const clinicIdFromUrl = params.get("clinicId");
+    const viewFromUrl = params.get("view");
 
 history.replaceState(
   {
